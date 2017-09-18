@@ -21,12 +21,14 @@ _Open_ - the addition of cell types and simulations (subclasses of the abstract 
 
 Overview
 =======
+![design diagram](designOverview.png)
 
 Our design is driven by a class Driver that delegates the visual component responsibilities to a UI class, which contains a GridPane and other visual components, and the back-end responsibilities to a subclass of CellManager, which uses a subclass of Cell for the simulations computations. Driver runs a game-loop-esque procedure and a step method that continuously updates the simulation. In a given call, the step method uses a subclass of CellManager that corresponds with the type of simulation. This subclass updates the statuses of each Cell and returns the list of updated Cells to Driver. The step method then passes the list of updated Cells to UI, which uses the list to update the colors of the Rectangles in the GridPane.
 
 
 User Interface
 ========
+![UI](userInterface.png)
 
 We will have a menu that will display on startup and have buttons for the various simulations. When any of these buttons are pressed the scene will change to show that simulation’s user interface.  There will also be a help button that displays all the information about each simulation and how the XML files are formatted.
 On each simulation’s interface, we will include:
@@ -174,14 +176,17 @@ public void updateCurrentCells()
 private ArrayList<Cell> getNeighbors(int[] locationNums)
 ```
 
-Cell.java
+* Cell.java
+
+
+INSTANCE VARIABLES:
 ```java
-	INSTANCE VARIABLES:
 	String status
 	Color color
 ```
 
-	METHODS:
+
+METHODS:
 ```java
 	/**
 * Gets the current cell status
@@ -195,7 +200,8 @@ Cell.java
 	public void setStatus()
 ```
 	
-    SUBCLASSES:
+	
+SUBCLASSES:
 FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
 
 ### Use Cases
