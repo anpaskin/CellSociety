@@ -58,7 +58,7 @@ Design Details
 
 ### Classes
 
-#### Driver.java (extends Application)
+##### Driver.java (extends Application)
 
 This class is the main class for the program. It reads in and parses XML files, starts the program, and handles the simulation loop. 
 
@@ -106,7 +106,7 @@ private void step(double elapsedTime, ArrayList<Color> cellStatuses)
 ```
 
 
-#### UI.java
+##### UI.java
 
 The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
 
@@ -148,7 +148,7 @@ private void handleButtonClick(Button button)
 ```
 
 
-#### CellManager.java
+##### CellManager.java
 
 This class holds all of the Cells in the simulation and manages all of the operations necessary to update their statuses.
 
@@ -186,7 +186,12 @@ private ArrayList<Cell> getNeighbors(int[] locationNums)
 ```
 
 
-#### Cell.java
+SUBCLASSES:
+
+FireSim.java, WatorSim.java, LifeSim.java, PredatorPreySim.java, SegregationSim
+
+
+##### Cell.java
 
 
 INSTANCE VARIABLES:
@@ -213,7 +218,8 @@ METHODS:
 	
 SUBCLASSES:
 
-FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
+FireCell.java, WatorCell.java, LifeCell.java, PredatorPreyCell.java, SegregationCell.java, NullCell.java
+
 
 ### Use Cases
 (also explained in detail throughout the DESIGN.md file)
