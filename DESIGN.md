@@ -188,7 +188,7 @@ private ArrayList<Cell> getNeighbors(int[] locationNums)
 
 SUBCLASSES:
 
-FireSim.java, WatorSim.java, LifeSim.java, PredatorPreySim.java, SegregationSim
+FireSim.java, WatorSim.java, LifeSim.java, PredatorPreySim.java, SegregationSim.java
 
 
 ##### Cell.java
