@@ -56,7 +56,7 @@ Design Details
 
 ### Classes
 * Driver.java (extends Application)
-This class is the main class for the program. It reads in and parses XML files, starts the program, and handles the simulation loop. 
+* This class is the main class for the program. It reads in and parses XML files, starts the program, and handles the simulation loop. 
 
 The driver communicates with the UI and Cell Manager classes by directly passing information about the simulation and cells.
 
@@ -102,7 +102,7 @@ private void step(double elapsedTime, ArrayList<Color> cellStatuses)
 ```
 
 * UI.java
-The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
+* The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
 
 INSTANCE VARIABLES:
 ```java
