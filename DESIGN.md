@@ -205,3 +205,49 @@ SUBCLASSES:
 FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
 
 ### Use Cases
+(also explained in detail throughout the DESIGN.md file)
+
+
+The getting neighbors functions will be the same for each of the edge/corner and middle cases. This could be done in two ways: the grid could be set up initially to make this easier (filling it with a border of null cells) or those cells could be taken care of separately when getting neighbors. We decided that the grid will be wrapped in a border of null Cells, on which the get-neighbors function is never called, so as to make getting the neighbors of an edge cell the same process as getting the neighbors of a middle cell. We also decided that getting neighbors should always return all of the neighbors (which will be a constant 4 or 8 depending on the type of cellular automata, von Neumann vs. Moore neighborhood) and that the edge cases should just include null cells (making get neighbors pretty and just requiring a little bit more setup). This does make us “expand” our grid by a little, but we think it will make debugging and testing our code easier (constant length of all the neighbors returned). For a specific cell, we will access its location in the currentCells arraylist and use getNeighborLocationNums to get those neighboring cells. This will just be done by taking the cells at the indices +/-1 from the current index (the ones right and left of the current cell), and +/-(Math.pow(currentCells.size(),0.5)) (the ones below and above the current cell).
+
+In order to move to the next generation of a simulation, the step method of Driver calls on a CellManager subclass to update the statuses of the Cells and pass the newly updated Cells back to Driver in a list. The step method then passes this list to the UI object, which updates the Colors of all the Rectangles in the GridPane accordingly.
+
+In order to set the value of a simulation parameter such as probCatch in Fire, Driver reads the value to set from the XML file and calls a setParameter method of the CellManager subclass that it uses to run the simulation.
+
+To switch simulations, we will need to click the menu button to get from the Game of Life simulation scene to the menu scene. Then a button must be pressed on the menu scene to switch to the Wator simulation. We mostly know how we would code this way. An alternative, that is also mentioned earlier in the User Interface section, is using new stages/windows to hold the various simulations which would make switching between animation simulations easier and allow for comparison.
+
+
+Design Considerations
+=======
+
+One thing that we addressed was how to get neighbors (on top of just the edge vs middle cases, see Use Cases under Design Details). These are our preliminary ideas, but are definitely subject to change if we find a better method.
+
+We discussed the pros and cons of having each individual cell “know” their location and how we would keep this location information. We were first thinking about having a superclass contain all of the location information, but then there would be a large amount of code to just try and get a specific cell’s location. Instead we thought that the cell should intrinsically know its location by having it be in an “order” defined by the XML file and how it is read. Thus, a Cell’s index in the list in which it is contained in CellManager indicates its location. Therefore, we will reduce the amount of code and can easily access this location without an instance variable (int location) in Cells.
+
+Then we had to consider how we wanted this location to be formatted. We could use Point2D row and columns, which would involve getting the x and y locations (extra methods and code) and take a good amount of space. There would also have to be some math (adding/subtracting one to the row and column) needed to find the locations of the other neighbors. On the other hand, if we kept each location as just an integer, this would take up less space and also need a similar amount of math to find the locations of its neighbors (adding/subtracting one/size of grid). Thus, each Cell’s location is an integer with the top left corner Cell being 1 and each location incrementing left to right along each row.
+
+We also discussed at length how we wanted to display our simulations. We debated whether or not the Driver should have a GridPane that handles Cell formatting while the Driver handles the rest of the UI, and we concluded that it would be best to streamline all of the UI components in a single UI class used by Driver. This is more efficient and cleaner than dispersing the UI components throughout the Driver class.
+
+
+Team Responsibilities
+=======
+### Aaron
+
+* PRIMARY mostly backend, writing CellManager and Cell abstract superclasses, writing code for the two simulations (CellManager and Cell subclasses)
+
+* SECONDARY finishing incomplete code for other simulations
+
+
+### Dara
+
+* PRIMARY formatting and reading XML and learning what XML is, starting code for one simulation (the two subclasses of CellManager and Cell)
+
+* SECONDARY helping with UI
+
+
+### Kelly
+
+* PRIMARY figuring out UI display updating things, starting code for one simulation (the two subclasses of CellManager and Cell)
+
+* SECONDARY helping format XMLs, and working on Driver class
+
