@@ -140,8 +140,10 @@ private void handleButtonClick(Button button)
 ```
 
 
-CellManager.java
-	INSTANCE VARIABLES:
+* CellManager.java
+* This class holds all of the Cells in the simulation and manages all of the operations necessary to update their statuses.
+
+INSTANCE VARIABLES:
 ```java
 	ArrayList<Cell> currentCells
 	ArrayList<String> nextCellStatuses
