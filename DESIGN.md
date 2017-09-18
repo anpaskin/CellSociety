@@ -57,8 +57,10 @@ Design Details
 =======
 
 ### Classes
-* Driver.java (extends Application)
-* This class is the main class for the program. It reads in and parses XML files, starts the program, and handles the simulation loop. 
+
+#### Driver.java (extends Application)
+
+This class is the main class for the program. It reads in and parses XML files, starts the program, and handles the simulation loop. 
 
 The driver communicates with the UI and Cell Manager classes by directly passing information about the simulation and cells.
 
@@ -103,8 +105,11 @@ public void simLoop()
 private void step(double elapsedTime, ArrayList<Color> cellStatuses)
 ```
 
-* UI.java
-* The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
+
+#### UI.java
+
+The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
+
 
 INSTANCE VARIABLES:
 ```java
@@ -114,6 +119,7 @@ boolean running
 ArrayList<Button> buttons
 GridPane grid
 ```
+
 
 METHODS:
 ```java
@@ -142,14 +148,17 @@ private void handleButtonClick(Button button)
 ```
 
 
-* CellManager.java
-* This class holds all of the Cells in the simulation and manages all of the operations necessary to update their statuses.
+#### CellManager.java
+
+This class holds all of the Cells in the simulation and manages all of the operations necessary to update their statuses.
+
 
 INSTANCE VARIABLES:
 ```java
 	ArrayList<Cell> currentCells
 	ArrayList<String> nextCellStatuses
 ```
+
 	
 METHODS:
 ```java
@@ -176,7 +185,8 @@ public void updateCurrentCells()
 private ArrayList<Cell> getNeighbors(int[] locationNums)
 ```
 
-* Cell.java
+
+#### Cell.java
 
 
 INSTANCE VARIABLES:
@@ -188,7 +198,7 @@ INSTANCE VARIABLES:
 
 METHODS:
 ```java
-	/**
+/**
 * Gets the current cell status
 */
 	public String getStatus()
@@ -202,6 +212,7 @@ METHODS:
 	
 	
 SUBCLASSES:
+
 FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
 
 ### Use Cases
