@@ -5,7 +5,7 @@ Introduction
 =======
 
 ### Problem
-We want to create a Cellular Automata simulator that can run different simulations, which include cells of different states and a set of rules that determine how a cellís state changes based on the states of its neighboring cells.
+We want to create a Cellular Automata simulator that can run different simulations, which include cells of different states and a set of rules that determine how a cell‚Äôs state changes based on the states of its neighboring cells.
 
 
 ### Design Goals
@@ -28,16 +28,16 @@ Our design is driven by a class Driver that delegates the visual component respo
 User Interface
 ========
 
-We will have a menu that will display on startup and have buttons for the various simulations. When any of these buttons are pressed the scene will change to show that simulationís user interface.  There will also be a help button that displays all the information about each simulation and how the XML files are formatted.
-On each simulationís interface, we will include:
+We will have a menu that will display on startup and have buttons for the various simulations. When any of these buttons are pressed the scene will change to show that simulation‚Äôs user interface.  There will also be a help button that displays all the information about each simulation and how the XML files are formatted.
+On each simulation‚Äôs interface, we will include:
 
 
 * The type of the simulation displayed in the title of the stage.
-We will insert a button for starting button ìSTARTî that switches to ìPAUSEî when running and switches to ìRESUMEî if paused and already started.
+We will insert a button for starting button ‚ÄúSTART‚Äù that switches to ‚ÄúPAUSE‚Äù when running and switches to ‚ÄúRESUME‚Äù if paused and already started.
 
 * Another button for moving the animation step by step (one animation at a time).
 
-* Another button for switching back to the menu may need to be included if a new stage isnít made for each simulation. This can be located in the top right corner (not included in picture).
+* Another button for switching back to the menu may need to be included if a new stage isn‚Äôt made for each simulation. This can be located in the top right corner (not included in picture).
 
 * There will also be a slider to choose the speed at which the animation is updated.
 
@@ -89,7 +89,7 @@ private void readAndSet(File xmlFile)
 public void start(Stage stage)
 
 /**
-* Runs the ìgameLoopî and calls step
+* Runs the ‚ÄúgameLoop‚Äù and calls step
 */
 public void simLoop()
 
@@ -136,11 +136,14 @@ private void handleButtonClick(Button button)
 
 
 CellManager.java
+```java
 	INSTANCE VARIABLES:
 	ArrayList<Cell> currentCells
 	ArrayList<String> nextCellStatuses
+```
 	
 METHODS:
+```java
 /**
 * Returns an int array of the locations of neighbor cells
 */
@@ -162,87 +165,30 @@ public void updateCurrentCells()
 * Returns arraylist of all neighboring cells
 */
 private ArrayList<Cell> getNeighbors(int[] locationNums)
-
+```
 
 Cell.java
+```java
 	INSTANCE VARIABLES:
 	String status
 	Color color
+```
 
 	METHODS:
+```java
 	/**
 * Gets the current cell status
 */
 	public String getStatus()
 
 /**
-* Sets the current cell status; also changes cellís color
+* Sets the current cell status; also changes cell‚Äôs color
 * status <--> color
 */
 	public void setStatus()
+```
 	
 	SUBCLASSES:
 FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
 
 ### Use Cases
-The program is currently organized with the driver/runner called BallisLife. This sets up the start and end scenes and transitions between the scenes (the game setup and transitioner). All of the objects created for the game are named Arrows, Balls, Blocks, Drops, Paddles, and Powerups. These create the image and imageviews and add them to the root to that they can be used in Levels. Levels is the class where each level scene is set up. The file is read and everything is interpreted and created thorugh the game object classes and added to this specific root for the level. The code is currently all in one package and has 8 classes.
-
-
-To add a new level, all you need to do is create a new file in the levels folder called "Level #.txt" and change in line 133 of BallisLife.java to reflect the new updated number of levels (this file must be in a similar format to the ones that I have created though, 9 digit string in each line with specified characters):
-```java
-private void step(double elapsedTime, Group group) {
-		// update attributes
-		if (levelNum == 0) {
-			return;
-		}
-		if (levelNum != 0) {
-			gameOver = level.update(SECOND_DELAY);
-			if (!gameOver) {
-				if (level.isDone()) {
-					levelNum = levelNum + 1;
-					createLevel(levelNum);
-				}
-				if (levelNum > 3) { //only 3 levels
-					myStage.setScene(winScene);
-				}
-			}
-			else {
-				myStage.setScene(endScene);
-			}
-		}
-		else {
-			myStage.setScene(endScene);
-		}
-	}
-}
-```
-
-I tried separating the code into code that could be modified and code that couldn't be modified, so the BallisLife class runs everything and that won't change. The Levels can be added and are distinct from one another so it is separate. I wrestled with whether I wanted all the levels to be created at once or when they are needed (I chose the latter bc you don't necessarily go through all the levels).
-
-
-* Splash Screen
-
-The splash screen is created in BallisLife.java through the call in *start* of *setupStartScene*. *setupStartScene* is a method that creates a group to which all of the text is added and placed where it needs to go. This just needed some javafx text, and it was ready to go! This can be very flexible because I can add an image as the background or change the text however I want.
-
-* Cheat Codes
-
-These are also implemented in BallisLife and Levels. There are two types of cheat codes (ones from the start scene and ones from the level scenes). The ones on the start scenes is done through *handleKeyInput* (which is called in *setupStartScene*) which converts the key input into continuing into the game or skipping to a level. The ones on the level scenes *setupGameScene* calls *handleKeyInput* which again converts the input to the specific cheat. More cheats could be added very easily!
-
-
-### Alternate Designs
-
-As I have said before in the other sections, I could have completely separated the start and end scenes from the BallisLife class and made them separate (kind of similar to waht I did for Levels). This refactoring would have made BallisLife look cleaner and more easy to read (with less methods also!). I think just that also refactoring towards the end was stressful and I didn't really konw what I wanted.
-
-
-I also would have liked to fix the Powerups and Drops classes so that they are more concise and perhaps better tie the specific drop to its powerup. Also adding the blocks would be better in the Blocks class as soemthing active than in the Levels class. I think just rethinking this is needed (like moving and refactoring methods so that they make more sense).
-
-
-* BUGS
-
-1. The ball hitting the edge between two adjacent blocks and freaking out/causing game to end (as described earlier and in README). Also the ball hitting the corners of blocks might still give me trouble.
-
-2. The ball can also go too fast when using the cheat f, but other than that it shouldn't go too fast when there is only a few speed up powerups. But I never implemented a min and max speed for the ball. When it does go too fast, I think it may speed over some blocks/objects and interactions are screwed up.
-
-3. The movement of the paddle is also VERY jerky and clunky. That makes it pretty hard to play and should have been fixed. The paddle and ball physics was also never completely finished so you can get stuck just going straight up and down...
-
-
