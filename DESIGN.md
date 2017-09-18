@@ -103,14 +103,18 @@ private void step(double elapsedTime, ArrayList<Color> cellStatuses)
 
 * UI.java
 The UI class manages all of the visual components of the program, displaying the grid and its cells as they change states, the parameters available to be toggled by the user, and other stylistic and textual components.
+
 INSTANCE VARIABLES:
+```java
 double animationSpeed
 boolean start
 boolean running
 ArrayList<Button> buttons
 GridPane grid
+```
 
 METHODS:
+```java
 /**
 * Sets up the Menu and waits for users to interact with it
 * through handleButtonClick to move to setSim
@@ -133,11 +137,12 @@ public void updateCellColors(ArrayList<Color> newColors)
 * Causes the transition between setMenu and setSim
 */
 private void handleButtonClick(Button button)
+```java
 
 
 CellManager.java
-```java
 	INSTANCE VARIABLES:
+```java
 	ArrayList<Cell> currentCells
 	ArrayList<String> nextCellStatuses
 ```
