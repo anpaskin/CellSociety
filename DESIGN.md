@@ -195,7 +195,7 @@ Cell.java
 	public void setStatus()
 ```
 	
-	SUBCLASSES:
+    SUBCLASSES:
 FireCell.java, WatorCell.java, LifeCell.java, PredatorPrey.java
 
 ### Use Cases
