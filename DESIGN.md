@@ -137,7 +137,7 @@ public void updateCellColors(ArrayList<Color> newColors)
 * Causes the transition between setMenu and setSim
 */
 private void handleButtonClick(Button button)
-```java
+```
 
 
 CellManager.java
