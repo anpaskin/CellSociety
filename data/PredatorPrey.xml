@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data predatorPrey="PredatorPrey">
+    <title>WaTor World</title>
+    <author>A.K. Dewdney</author>
+    <fishPercent>0.40</fishPercent>
+    <sharkPercent>0.30</sharkPercent>
+	<fishBreed>5</fishBreed>
+	<sharkBreed>7</sharkBreed>
+	<sharkStarve>4</sharkStarve>
+    <size>20.0</size>
+</data>
