@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<data gameOfLife="GameOfLife">
+<data simulation="GameOfLife">
     <title>Game of Life</title>
     <author>John Horton Conway</author>
 	<liveCellPercent>0.35</liveCellPercent>

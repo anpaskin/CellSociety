@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<data segregation="Segregation">
+<data simulation="Segregation">
     <title>Segregation Model</title>
     <author>Thomas Schelling</author>
     <minSimilar>0.30</minSimilar>

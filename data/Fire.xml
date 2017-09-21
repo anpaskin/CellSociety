@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<data fire="Fire">
+<data simulation="Fire">
     <title>Spreading of Fire</title>
     <author>R. Rothermel</author>
 	<probTree>0.40</probTree>
