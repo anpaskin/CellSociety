@@ -10,8 +10,8 @@ import java.util.Collections;
  */
 public abstract class CellManager {
 
-	private ArrayList<Cell> currentCells;
-	private ArrayList<String> nextCellStatuses;
+	protected ArrayList<Cell> currentCells;
+	protected ArrayList<String> nextCellStatuses;
 	
 	public CellManager() {
 		currentCells = new ArrayList<Cell>();
@@ -28,12 +28,12 @@ public abstract class CellManager {
 		}
 	}
 	
-	public ArrayList<Cell> getNeighbors(Cell c) {
+	public final ArrayList<Cell> getNeighbors(Cell c) {
 		ArrayList<Integer> neighborLocNums = getNeighborLocationNums(c);
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));
-			if(!(curCell instanceof NullCell)) {
+			if(!curCell.getStatus().equals("Null")) {
 				neighbors.add(curCell);
 			}
 		}
