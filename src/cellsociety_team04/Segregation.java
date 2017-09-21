@@ -83,7 +83,7 @@ public class Segregation extends CellManager{
 	 * 
 	 * @param c
 	 * @param neighbors
-	 * @return returns true if cell needs to be moved (does not have enough similar neighbors
+	 * @return returns true if cell needs to be moved (does not have enough similar neighbors)
 	 */
 	private boolean checkNeighbors(Cell c, ArrayList<Cell> neighbors) {
 		double simCount = 0;
