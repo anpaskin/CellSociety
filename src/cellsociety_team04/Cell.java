@@ -2,6 +2,11 @@ package cellsociety_team04;
 
 import javafx.scene.paint.Color;
 
+/**
+ * 
+ * @author Aaron Paskin
+ *
+ */
 public abstract class Cell {
 
 	private String status;
@@ -18,6 +23,9 @@ public abstract class Cell {
 	
 	public void setStatus(String s) {
 		status = s;
+		if(s.equals("Empty")) {
+			color = Color.WHITE;
+		}
 	}
 	
 }

@@ -3,6 +3,11 @@ package cellsociety_team04;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * 
+ * @author Aaron Paskin
+ *
+ */
 public abstract class CellManager {
 
 	private ArrayList<Cell> currentCells;
@@ -27,7 +32,10 @@ public abstract class CellManager {
 		ArrayList<Integer> neighborLocNums = getNeighborLocationNums(c);
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
-			neighbors.add(currentCells.get(neighborLocNums.get(i)));
+			Cell curCell = currentCells.get(neighborLocNums.get(i));
+			if(!(curCell instanceof NullCell)) {
+				neighbors.add(curCell);
+			}
 		}
 		return neighbors;
 	}
