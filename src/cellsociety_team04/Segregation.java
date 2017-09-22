@@ -15,7 +15,7 @@ public class Segregation extends CellManager{
 	private double emptyRatio;
 	private double size;
 	
-	public Segregation(double t, double r, double empty, double n) {
+	public Segregation(double t, double empty, double r, double n) {
 		super();
 		minSimilar = t;
 		redRatio = r;
@@ -27,25 +27,26 @@ public class Segregation extends CellManager{
 	public void initializeCurrentCells() {
 		ArrayList<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
-			if((i / Math.sqrt(size) == 0) || (i / Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1)) {
+			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
 				currentCells.add(new SegCell("Null"));
 			}
 			else {
-				int k = (int)(Math.random()*size);
+				int k = (int)(Math.random()*paramCells.size());
 				currentCells.add(paramCells.get(k));
 				paramCells.remove(k);
 			}
 		}
 	}
 
-	private ArrayList<Cell> setParamCells() {
+	public ArrayList<Cell> setParamCells() {
 		ArrayList<Cell> paramCells = new ArrayList<Cell>();
-		for(int k = 0; k < size; k++) {
-			if(k < size * emptyRatio) {
+		int pSize = (int)(Math.pow((Math.sqrt(size) - 1), 2));
+		for(int k = 0; k < pSize; k++) {
+			if(k < pSize * emptyRatio) {
 				paramCells.add(new SegCell("Empty"));
 			}
-			else if(k < (size * emptyRatio) + ((size - size * emptyRatio) * redRatio)) {
+			else if(k < (pSize * emptyRatio) + ((pSize - pSize * emptyRatio) * redRatio)) {
 				paramCells.add(new SegCell("Red"));
 			}
 			else {
@@ -63,7 +64,7 @@ public class Segregation extends CellManager{
 			else if(((SegCell)c).getFillBlue()) {
 				nextCellStatuses.set(currentCells.indexOf(c), "Blue");
 			}
-			else if(!c.getStatus().equals("Empty")) {
+			else if(!c.getStatus().equals("Empty") && !c.getStatus().equals("Null")) {
 				ArrayList<Cell> neighbors = getNeighbors(c);
 				removeEmptyNeighbors(neighbors);
 				if(checkNeighbors(c, neighbors)) {

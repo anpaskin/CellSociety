@@ -17,7 +17,8 @@ public class SegCell extends Cell{
 	}
 	
 	public void setStatus(String s) {
-		this.setStatus(s);
+		//this.setStatus(s);
+		status = s;
 		if(s.equals("Red")) {
 			color = Color.RED;
 		}

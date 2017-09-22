@@ -30,6 +30,8 @@ public abstract class CellManager {
 	
 	public final ArrayList<Cell> getNeighbors(Cell c) {
 		ArrayList<Integer> neighborLocNums = getNeighborLocationNums(c);
+		System.out.println("Neighbor Loc Nums Size: " + neighborLocNums.size());
+		System.out.println(neighborLocNums);
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));
@@ -51,6 +53,14 @@ public abstract class CellManager {
 		Collections.sort(locNums);
 		locNums.remove(locNums.indexOf(cNum));
 		return locNums;	
+	}
+	
+	/**
+	 * for testing only
+	 * @return
+	 */
+	public ArrayList<Cell> getCurrentCells() {
+		return currentCells;
 	}
 	
 	/*public static void main(String[] args) {
