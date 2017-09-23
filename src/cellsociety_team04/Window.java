@@ -8,11 +8,12 @@ public abstract class Window {
 	protected Stage myStage;
 	protected Group myRoot;
 	protected Scene myScene;
-	private static final double WIDTH = 500;
-	private static final double HEIGHT = 500;
+	protected static final double WIDTH = 500;
+	protected static final double HEIGHT = 500;
 	
 	public Window() {
 		myStage = new Stage();
+		myRoot = new Group();
 		setSceneDimensions();
 		myStage.setScene(myScene);
 	}

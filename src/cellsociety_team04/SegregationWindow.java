@@ -12,21 +12,11 @@ public class SegregationWindow extends SimulationWindow {
 	private Button run, step;
 	private Slider redToBlue;
 	
-	public SegregationWindow(Stage stage, Group root, ArrayList<Button> buttons) {
-		this.myStage = stage;
-		this.myRoot = root;
-		this.start = false;
-		this.mySpeed = 1;
-		this.myButtons = buttons;
-		
-		addParams();
+	public SegregationWindow() {
+		super();
+
 		
 	}
 
-	@Override
-	public void addParams() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

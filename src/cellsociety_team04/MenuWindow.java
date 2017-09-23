@@ -1,68 +1,69 @@
 package cellsociety_team04;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraintsBuilder;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 public class MenuWindow extends Window {
-	
-	private static final int BUTTONOFFSET = 50;
-	private Scene menu;
-	private Group root;
+
+	private static final int BUTTONOFFSET = 10;
 	private List<Button> buttons;
-	
+	private List<String> buttonNames = new ArrayList<String>(Arrays.asList("Segregation", "Predator-Prey", "Fire", "Game of Life"));
+	private double BUTTONPADDING = (WIDTH - BUTTONOFFSET*2)/buttonNames.size();
 
 	public MenuWindow() {
 		super();
 		setupScene();
+		userInteraction();
 	}	
-	
+
+	private void userInteraction() {
+/*		for (int i = 0; i < buttons.size(); i++) {
+			buttonNames.get(i).setOnAction(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					label.setText("Accepted");
+				}
+			});
+		}*/
+	}
+
 	@Override
 	public void setupScene() {
 		buttons = new ArrayList<Button>();
-		addbuttons();
+		addButtons();
+		addTitle();
 	}
-	
-	private void addbuttons() {
-		
-	}
-	
 
-	private void formatMenuScene(double width, double height, Stage menuStage) {
-		menu = new Scene(root, width, height, Color.WHITE);
-		menuStage.setScene(menu);
-		root.getChildren().add(titleText(width, height));
-		
-		for (int i = 0; i < buttons.size(); i++) {
-			Button myButton = buttons.get(i);
-			myButton = new Button("hellooo");//((Button) buttons.get(i)).getName());
-			//myButton.s
-			System.out.println(myButton);
-			myButton.setLayoutX(BUTTONOFFSET + i*(width-2*(BUTTONOFFSET+myButton.getBoundsInLocal().getWidth()))/((buttons.size()-1)));//-myButton.getBoundsInLocal().getWidth()/2);
-			myButton.setLayoutY(height*2/3);
-			root.getChildren().add(myButton);
+	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
+		for (int i = 0; i < buttonNames.size(); i++) {
+			Button button = new Button(buttonNames.get(i));
+			button.setLayoutX(BUTTONOFFSET + i*BUTTONPADDING);
+			button.setLayoutY(HEIGHT*2/3);
+			buttons.add(button);
+			myRoot.getChildren().add(button);
 		}
 	}
-	
-	private Text titleText(double width, double height) {
-		Text myText = new Text();
-		myText.setFont(new Font(75));
-		myText.setWrappingWidth(width);
-		myText.setTextAlignment(TextAlignment.CENTER);
-		myText.setText("Cell Society");
-		myText.setY(height/4);
-		return myText;
+
+	private void addTitle() {
+		Text text = new Text();
+		text.setFont(new Font(75));
+		text.setWrappingWidth(WIDTH);
+		text.setTextAlignment(TextAlignment.CENTER);
+		text.setText("Cell Society");
+		text.setY(HEIGHT/4);
+		myRoot.getChildren().add(text);
 	}
 }

@@ -30,10 +30,6 @@ public class Driver extends Application {
 	/*	private static final double MILLISECOND_DELAY = 0;
 	private static final String SECOND_DELAY = null;*/
 	private Stage menuStage;
-	//private Scene menu;
-	private Button GameofLife, PredatorPrey, Fire, Segregation;
-	private ArrayList<Button> buttons = new ArrayList<>(Arrays.asList(GameofLife, PredatorPrey, Fire, Segregation));
-	private double BUTTONOFFSET = 150;
 
 	/**
 	 * Displays the menu in the window
