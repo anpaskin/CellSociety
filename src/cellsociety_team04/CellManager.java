@@ -12,6 +12,7 @@ public abstract class CellManager {
 
 	protected ArrayList<Cell> currentCells;
 	protected ArrayList<String> nextCellStatuses;
+	protected double size;
 	
 	public CellManager() {
 		currentCells = new ArrayList<Cell>();

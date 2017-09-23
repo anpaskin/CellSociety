@@ -6,7 +6,6 @@ import java.util.Collections;
 public class Fire extends CellManager {
 
 	private double pCatch;
-	private double size;
 	
 	public Fire(double probCatch, double n) {
 		super();
