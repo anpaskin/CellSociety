@@ -13,8 +13,6 @@ public class Segregation extends CellManager{
 	private double redRatio;
 	private double blueRatio;
 	private double emptyRatio;
-	private double size;
-	
 	public Segregation(double t, double empty, double r, double n) {
 		super();
 		minSimilar = t;
@@ -43,26 +41,17 @@ public class Segregation extends CellManager{
 	public ArrayList<Cell> setParamCells() {
 		ArrayList<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
-		int e = 0;
-		int r = 0;
-		int b = 0;
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * emptyRatio) {
 				paramCells.add(new SegCell("Empty"));
-				e++;
 			}
 			else if(k < (pSize * emptyRatio) + ((pSize - pSize * emptyRatio) * redRatio)) {
 				paramCells.add(new SegCell("Red"));
-				r++;
 			}
 			else {
 				paramCells.add(new SegCell("Blue"));
-				b++;
 			}
 		}
-		System.out.println("Empty in Param: " + e);
-		System.out.println("Red in Param: " + r);
-		System.out.println("Blue in Param: " + b);
 		return paramCells;
 	}
 	

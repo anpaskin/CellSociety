@@ -5,13 +5,43 @@ import java.util.ArrayList;
 public class testing {
 
 	public static void main(String[] args) {
-
 		//segTesting(.5, .25, .5, 100);
-		fireTesting(.75, 24, 25);
-		
+		//fireTesting(.75, 66, 100);
+		lifeTesting(.5, 16);
 	}
 	
-
+	private static void lifeTesting(double alive, double size) {
+		GameOfLife lifeSim = new GameOfLife(alive, size);
+		ArrayList<Cell> s = lifeSim.getCurrentCells();
+		lifeSim.initializeCurrentCells();
+		double rc = Math.sqrt(s.size());
+		char[][] grid = new char[(int)rc][(int)rc];
+		int i = 0;
+		for(int x = 0; x < size; x++) {
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					String sStatus = s.get(i).getStatus();
+					if(sStatus.equals("Alive")) grid[r][c] = 'L';
+					else if(sStatus.equals("Dead")) grid[r][c] = '_';
+					else if(sStatus.equals("Null")) grid[r][c] = 'N';
+					i++;
+				}
+			}
+			i = 0;
+			
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					System.out.print(grid[r][c] + "  ");
+				}
+				System.out.println();
+			}
+			System.out.println("===================================================");
+			lifeSim.setNextCellStatuses();
+			lifeSim.updateCurrentCells();
+		}
+	}
+	
+	
 	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
 		Fire fireSim = new Fire(probCatch, size);
 		ArrayList<Cell> s = fireSim.getCurrentCells();
@@ -22,10 +52,11 @@ public class testing {
 		for(int x = 0; x < size; x++) {
 			for(int r = 0; r < rc; r++) {
 				for(int c = 0; c < rc; c++) {
-					if(s.get(i).getStatus().equals("Tree")) grid[r][c] = 'T';
-					else if(s.get(i).getStatus().equals("Fire")) grid[r][c] = 'F';
-					else if(s.get(i).getStatus().equals("Empty")) grid[r][c] = 'E';
-					else if(s.get(i).getStatus().equals("Null")) grid[r][c] = 'N';
+					String sStatus = s.get(i).getStatus();
+					if(sStatus.equals("Tree")) grid[r][c] = 'A';
+					else if(sStatus.equals("Fire")) grid[r][c] = '^';
+					else if(sStatus.equals("Empty")) grid[r][c] = '_';
+					else if(sStatus.equals("Null")) grid[r][c] = 'N';
 					i++;
 				}
 			}
