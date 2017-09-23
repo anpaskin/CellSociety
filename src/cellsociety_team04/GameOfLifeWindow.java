@@ -14,6 +14,21 @@ public class GameOfLifeWindow extends SimulationWindow {
 		super();
 		
 	}
+	
+	/**
+	 * Updates the cells for each SimulationWindow
+	 */
+	public void step(double elapsedTime) {
+		// do nothing
+		if (windowOpen) {
+			if (simulationRunning) {
+				
+			}
+			else {
+				
+			}
+		}
+	}
 
 
 }

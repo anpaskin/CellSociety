@@ -3,25 +3,23 @@ package cellsociety_team04;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraintsBuilder;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class MenuWindow extends Window {
 
-	private static final int BUTTONOFFSET = 10;
+	private static final int BUTTONOFFSET = 50;
 	private List<Button> buttons;
-	private List<String> buttonNames = new ArrayList<String>(Arrays.asList("Segregation", "Predator-Prey", "Fire", "Game of Life"));
-	private double BUTTONPADDING = (WIDTH - BUTTONOFFSET*2)/buttonNames.size();
+	private static final double buttonScale = 0.5;
+	
+	private double buttonPadding;
 
 	public MenuWindow() {
 		super();
@@ -29,30 +27,50 @@ public class MenuWindow extends Window {
 		userInteraction();
 	}	
 
-	private void userInteraction() {
-/*		for (int i = 0; i < buttons.size(); i++) {
-			buttonNames.get(i).setOnAction(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					label.setText("Accepted");
+	private void userInteraction() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+		for (int i = 0; i < buttons.size(); i ++) {
+			Button button = buttons.get(i);
+			button.setOnAction(new EventHandler<ActionEvent>() {
+				@Override public void handle(ActionEvent e) {
+					//TODO need to have new stage open instead
 				}
 			});
-		}*/
+		}
 	}
 
 	@Override
 	public void setupScene() {
-		buttons = new ArrayList<Button>();
 		addButtons();
 		addTitle();
 	}
 
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
-		for (int i = 0; i < buttonNames.size(); i++) {
-			Button button = new Button(buttonNames.get(i));
-			button.setLayoutX(BUTTONOFFSET + i*BUTTONPADDING);
+		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
+		Image segregationImage = new Image(getClass().getClassLoader().getResourceAsStream("segregation.png"));
+		Button segregationButton = new Button();
+		segregationButton.setGraphic(new ImageView(segregationImage));
+		
+		Image watorImage = new Image(getClass().getClassLoader().getResourceAsStream("wator.png"));
+		Button watorButton = new Button();
+		watorButton.setGraphic(new ImageView(watorImage));
+		
+		Image fireImage = new Image(getClass().getClassLoader().getResourceAsStream("fire.png"));
+		Button fireButton = new Button();
+		fireButton.setGraphic(new ImageView(fireImage));
+		
+		Image gameoflifeImage = new Image(getClass().getClassLoader().getResourceAsStream("gameoflife.png"));
+		Button gameoflifeButton = new Button();
+		gameoflifeButton.setGraphic(new ImageView(gameoflifeImage));
+		
+		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
+		System.out.println(buttons);
+		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
+		
+		for (int i = 0; i < buttons.size(); i++) {
+			Button button = buttons.get(i);
+			//System.out.println(button);
+			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getWidth() + i*buttonPadding);
 			button.setLayoutY(HEIGHT*2/3);
-			buttons.add(button);
 			myRoot.getChildren().add(button);
 		}
 	}

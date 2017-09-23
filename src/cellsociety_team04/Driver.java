@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * 
@@ -27,8 +28,15 @@ import javafx.stage.Stage;
 public class Driver extends Application {
 
 	private static final String TITLE = "Cell Society";
-	/*	private static final double MILLISECOND_DELAY = 0;
-	private static final String SECOND_DELAY = null;*/
+	private boolean segregationWindow = false;
+	private boolean segregationRunning = false;
+	private boolean watorWindow = false;
+	private boolean watorRunning = false;
+	private boolean fireWindow = false;
+	private boolean fireRunning = false;
+	private boolean gameoflifeWindow = false;
+	private boolean gameoflifeRunning = false;
+
 	private Stage menuStage;
 
 	/**
@@ -42,36 +50,7 @@ public class Driver extends Application {
 		Window menu = new MenuWindow();
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
-
-		/*segregation.setOnAction(e -> {
-			Stage segStage = new Stage();
-			//segStage.run();
-		});
-		*//*		//attach the game loop
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY, root));
-		Timeline animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();*/
 	}
-
-	/*	private Object step(String secondDelay, Group root2) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-/*	private void formatStage(Rectangle2D dimensions, double width, double height) {
-		menuStage.setX(dimensions.getMinX());
-		menuStage.setY(dimensions.getMinY());
-		menuStage.setWidth(width);
-		menuStage.setHeight(height);
-	}*/
-
-	/*	private Button simButton() {
-
-	}*/
-
 
 	/**
 	 * Start of the program
