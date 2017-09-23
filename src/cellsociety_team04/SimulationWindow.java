@@ -11,5 +11,9 @@ public abstract class SimulationWindow extends Window {
 	protected double mySpeed;
 	protected ArrayList<Button> myButtons;
 	
+	public void addParams() {
+		
+	}
+	
 	
 }
