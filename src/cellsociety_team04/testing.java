@@ -5,20 +5,74 @@ import java.util.ArrayList;
 public class testing {
 
 	public static void main(String[] args) {
+
+		//segTesting(.5, .25, .5, 100);
+		fireTesting(.75, 24, 25);
 		
-		System.out.println(3%19);
-		
-		Segregation segSim = new Segregation(.375, .24, .5, 100);
-		segSim.initializeCurrentCells();
-		ArrayList<Cell> s = segSim.getCurrentCells();
-		ArrayList<Cell> p = segSim.setParamCells();
-		System.out.println("Current Cells Size: " + s.size());
-		System.out.println("Param Size: " + p.size());
+	}
+	
+
+	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
+		Fire fireSim = new Fire(probCatch, size);
+		ArrayList<Cell> s = fireSim.getCurrentCells();
+		fireSim.initializeCurrentCells(fireStartLoc);
 		double rc = Math.sqrt(s.size());
-		double prc = Math.sqrt(p.size());
 		char[][] grid = new char[(int)rc][(int)rc];
 		int i = 0;
-		for(int x = 0; x < 100; x++) {
+		for(int x = 0; x < size; x++) {
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					if(s.get(i).getStatus().equals("Tree")) grid[r][c] = 'T';
+					else if(s.get(i).getStatus().equals("Fire")) grid[r][c] = 'F';
+					else if(s.get(i).getStatus().equals("Empty")) grid[r][c] = 'E';
+					else if(s.get(i).getStatus().equals("Null")) grid[r][c] = 'N';
+					i++;
+				}
+			}
+			i = 0;
+			
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					System.out.print(grid[r][c] + "  ");
+				}
+				System.out.println();
+			}
+			System.out.println("===================================================");
+			fireSim.setNextCellStatuses();
+			fireSim.updateCurrentCells();
+		}
+		
+	}
+	
+	private static void segTesting(double minSim, double emptyCount, double redCount, double size) {
+		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size);
+		segSim.initializeCurrentCells();
+		ArrayList<Cell> s = segSim.getCurrentCells();
+		//ArrayList<Cell> p = segSim.setParamCells();
+		System.out.println("Current Cells Size: " + s.size());
+		int red = 0;
+		int blue = 0;
+		int empty = 0;
+		for(Cell c : s) {
+			if(c.getStatus().equals("Empty")) {
+				empty++;
+			}
+			else if(c.getStatus().equals("Red")) {
+				red++;
+			}
+			else if(c.getStatus().equals("Blue")) {
+				blue++;
+			}
+		}
+		System.out.println("Initial Empty Count: " + empty);
+		System.out.println("Initial Red Count: " + red);
+		System.out.println("Initial Blue Count: " + blue);
+		//System.out.println("Param Size: " + p.size());
+		double rc = Math.sqrt(s.size());
+		//double prc = Math.sqrt(p.size());
+		char[][] grid = new char[(int)rc][(int)rc];
+		int i = 0;
+		for(int x = 0; x < size; x++) {
 			for(int r = 0; r < rc; r++) {
 				for(int c = 0; c < rc; c++) {
 					if(s.get(i).getStatus().equals("Red")) grid[r][c] = 'R';
@@ -36,12 +90,29 @@ public class testing {
 				}
 				System.out.println();
 			}
-			System.out.println("_________________________________");
+			System.out.println("===================================================");
 			segSim.setNextCellStatuses();
 			segSim.updateCurrentCells();
 		}
-			
 		
+		red = 0;
+		blue = 0;
+		empty = 0;
+		for(Cell c : segSim.getCurrentCells()) {
+			if(c.getStatus().equals("Empty")) {
+				empty++;
+			}
+			else if(c.getStatus().equals("Red")) {
+				red++;
+			}
+			else if(c.getStatus().equals("Blue")) {
+				blue++;
+			}
+		}
+		System.out.println("Final Empty Count: " + empty);
+		System.out.println("Final Red Count: " + red);
+		System.out.println("Final Blue Count: " + blue);
 	}
+	
 	
 }
