@@ -29,9 +29,10 @@ public abstract class CellManager {
 	}
 	
 	public final ArrayList<Cell> getNeighbors(Cell c) {
+		//System.out.println("Enter Get Neighbors with Cell #" + currentCells.indexOf(c) + ", " + c.getStatus());
 		ArrayList<Integer> neighborLocNums = getNeighborLocationNums(c);
-		System.out.println("Neighbor Loc Nums Size: " + neighborLocNums.size());
-		System.out.println(neighborLocNums);
+		//System.out.println("Neighbor Loc Nums Size: " + neighborLocNums.size());
+		//System.out.println("Neighbors: " + neighborLocNums);
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));

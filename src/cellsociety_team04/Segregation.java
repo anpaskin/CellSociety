@@ -21,7 +21,7 @@ public class Segregation extends CellManager{
 		redRatio = r;
 		blueRatio = 1 - r;
 		emptyRatio = empty;
-		size = Math.pow(Math.sqrt(n) + 1, 2);
+		size = Math.pow(Math.sqrt(n) + 2, 2);
 	}
 	
 	public void initializeCurrentCells() {
@@ -36,48 +36,57 @@ public class Segregation extends CellManager{
 				currentCells.add(paramCells.get(k));
 				paramCells.remove(k);
 			}
+			nextCellStatuses.add(currentCells.get(i).getStatus());
 		}
 	}
 
 	public ArrayList<Cell> setParamCells() {
 		ArrayList<Cell> paramCells = new ArrayList<Cell>();
-		int pSize = (int)(Math.pow((Math.sqrt(size) - 1), 2));
+		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int e = 0;
+		int r = 0;
+		int b = 0;
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * emptyRatio) {
 				paramCells.add(new SegCell("Empty"));
+				e++;
 			}
 			else if(k < (pSize * emptyRatio) + ((pSize - pSize * emptyRatio) * redRatio)) {
 				paramCells.add(new SegCell("Red"));
+				r++;
 			}
 			else {
 				paramCells.add(new SegCell("Blue"));
+				b++;
 			}
 		}
+		System.out.println("Empty in Param: " + e);
+		System.out.println("Red in Param: " + r);
+		System.out.println("Blue in Param: " + b);
 		return paramCells;
 	}
 	
 	public void setNextCellStatuses() {
+		ArrayList<Integer> empties = getValidMoveLocs();
 		for(Cell c : currentCells) {
-			if(((SegCell)c).getFillRed()) {
-				nextCellStatuses.set(currentCells.indexOf(c), "Red");
-			}
-			else if(((SegCell)c).getFillBlue()) {
-				nextCellStatuses.set(currentCells.indexOf(c), "Blue");
-			}
-			else if(!c.getStatus().equals("Empty") && !c.getStatus().equals("Null")) {
+			if(!c.getStatus().equals("Empty") && !c.getStatus().equals("Null")) {
 				ArrayList<Cell> neighbors = getNeighbors(c);
-				removeEmptyNeighbors(neighbors);
 				if(checkNeighbors(c, neighbors)) {
+					nextCellStatuses.set(empties.get(0), c.getStatus());
+					empties.remove(0);
+					empties.add(currentCells.indexOf(c));
 					nextCellStatuses.set(currentCells.indexOf(c), "Empty");
-					for(Cell e : currentCells) {
-						if(e.getStatus().equals("Empty")) {
-							((SegCell)e).markFill(c.getStatus());
-							nextCellStatuses.set(currentCells.indexOf(e), c.getStatus());
-						}
-					}
 				}
 			}
 		}
+	}
+	
+	private ArrayList<Integer> getValidMoveLocs() {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		for(Cell c : currentCells) {
+			if(c.getStatus().equals("Empty")) ret.add(currentCells.indexOf(c));
+		}
+		return ret;
 	}
 
 	/**
@@ -88,20 +97,16 @@ public class Segregation extends CellManager{
 	 */
 	private boolean checkNeighbors(Cell c, ArrayList<Cell> neighbors) {
 		double simCount = 0;
+		double occupiedNeighbors = 0;
 		for(Cell n : neighbors) {
 			if(n.getStatus().equals(c.getStatus())) {
 				simCount++;
 			}
-		}
-		return simCount / neighbors.size() < minSimilar;
-	}
-	
-	private void removeEmptyNeighbors(ArrayList<Cell> neighbors) {
-		for(Cell n : neighbors) {
-			if(n.getStatus().equals("Empty")) {
-				neighbors.remove(n);
+			if(!n.getStatus().equals("Empty")) {
+				occupiedNeighbors++;
 			}
 		}
+		return simCount / occupiedNeighbors < minSimilar;
 	}
 	
 }
