@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cellsociety_Cells.Cell;
+import cellsociety_Simulations.CellManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
@@ -38,6 +40,7 @@ public abstract class SimulationWindow extends Window {
 	Slider speed = new Slider();
 	
 	protected GridPane grid = new GridPane();
+	protected ArrayList<Color> cellColors;
 
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
@@ -154,6 +157,34 @@ public abstract class SimulationWindow extends Window {
 		grid.setLayoutY(offset);
 		myRoot.getChildren().add(grid);
 	}
+	
+	// updates grid with cellColors array list data
+	public GridPane updateGridPane(GridPane grid) {
+		for (int row = 0; row < numCells; row++) {
+			for (int col = 0; col < numCells; col++) {
+				Rectangle rect = new Rectangle();
+				rect.setWidth(cellSize);
+				rect.setHeight(cellSize);
+				int cellNum = row + col;
+				rect.setFill(cellColors.get(cellNum));
+				GridPane.setRowIndex(rect, row);
+				GridPane.setColumnIndex(rect, col);
+				//grid.add(rect, col, row);
+				grid.getChildren().addAll(rect);
+			}
+		}
+		return grid;
+		
+	}
+	
+	// pass in currentCells array list and get array list of colors to fill grid
+	private ArrayList<Color> getCellColors(ArrayList<Cell> cellStatuses) {
+		for (int i = 0; i < cellStatuses.size(); i++) {
+			cellColors.add(cellStatuses.get(i).getColor());
+		}
+		return cellColors;
+	}
+	
 
 	public void throwErrors() {
 		double gridSize = numCells*cellSize;
