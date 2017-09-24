@@ -22,6 +22,7 @@ import javafx.util.Duration;
  * Driver for running the code
  * 
  * @author kelly
+ * @author Dara
  *
  */
 
@@ -36,6 +37,9 @@ public class Driver extends Application {
 	private Window wator = new WatorWindow();
 	private Window fire = new FireWindow();
 	private Window gameoflife = new GameOfLifeWindow();
+	
+	private CellManager simulation;
+
 
 	/**
 	 * Displays the menu in the window
@@ -47,6 +51,11 @@ public class Driver extends Application {
 
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
+		
+		//NOTE: xml info is parsed and read here to create new simulation
+		XMLParser parser = new XMLParser();
+		parser.chooseFile(stage);
+		simulation = parser.getSimulation();
 
 		setupSimulation();
 		//runSimulation();
