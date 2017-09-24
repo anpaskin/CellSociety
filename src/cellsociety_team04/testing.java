@@ -12,7 +12,47 @@ public class testing {
 	public static void main(String[] args) {
 		//segTesting(.5, .25, .5, 100);
 		//fireTesting(.75, 66, 100);
-		lifeTesting(.5, 16);
+		//lifeTesting(.5, 100);
+		waTorTesting(0.2, 0.35, 100);
+	}
+	
+	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size);
+		waSim.initializeCurrentCells();
+		ArrayList<Cell> s = waSim.getCurrentCells();
+		double rc = Math.sqrt(s.size());
+		String[][] grid = new String[(int)rc][(int)rc];
+		int i = 0;
+		for(int x = 0; x < size; x++) {
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					String sStatus = s.get(i).getStatus();
+					if(sStatus.equals("Shark")) grid[r][c] = "S";
+					else if(sStatus.equals("Fish")) grid[r][c] = "f";
+					else if(sStatus.equals("Empty")) grid[r][c] = "_";
+					else if(sStatus.equals("Null")) grid[r][c] = "N";
+					/*if(!sStatus.equals("Null")) {
+						System.out.print("Neighbors: ");
+						for(Cell n : waSim.getNeighbors(s.get(i))) {
+							System.out.print(s.indexOf(n) + ", ");
+						}
+						System.out.println();
+					} */
+					i++;
+				}
+			}
+			i = 0;
+			
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					System.out.print(grid[r][c] + "  ");
+				}
+				System.out.println();
+			}
+			System.out.println("===================================================");
+			waSim.setNextCellStatuses();
+			waSim.updateCurrentCells();
+		}
 	}
 	
 	private static void lifeTesting(double alive, double size) {
