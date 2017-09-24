@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -27,7 +28,6 @@ public abstract class SimulationWindow extends Window {
 	protected Button startButton = new Button();
 	protected Button stepButton = new Button();
 
-	protected double speed = 1;
 	protected int numCells = 50;
 	protected int cellSize = 10;
 
@@ -35,6 +35,8 @@ public abstract class SimulationWindow extends Window {
 	protected int offset = 50;
 	protected int padding = 100;
 
+	Slider speed = new Slider();
+	
 	protected GridPane grid = new GridPane();
 
 	protected boolean windowOpen = false;
@@ -52,7 +54,8 @@ public abstract class SimulationWindow extends Window {
 
 		// attach "game loop" to timeline to play it
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY*speed));
+				e -> step(SECOND_DELAY));
+		//TODO multiply seconddelay by amount sound on speed slider
 		Timeline animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
@@ -76,7 +79,7 @@ public abstract class SimulationWindow extends Window {
 		setupSceneDimensions();
 		buttons = new ArrayList<Button>();
 		addButtons();
-		placeButtons();
+		addSlider();
 		addTitle();
 		addGridPane();
 		throwErrors();
@@ -85,9 +88,7 @@ public abstract class SimulationWindow extends Window {
 	public void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX();
-		System.out.println(WIDTH);
 		HEIGHT = dimensions.getMaxY();
-		System.out.println(HEIGHT);
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
@@ -103,9 +104,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setGraphic(new ImageView(stepImage));
 
 		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
-	}
-
-	private void placeButtons() {
+		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
 			button.setLayoutX(offset);
@@ -118,8 +117,17 @@ public abstract class SimulationWindow extends Window {
 		//do nothing
 	}
 
-	private void addSlider() {
-		//TODO
+	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
+		speed.setMin(0);
+		speed.setMax(5);
+		speed.setValue(1);
+		speed.setShowTickLabels(true);
+		speed.setShowTickMarks(true);
+		speed.setMajorTickUnit(1);
+		speed.setBlockIncrement(1);
+		speed.setLayoutX(offset);
+		speed.setLayoutY(offset + buttons.size()*padding);
+		myRoot.getChildren().add(speed);
 	}
 
 	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
@@ -142,9 +150,9 @@ public abstract class SimulationWindow extends Window {
 				grid.getChildren().addAll(rect);
 			}
 		}
-		myRoot.getChildren().add(grid);
 		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
 		grid.setLayoutY(offset);
+		myRoot.getChildren().add(grid);
 	}
 
 	public void throwErrors() {
