@@ -1,5 +1,5 @@
 package cellsociety_UIUX;
 
-public class WatorWindow extends Window {
+public class WatorWindow extends SimulationWindow {
 
 }

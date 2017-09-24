@@ -1,12 +1,7 @@
 package cellsociety_team04;
 
-import cellsociety_Simulations.CellManager;
-import cellsociety_UIUX.FireWindow;
-import cellsociety_UIUX.GameOfLifeWindow;
-import cellsociety_UIUX.MenuWindow;
-import cellsociety_UIUX.SegregationWindow;
-import cellsociety_UIUX.WatorWindow;
-import cellsociety_UIUX.Window;
+import cellsociety_Simulations.*;
+import cellsociety_UIUX.*;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,16 +17,17 @@ import javafx.stage.Stage;
 
 public class Driver extends Application {
 
-	private static final String TITLE = "Cell Society";
+	private static final String MENUTITLE = "Cell Society";
+	private static final String SIMULATIONTITLE = "SIMULATION";
 
 	private Stage menuStage;
 	private Stage simulationStage;
 	private Window menu = new MenuWindow();
-	private Window segregation = new SegregationWindow();
-	private Window wator = new WatorWindow();
-	private Window fire = new FireWindow();
-	private Window gameoflife = new GameOfLifeWindow();
-	
+	private SimulationWindow segregation = new SegregationWindow();
+	private SimulationWindow wator = new WatorWindow();
+	private SimulationWindow fire = new FireWindow();
+	private SimulationWindow gameoflife = new GameOfLifeWindow();
+
 	private CellManager simulation;
 
 
@@ -41,34 +37,57 @@ public class Driver extends Application {
 	@Override
 	public void start(Stage stage) {
 		menuStage = stage;
-		menuStage.setTitle(TITLE);
+		menuStage.setTitle(MENUTITLE);
 
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
-		
+
+		setupSimulation();
 		//NOTE: xml info is parsed and read here to create new simulation
 		XMLParser parser = new XMLParser();
 		parser.chooseFile(stage);
 		simulation = parser.getSimulation();
 
-		setupSimulation();
-		//runSimulation();
+		runSimulation();
+		simulationStage.show();
 	}
 
 
 	private void setupSimulation() {
 		simulationStage = new Stage();
 		//TODO use title from xml file... 
-		simulationStage.setTitle("Simulation");
+		simulationStage.setTitle(SIMULATIONTITLE);
+
+		if (simulation instanceof Segregation) {
+			segregation.setWindowOpen(true);
+		}
+/*		else if (simulation instanceof Wator) {
+			wator.setWindowOpen(true);
+		}*/
+		else if (simulation instanceof Fire) {
+			fire.setWindowOpen(true);
+		}
+		else if (simulation instanceof GameOfLife) {
+			gameoflife.setWindowOpen(true);
+		}
+
 	}
 
-	/*	private void runSimulation() {
-		// TODO Auto-generated method stub
+	private void runSimulation() {
 		if (segregation.getWindowOpen()) {
-
+			simulationStage.setScene(segregation.getScene());
+		}
+		else if (wator.getWindowOpen()) {
+			simulationStage.setScene(wator.getScene());
+		}
+		else if (fire.getWindowOpen()) {
+			simulationStage.setScene(fire.getScene());
+		}
+		else if (gameoflife.getWindowOpen()) {
+			simulationStage.setScene(gameoflife.getScene());
 		}
 	}
-	 */
+	 
 	/**
 	 * Start of the program
 	 */

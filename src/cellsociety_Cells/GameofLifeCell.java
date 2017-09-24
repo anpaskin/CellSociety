@@ -1,6 +1,5 @@
-package cellsociety_Simulations;
+package cellsociety_Cells;
 
-import cellsociety_Cells.Cell;
 import javafx.scene.paint.Color;
 
 /**

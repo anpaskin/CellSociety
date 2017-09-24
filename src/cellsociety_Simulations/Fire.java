@@ -1,11 +1,10 @@
-package cellsociety_team04;
+package cellsociety_Simulations;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.FireCell;
-import cellsociety_Simulations.CellManager;
 
 public class Fire extends CellManager {
 
