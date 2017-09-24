@@ -24,7 +24,7 @@ public class Driver extends Application {
 	private static final String SIMULATIONTITLE = "SIMULATION";
 
 	private Stage menuStage;
-	private Stage simulationStage;
+	private Stage simulationStage = new Stage();
 	private Window menu = new MenuWindow(menuStage);
 	private SimulationWindow segregation = new SegregationWindow(simulationStage);
 	private SimulationWindow wator = new WatorWindow(simulationStage);
@@ -58,7 +58,6 @@ public class Driver extends Application {
 	}
 
 	private void setupSimulation() {
-		simulationStage = new Stage();
 		//TODO use title from xml file... 
 		simulationStage.setTitle(SIMULATIONTITLE);
 

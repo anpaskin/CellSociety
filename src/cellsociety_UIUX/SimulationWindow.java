@@ -6,27 +6,30 @@ import java.util.List;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
 	
-	protected static final double WIDTH = 800;
-	protected static final double HEIGHT = 800;
+	protected double WIDTH;
+	protected double HEIGHT;
 	
 	protected boolean start;
 	protected Button run;
 	protected Button step;
 	
 	protected double speed;
-	protected double numCells;
-	protected double cellSize;
+	protected int numCells = 10;
+	protected int cellSize = 10;
 	
 	protected List<Button> buttons;
 	protected int buttonOffset = 50;
@@ -73,9 +76,17 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		placeButtons();
 		addTitle();
+		addGridPane();
 	}
 	
 	public void setupSceneDimensions() {
+		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
+		WIDTH = dimensions.getMaxX();
+		HEIGHT = dimensions.getMaxY();
+		myStage.setX(dimensions.getMinX());
+		myStage.setY(dimensions.getMinY());
+		myStage.setWidth(WIDTH);
+		myStage.setHeight(HEIGHT);
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
@@ -109,20 +120,22 @@ public abstract class SimulationWindow extends Window {
 		//TODO
 	}
 
-	public GridPane addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
+	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		GridPane grid = new GridPane();
+		grid.setGridLinesVisible(true);
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Rectangle rect = new Rectangle();
 				rect.setWidth(cellSize);
 				rect.setHeight(cellSize);
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
+				rect.setFill(Color.WHITE);
+				//grid.add(rect, col, row);
 				grid.getChildren().add(rect);
 			}
 		}
+		grid.setLayoutX(WIDTH - grid.getBoundsInLocal().getWidth());
+		grid.setLayoutY(HEIGHT - grid.getBoundsInLocal().getWidth());
 		myRoot.getChildren().add(grid);
-		return grid;
 	}
 	
 	public void closeSimulation() {
