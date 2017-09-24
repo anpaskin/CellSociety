@@ -64,7 +64,11 @@ public class Driver extends Application {
 	}
 
 	/*	private Object step(String secondDelay, Group root2) {
-		// TODO Auto-generated method stub
+		// Get current cells from CellManager
+		// Pass current cells to UI to update grid display
+		// Update Cells in CellManager
+		// Repeat
+		// Need to check for the end?
 		return null;
 	}*/
 

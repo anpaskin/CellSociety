@@ -44,7 +44,7 @@ public abstract class CellManager {
 		return neighbors;
 	}
 	
-	private ArrayList<Integer> getNeighborLocationNums(Cell c) {
+	protected ArrayList<Integer> getNeighborLocationNums(Cell c) {
 		ArrayList<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
 		for(int i = -1; i < 2; i++) {
