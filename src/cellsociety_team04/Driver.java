@@ -4,6 +4,9 @@ import cellsociety_Simulations.*;
 import cellsociety_UIUX.*;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -22,11 +25,11 @@ public class Driver extends Application {
 
 	private Stage menuStage;
 	private Stage simulationStage;
-	private Window menu = new MenuWindow();
-	private SimulationWindow segregation = new SegregationWindow();
-	private SimulationWindow wator = new WatorWindow();
-	private SimulationWindow fire = new FireWindow();
-	private SimulationWindow gameoflife = new GameOfLifeWindow();
+	private Window menu = new MenuWindow(menuStage);
+	private SimulationWindow segregation = new SegregationWindow(simulationStage);
+	private SimulationWindow wator = new WatorWindow(simulationStage);
+	private SimulationWindow fire = new FireWindow(simulationStage);
+	private SimulationWindow gameoflife = new GameOfLifeWindow(simulationStage);
 
 	private CellManager simulation;
 
@@ -39,19 +42,20 @@ public class Driver extends Application {
 		menuStage = stage;
 		menuStage.setTitle(MENUTITLE);
 
+		menu.setupSceneDimensions();
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
 
-		setupSimulation();
 		//NOTE: xml info is parsed and read here to create new simulation
+		// add button to menu for uploading a new file... if user clicks then prompt file choice
 		XMLParser parser = new XMLParser();
 		parser.chooseFile(stage);
 		simulation = parser.getSimulation();
 
+		setupSimulation();
 		runSimulation();
 		simulationStage.show();
 	}
-
 
 	private void setupSimulation() {
 		simulationStage = new Stage();
@@ -60,15 +64,19 @@ public class Driver extends Application {
 
 		if (simulation instanceof Segregation) {
 			segregation.setWindowOpen(true);
+			System.out.println("segregation");
 		}
 /*		else if (simulation instanceof Wator) {
 			wator.setWindowOpen(true);
+			System.out.println("wator");
 		}*/
 		else if (simulation instanceof Fire) {
 			fire.setWindowOpen(true);
+			System.out.println("fire");
 		}
 		else if (simulation instanceof GameOfLife) {
 			gameoflife.setWindowOpen(true);
+			System.out.println("gameoflife WHY WONT YOU BE RIGHT SIZE");
 		}
 
 	}

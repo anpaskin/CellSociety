@@ -6,20 +6,31 @@ import java.util.List;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
+	
+	protected static final double WIDTH = 800;
+	protected static final double HEIGHT = 800;
+	
 	protected boolean start;
 	protected Button run;
 	protected Button step;
+	
 	protected double speed;
 	protected double numCells;
 	protected double cellSize;
 	
 	protected List<Button> buttons;
+	protected int buttonOffset = 50;
+	protected int buttonPadding = 100;
 		
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
@@ -29,8 +40,8 @@ public abstract class SimulationWindow extends Window {
 	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
 
-	public SimulationWindow() {
-		super();
+	public SimulationWindow(Stage s) {
+		super(s);
 		setupScene();
 		userInteraction();
 
@@ -57,13 +68,37 @@ public abstract class SimulationWindow extends Window {
 
 	@Override
 	public void setupScene() {
+		setupSceneDimensions();
 		buttons = new ArrayList<Button>();
 		addButtons();
+		placeButtons();
 		addTitle();
+	}
+	
+	public void setupSceneDimensions() {
+		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
 	private void addButtons() {
 		//TODO
+		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
+		Button startButton = new Button();
+		startButton.setGraphic(new ImageView(startImage));
+		
+		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
+		Button stepButton = new Button();
+		stepButton.setGraphic(new ImageView(stepImage));
+		
+		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
+	}
+	
+	private void placeButtons() {
+		for (int i = 0; i < buttons.size(); i++) {
+			Button button = buttons.get(i);
+			button.setLayoutX(buttonOffset);
+			button.setLayoutY(buttonOffset + i*buttonPadding);
+			myRoot.getChildren().add(button);
+		}
 	}
 	
 	private void addTitle() {
@@ -88,6 +123,11 @@ public abstract class SimulationWindow extends Window {
 		}
 		myRoot.getChildren().add(grid);
 		return grid;
+	}
+	
+	public void closeSimulation() {
+		myStage.close();
+		windowOpen = false;
 	}
 
 	public boolean getWindowOpen() {

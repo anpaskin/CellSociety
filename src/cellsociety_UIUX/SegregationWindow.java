@@ -12,8 +12,8 @@ public class SegregationWindow extends SimulationWindow {
 	private Button run, step;
 	private Slider redToBlue;
 	
-	public SegregationWindow() {
-		super();
+	public SegregationWindow(Stage s) {
+		super(s);
 	}
 
 

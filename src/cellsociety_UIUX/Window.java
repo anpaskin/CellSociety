@@ -8,14 +8,11 @@ public abstract class Window {
 	protected Stage myStage;
 	protected Group myRoot;
 	protected Scene myScene;
-	protected static final double WIDTH = 1000;
-	protected static final double HEIGHT = 500;
 	
-	public Window() {
-		myStage = new Stage();
+	public Window(Stage s) {
+		myStage = s;
 		myRoot = new Group();
-		setupSceneDimensions();
-		myStage.setScene(myScene);
+		
 	}
 	
 	public void setupScene() {
@@ -23,7 +20,7 @@ public abstract class Window {
 	}
 	
 	public void setupSceneDimensions() {
-		myScene = new Scene(myRoot, WIDTH, HEIGHT);
+		//do nothing
 	}
 	
 	public Scene getScene() {

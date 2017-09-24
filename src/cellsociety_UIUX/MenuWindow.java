@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,14 +17,16 @@ import javafx.stage.Stage;
 
 public class MenuWindow extends Window {
 
+	private static final double WIDTH = 1000;
+	private static final double HEIGHT = 500;
+	
 	private static final int BUTTONOFFSET = 50;
 	private List<Button> buttons;
-	private static final double buttonScale = 0.5;
 	
 	private double buttonPadding;
 
-	public MenuWindow() {
-		super();
+	public MenuWindow(Stage s) {
+		super(s);
 		setupScene();
 		userInteraction();
 	}	
@@ -33,6 +36,10 @@ public class MenuWindow extends Window {
 		addButtons();
 		addTitle();
 	}
+	
+	public void setupSceneDimensions() {
+		myScene = new Scene(myRoot, WIDTH, HEIGHT);
+	}
 
 	private void userInteraction() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
@@ -40,7 +47,7 @@ public class MenuWindow extends Window {
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
 					//TODO need to have new stage open instead
-					
+					// stage shows info about that simulation
 				}
 			});
 		}
@@ -65,7 +72,6 @@ public class MenuWindow extends Window {
 		gameoflifeButton.setGraphic(new ImageView(gameoflifeImage));
 		
 		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
-		System.out.println(buttons);
 		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
 		
 		for (int i = 0; i < buttons.size(); i++) {
