@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 public class MenuWindow extends Window {
 
@@ -27,21 +28,22 @@ public class MenuWindow extends Window {
 		userInteraction();
 	}	
 
+	@Override
+	public void setupScene() {
+		addButtons();
+		addTitle();
+	}
+
 	private void userInteraction() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
 					//TODO need to have new stage open instead
+					
 				}
 			});
 		}
-	}
-
-	@Override
-	public void setupScene() {
-		addButtons();
-		addTitle();
 	}
 
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
@@ -68,7 +70,6 @@ public class MenuWindow extends Window {
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			//System.out.println(button);
 			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getWidth() + i*buttonPadding);
 			button.setLayoutY(HEIGHT*2/3);
 			myRoot.getChildren().add(button);
@@ -76,12 +77,10 @@ public class MenuWindow extends Window {
 	}
 
 	private void addTitle() {
-		Text text = new Text();
-		text.setFont(new Font(75));
-		text.setWrappingWidth(WIDTH);
-		text.setTextAlignment(TextAlignment.CENTER);
-		text.setText("Cell Society");
-		text.setY(HEIGHT/4);
-		myRoot.getChildren().add(text);
+		Image titleImage = new Image(getClass().getClassLoader().getResourceAsStream("cellsociety.png"));
+		ImageView title = new ImageView(titleImage);
+		title.setLayoutX(WIDTH/2-title.getBoundsInLocal().getWidth()/2);
+		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
+		myRoot.getChildren().add(title);
 	}
 }

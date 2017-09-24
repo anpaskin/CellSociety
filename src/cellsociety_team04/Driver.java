@@ -28,16 +28,14 @@ import javafx.util.Duration;
 public class Driver extends Application {
 
 	private static final String TITLE = "Cell Society";
-	private boolean segregationWindow = false;
-	private boolean segregationRunning = false;
-	private boolean watorWindow = false;
-	private boolean watorRunning = false;
-	private boolean fireWindow = false;
-	private boolean fireRunning = false;
-	private boolean gameoflifeWindow = false;
-	private boolean gameoflifeRunning = false;
 
 	private Stage menuStage;
+	private Stage simulationStage;
+	private Window menu = new MenuWindow();
+	private Window segregation = new SegregationWindow();
+	private Window wator = new WatorWindow();
+	private Window fire = new FireWindow();
+	private Window gameoflife = new GameOfLifeWindow();
 
 	/**
 	 * Displays the menu in the window
@@ -47,11 +45,27 @@ public class Driver extends Application {
 		menuStage = stage;
 		menuStage.setTitle(TITLE);
 
-		Window menu = new MenuWindow();
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
+
+		setupSimulation();
+		//runSimulation();
 	}
 
+
+	private void setupSimulation() {
+		simulationStage = new Stage();
+		//TODO use title from xml file... 
+		simulationStage.setTitle("Simulation");
+	}
+
+	/*	private void runSimulation() {
+		// TODO Auto-generated method stub
+		if (segregation.getWindowOpen()) {
+
+		}
+	}
+	 */
 	/**
 	 * Start of the program
 	 */

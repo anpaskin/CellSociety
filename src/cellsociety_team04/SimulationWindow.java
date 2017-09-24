@@ -20,8 +20,7 @@ public abstract class SimulationWindow extends Window {
 	protected double cellSize;
 	
 	protected List<Button> buttons;
-	private List<String> buttonNames = new ArrayList<String>(Arrays.asList("Start", "Step"));
-	
+		
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
 
@@ -72,7 +71,7 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addSlider() {
-
+		//TODO
 	}
 
 	public GridPane addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
@@ -91,5 +90,17 @@ public abstract class SimulationWindow extends Window {
 		return grid;
 	}
 
-
+	public boolean getWindowOpen() {
+		return windowOpen;
+	}
+	public void setWindowOpen(boolean b) {
+		windowOpen = b;
+	}
+	
+	public boolean getSimulationRunning() {
+		return simulationRunning;
+	}	
+	public void setSimulationRunning(boolean b) {
+		simulationRunning = b;
+	}
 }

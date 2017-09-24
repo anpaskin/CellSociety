@@ -14,8 +14,6 @@ public class SegregationWindow extends SimulationWindow {
 	
 	public SegregationWindow() {
 		super();
-
-		
 	}
 
 
