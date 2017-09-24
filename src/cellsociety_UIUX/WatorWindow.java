@@ -1,4 +1,4 @@
-package cellsociety_team04;
+package cellsociety_UIUX;
 
 public class WatorWindow extends Window {
 

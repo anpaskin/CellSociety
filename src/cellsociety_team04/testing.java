@@ -2,6 +2,10 @@ package cellsociety_team04;
 
 import java.util.ArrayList;
 
+import cellsociety_Cells.Cell;
+import cellsociety_Simulations.GameOfLife;
+import cellsociety_Simulations.Segregation;
+
 public class testing {
 
 	public static void main(String[] args) {

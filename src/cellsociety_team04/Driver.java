@@ -1,21 +1,15 @@
 package cellsociety_team04;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import cellsociety_Simulations.CellManager;
+import cellsociety_UIUX.FireWindow;
+import cellsociety_UIUX.GameOfLifeWindow;
+import cellsociety_UIUX.MenuWindow;
+import cellsociety_UIUX.SegregationWindow;
+import cellsociety_UIUX.WatorWindow;
+import cellsociety_UIUX.Window;
+
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * 

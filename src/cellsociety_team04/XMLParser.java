@@ -5,6 +5,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import cellsociety_Simulations.CellManager;
+import cellsociety_Simulations.GameOfLife;
+import cellsociety_Simulations.Segregation;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
