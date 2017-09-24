@@ -19,22 +19,24 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
-	
+
 	protected double WIDTH;
 	protected double HEIGHT;
-	
-	protected boolean start;
-	protected Button run;
-	protected Button step;
-	
-	protected double speed;
-	protected int numCells = 10;
+
+	protected boolean running;
+	protected Button startButton = new Button();
+	protected Button stepButton = new Button();
+
+	protected double speed = 1;
+	protected int numCells = 50;
 	protected int cellSize = 10;
-	
+
 	protected List<Button> buttons;
-	protected int buttonOffset = 50;
-	protected int buttonPadding = 100;
-		
+	protected int offset = 50;
+	protected int padding = 100;
+
+	protected GridPane grid = new GridPane();
+
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
 
@@ -50,7 +52,7 @@ public abstract class SimulationWindow extends Window {
 
 		// attach "game loop" to timeline to play it
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY));
+				e -> step(SECOND_DELAY*speed));
 		Timeline animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
@@ -59,7 +61,7 @@ public abstract class SimulationWindow extends Window {
 
 	private void userInteraction() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -77,43 +79,43 @@ public abstract class SimulationWindow extends Window {
 		placeButtons();
 		addTitle();
 		addGridPane();
+		throwErrors();
 	}
-	
+
 	public void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX();
+		System.out.println(WIDTH);
 		HEIGHT = dimensions.getMaxY();
+		System.out.println(HEIGHT);
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
-		myStage.setWidth(WIDTH);
-		myStage.setHeight(HEIGHT);
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
+		myStage.setMaximized(true);
 	}
 
 	private void addButtons() {
 		//TODO
 		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
-		Button startButton = new Button();
 		startButton.setGraphic(new ImageView(startImage));
-		
+
 		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
-		Button stepButton = new Button();
 		stepButton.setGraphic(new ImageView(stepImage));
-		
+
 		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
 	}
-	
+
 	private void placeButtons() {
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			button.setLayoutX(buttonOffset);
-			button.setLayoutY(buttonOffset + i*buttonPadding);
+			button.setLayoutX(offset);
+			button.setLayoutY(offset + i*padding);
 			myRoot.getChildren().add(button);
 		}
 	}
-	
+
 	private void addTitle() {
-		//TODO
+		//do nothing
 	}
 
 	private void addSlider() {
@@ -121,23 +123,38 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
-		GridPane grid = new GridPane();
-		grid.setGridLinesVisible(true);
+		/*grid.getStyleClass().add("game-grid");
+		grid.setGridLinesVisible(true);*/
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Rectangle rect = new Rectangle();
 				rect.setWidth(cellSize);
 				rect.setHeight(cellSize);
-				rect.setFill(Color.WHITE);
+				if ((row+col) % 2 == 1) {
+					rect.setFill(Color.WHITE);
+				}
+				else {
+					rect.setFill(Color.BLUE);
+				}
+				GridPane.setRowIndex(rect, row);
+				GridPane.setColumnIndex(rect, col);
 				//grid.add(rect, col, row);
-				grid.getChildren().add(rect);
+				grid.getChildren().addAll(rect);
 			}
 		}
-		grid.setLayoutX(WIDTH - grid.getBoundsInLocal().getWidth());
-		grid.setLayoutY(HEIGHT - grid.getBoundsInLocal().getWidth());
 		myRoot.getChildren().add(grid);
+		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
+		grid.setLayoutY(offset);
 	}
-	
+
+	public void throwErrors() {
+		double gridSize = numCells*cellSize;
+		//if (gridSize > WIDTH || gridSize > HEIGHT) {
+		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
+			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
+		}
+	}
+
 	public void closeSimulation() {
 		myStage.close();
 		windowOpen = false;
@@ -149,7 +166,7 @@ public abstract class SimulationWindow extends Window {
 	public void setWindowOpen(boolean b) {
 		windowOpen = b;
 	}
-	
+
 	public boolean getSimulationRunning() {
 		return simulationRunning;
 	}	

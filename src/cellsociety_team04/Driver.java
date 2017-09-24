@@ -65,30 +65,29 @@ public class Driver extends Application {
 			segregation.setWindowOpen(true);
 			System.out.println("segregation");
 		}
-/*		else if (simulation instanceof Wator) {
-			wator.setWindowOpen(true);
-			System.out.println("wator");
-		}*/
 		else if (simulation instanceof Fire) {
 			fire.setWindowOpen(true);
 			System.out.println("fire");
 		}
 		else if (simulation instanceof GameOfLife) {
 			gameoflife.setWindowOpen(true);
-			System.out.println("gameoflife WHY WONT YOU BE RIGHT SIZE");
+			System.out.println("gameoflife WHY WONT YOU HAVE BUTTONS");
 		}
-
+/*		else if (simulation instanceof Wator) {
+			wator.setWindowOpen(true);
+			System.out.println("wator");
+		}*/
 	}
 
 	private void runSimulation() {
 		if (segregation.getWindowOpen()) {
 			simulationStage.setScene(segregation.getScene());
 		}
-		else if (wator.getWindowOpen()) {
-			simulationStage.setScene(wator.getScene());
-		}
 		else if (fire.getWindowOpen()) {
 			simulationStage.setScene(fire.getScene());
+		}
+		else if (wator.getWindowOpen()) {
+			simulationStage.setScene(wator.getScene());
 		}
 		else if (gameoflife.getWindowOpen()) {
 			simulationStage.setScene(gameoflife.getScene());
