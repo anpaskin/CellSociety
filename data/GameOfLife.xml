@@ -2,6 +2,6 @@
 <data simulation="GameOfLife">
     <title>Game of Life</title>
     <author>John Horton Conway</author>
-	<liveCellPercent>0.35</liveCellPercent>
+	<aliveRatio>0.35</aliveRatio>
     <size>20.0</size>
 </data>

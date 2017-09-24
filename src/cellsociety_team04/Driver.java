@@ -21,6 +21,7 @@ import javafx.stage.Stage;
  * Driver for running the code
  * 
  * @author kelly
+ * @author Dara
  *
  */
 
@@ -35,6 +36,8 @@ public class Driver extends Application {
 	private Button GameofLife, PredatorPrey, Fire, Segregation;
 	private ArrayList<Button> buttons = new ArrayList<>(Arrays.asList(GameofLife, PredatorPrey, Fire, Segregation));
 	private double BUTTONOFFSET = 150;
+	
+	private CellManager simulation;
 
 	/**
 	 * Displays the menu in the window
@@ -49,6 +52,11 @@ public class Driver extends Application {
 		setupMenuStage(primaryScreenBounds, menu); //http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm
 
 		menuStage.show();
+		
+		//NOTE: xml info is parsed and read here to create new simulation
+		XMLParser parser = new XMLParser();
+		parser.chooseFile(stage);
+		simulation = parser.getSimulation();
 
 		/*segregation.setOnAction(e -> {
 			Stage segStage = new Stage();
