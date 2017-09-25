@@ -8,6 +8,8 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +28,9 @@ public abstract class SimulationWindow extends Window {
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	protected boolean running;
+	protected boolean notStarted = true;
+	protected boolean running = false;
+	protected boolean stepping = false;
 	protected Button startButton = new Button();
 	protected Button stepButton = new Button();
 
@@ -53,30 +57,45 @@ public abstract class SimulationWindow extends Window {
 	public SimulationWindow(Stage s) {
 		super(s);
 		setupScene();
-		userInteraction();
-
-		// attach "game loop" to timeline to play it
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY));
-		//TODO multiply seconddelay by amount sound on speed slider
-		Timeline animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();
 	}
 
-	private void userInteraction() {
+	protected void userInteraction() {
 		// TODO Auto-generated method stub
-
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				notStarted = !notStarted;
+				running = !running;
+			}
+		});
+		
+		stepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				stepping = true;
+			}
+		});
 	}
-
+	
+	protected void gameLoop() {
+	// attach "game loop" to timeline to play it
+			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+					e -> step(SECOND_DELAY));
+			//TODO multiply seconddelay by amount sound on speed slider
+			Timeline animation = new Timeline();
+			animation.setCycleCount(Timeline.INDEFINITE);
+			animation.getKeyFrames().add(frame);
+			animation.play();
+	}
+	
 	/**
 	 * Updates the cells for each SimulationWindow
 	 */
-	public void step(double elapsedTime) {
-		// do nothing
+	protected void step(double elapsedTime) {
+		if (!notStarted && running) {
+			//TODO
+		}
 	}
 
+	
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();

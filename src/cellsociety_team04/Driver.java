@@ -71,12 +71,12 @@ public class Driver extends Application {
 		}
 		else if (simulation instanceof GameOfLife) {
 			gameoflife.setWindowOpen(true);
-			System.out.println("gameoflife WHY WONT YOU HAVE BUTTONS");
+			System.out.println("gameoflife");
 		}
-/*		else if (simulation instanceof Wator) {
+		else if (simulation instanceof WaTor) {
 			wator.setWindowOpen(true);
 			System.out.println("wator");
-		}*/
+		}
 	}
 
 	private void runSimulation() {
