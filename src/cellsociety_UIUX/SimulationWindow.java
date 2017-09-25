@@ -115,7 +115,7 @@ public abstract class SimulationWindow extends Window {
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
-		myStage.setMaximized(true);
+		//myStage.setMaximized(true);
 	}
 	
 	public void setRowSize(CellManager c) {
