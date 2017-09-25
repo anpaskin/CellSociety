@@ -3,6 +3,11 @@ package cellsociety_team04;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * 
+ * @author Aaron Paskin
+ *
+ */
 public class WaTor extends CellManager {
 
 	private static final int DEFAULT_ENERGY = 5;
