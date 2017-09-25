@@ -21,6 +21,10 @@ public abstract class CellManager {
 		nextCellStatuses = new ArrayList<String>();
 	}
 	
+	public double getSize() {
+		return size;
+	}
+	
 	public void setNextCellStatuses() {
 		//content depends on simulation type
 	}
