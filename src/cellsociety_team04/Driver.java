@@ -67,9 +67,9 @@ public class Driver extends Application {
 			segregation.setRowSize(simulation);
 			((Segregation) simulation).initializeCurrentCells();
 			segregation.displayGridPane(simulation.getCurrentCells());
-
+			simulationStage.setScene(segregation.getScene());
 			System.out.println("segregation");
-			System.out.println(segregation.getCellColors());
+			//System.out.println(segregation.getCellColors());
 		}
 		else if (simulation instanceof Fire) {
 			fire.setWindowOpen(true);
@@ -78,7 +78,7 @@ public class Driver extends Application {
 			// TODO:
 			((Fire) simulation).initializeCurrentCells();
 			fire.displayGridPane(simulation.getCurrentCells());
-			
+			simulationStage.setScene(fire.getScene());
 			System.out.println("fire");
 		}
 		else if (simulation instanceof GameOfLife) {
@@ -87,7 +87,7 @@ public class Driver extends Application {
 			gameoflife.setRowSize(simulation);
 			((GameOfLife) simulation).initializeCurrentCells();
 			gameoflife.displayGridPane(simulation.getCurrentCells());
-			
+			simulationStage.setScene(gameoflife.getScene());
 			System.out.println("gameoflife");
 		}
 		else if (simulation instanceof WaTor) {
@@ -96,23 +96,23 @@ public class Driver extends Application {
 			wator.setRowSize(simulation);
 			((WaTor) simulation).initializeCurrentCells();
 			wator.displayGridPane(simulation.getCurrentCells());
-			
+			simulationStage.setScene(wator.getScene());
 			System.out.println("wator");
 		}
 	}
 
 	private void runSimulation() {
 		if (segregation.getWindowOpen()) {
-			simulationStage.setScene(segregation.getScene());
+			segregation.gameLoop(simulation);
 		}
 		else if (fire.getWindowOpen()) {
-			simulationStage.setScene(fire.getScene());
+			fire.gameLoop(simulation);
 		}
 		else if (wator.getWindowOpen()) {
-			simulationStage.setScene(wator.getScene());
+			wator.gameLoop(simulation);
 		}
 		else if (gameoflife.getWindowOpen()) {
-			simulationStage.setScene(gameoflife.getScene());
+			gameoflife.gameLoop(simulation);
 		}
 	}
 	 

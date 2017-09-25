@@ -28,7 +28,7 @@ public abstract class SimulationWindow extends Window {
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	protected boolean notStarted = true;
+	//protected boolean started = false;
 	protected boolean running = false;
 	protected boolean stepping = false;
 	protected Button startButton = new Button();
@@ -64,7 +64,6 @@ public abstract class SimulationWindow extends Window {
 		// TODO Auto-generated method stub
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
-				notStarted = !notStarted;
 				running = !running;
 			}
 		});
@@ -76,10 +75,10 @@ public abstract class SimulationWindow extends Window {
 		});
 	}
 	
-	protected void gameLoop() {
+	public void gameLoop(CellManager simType) {
 	// attach "game loop" to timeline to play it
 			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-					e -> step(SECOND_DELAY));
+					e -> step(SECOND_DELAY, simType));
 			//TODO multiply seconddelay by amount sound on speed slider
 			Timeline animation = new Timeline();
 			animation.setCycleCount(Timeline.INDEFINITE);
@@ -89,10 +88,14 @@ public abstract class SimulationWindow extends Window {
 	
 	/**
 	 * Updates the cells for each SimulationWindow
+	 * @param simType 
 	 */
-	protected void step(double elapsedTime) {
-		if (!notStarted && running) {
-			//TODO
+	protected void step(double elapsedTime, CellManager simType) {
+		if (running) {
+			simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGridPane(simType.getCurrentCells());
+			System.out.println(cellColors);
 		}
 	}
 
@@ -160,6 +163,7 @@ public abstract class SimulationWindow extends Window {
 
 	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		getCellColors(currentCells);
+		grid.getChildren().clear();
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Rectangle rect = new Rectangle();
@@ -167,7 +171,6 @@ public abstract class SimulationWindow extends Window {
 				rect.setHeight(cellSize);
 				int cellNum = row*numCells + col;
 				rect.setFill(cellColors.get(cellNum));
-				System.out.println(cellColors.get(cellNum));
 				GridPane.setRowIndex(rect, row);
 				GridPane.setColumnIndex(rect, col);
 				grid.getChildren().addAll(rect);
@@ -175,7 +178,9 @@ public abstract class SimulationWindow extends Window {
 		}
 		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
 		grid.setLayoutY(offset);
-		myRoot.getChildren().add(grid);
+		if (!myRoot.getChildren().contains(grid)) {
+			myRoot.getChildren().add(grid);
+		}
 	}
 	
 	// updates grid with cellColors array list data

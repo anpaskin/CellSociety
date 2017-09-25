@@ -25,6 +25,8 @@ public class SegregationWindow extends SimulationWindow {
 		addSlider(emptyRatio);
 	}
 	
+	
+	
 //	@Override
 //	protected void setGridSize(CellManager seg) {
 //		//(int) Math.sqrt(cellColors.size());
