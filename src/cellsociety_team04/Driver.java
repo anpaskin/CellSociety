@@ -67,8 +67,9 @@ public class Driver extends Application {
 			segregation.setRowSize(simulation);
 			((Segregation) simulation).initializeCurrentCells();
 			segregation.displayGridPane(simulation.getCurrentCells());
-			
+
 			System.out.println("segregation");
+			System.out.println(segregation.getCellColors());
 		}
 		else if (simulation instanceof Fire) {
 			fire.setWindowOpen(true);

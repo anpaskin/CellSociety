@@ -35,7 +35,7 @@ public abstract class SimulationWindow extends Window {
 	protected Button stepButton = new Button();
 	
 	protected int numCells;
-	protected int cellSize = 10;
+	protected int cellSize = 50;
 
 	protected List<Button> buttons;
 	protected int offset = 50;
@@ -159,8 +159,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
-		/*grid.getStyleClass().add("game-grid");
-		grid.setGridLinesVisible(true);*/
 		getCellColors(currentCells);
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
@@ -169,6 +167,7 @@ public abstract class SimulationWindow extends Window {
 				rect.setHeight(cellSize);
 				int cellNum = row*numCells + col;
 				rect.setFill(cellColors.get(cellNum));
+				System.out.println(cellColors.get(cellNum));
 				GridPane.setRowIndex(rect, row);
 				GridPane.setColumnIndex(rect, col);
 				grid.getChildren().addAll(rect);
@@ -198,11 +197,10 @@ public abstract class SimulationWindow extends Window {
 //	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
-	private ArrayList<Color> getCellColors(ArrayList<Cell> cellStatuses) {
+	private void getCellColors(ArrayList<Cell> cellStatuses) {
 		for (int i = 0; i < cellStatuses.size(); i++) {
 			cellColors.add(cellStatuses.get(i).getColor());
 		}
-		return cellColors;
 	}
 	
 
@@ -220,6 +218,10 @@ public abstract class SimulationWindow extends Window {
 		windowOpen = false;
 	}
 
+	public ArrayList<Color> getCellColors() {
+		return cellColors;
+	}
+	
 	public boolean getWindowOpen() {
 		return windowOpen;
 	}

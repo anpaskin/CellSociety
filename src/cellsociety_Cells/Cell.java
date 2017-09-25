@@ -14,7 +14,6 @@ public abstract class Cell {
 	
 	public Cell(String s) {
 		setStatus(s);
-		color = Color.WHITE;
 	}
 	
 	public String getStatus() {
