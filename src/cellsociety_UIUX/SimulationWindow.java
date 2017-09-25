@@ -8,6 +8,8 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
@@ -16,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -41,6 +44,7 @@ public abstract class SimulationWindow extends Window {
 	protected List<Button> buttons;
 	protected int offset = 50;
 	protected int padding = 100;
+	protected int simSpeed = 1;
 
 	Slider speed = new Slider();
 	
@@ -65,6 +69,7 @@ public abstract class SimulationWindow extends Window {
 		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
+				simSpeed = speed.valueProperty().intValue()*5;
 				running = !running;
 				if (running) {
 					playButton.setGraphic(pauseImageView);
@@ -80,11 +85,26 @@ public abstract class SimulationWindow extends Window {
 				stepping = true;
 			}
 		});
+		
+		
+		speed.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+			@Override public void handle(MouseDragEvent e) {
+				simSpeed = (int) speed.getValue();
+			}
+		});
+//		speed.valueProperty().addListener(new ChangeListener<Number>() {
+//	         public void changed(ObservableValue<? extends Number> ov,
+//	        		 Number old_val, Number new_val) {
+//	        	 		speed.set
+//	             	simSpeed = (int) new_val * 10;
+//	            }
+//	     });
+		
 	}
 	
 	public void gameLoop(CellManager simType) {
 	// attach "game loop" to timeline to play it
-			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY*simSpeed),
 					e -> step(SECOND_DELAY, simType));
 			//TODO multiply seconddelay by amount sound on speed slider
 			Timeline animation = new Timeline();
@@ -167,7 +187,7 @@ public abstract class SimulationWindow extends Window {
 
 	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
 		speed.setMin(0);
-		speed.setMax(5);
+		speed.setMax(3);
 		speed.setValue(1);
 		speed.setShowTickLabels(true);
 		speed.setShowTickMarks(true);
