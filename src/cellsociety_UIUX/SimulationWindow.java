@@ -95,7 +95,6 @@ public abstract class SimulationWindow extends Window {
 			simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGridPane(simType.getCurrentCells());
-			System.out.println(cellColors);
 		}
 	}
 
@@ -203,6 +202,7 @@ public abstract class SimulationWindow extends Window {
 	
 	// pass in currentCells array list and get array list of colors to fill grid
 	private void getCellColors(ArrayList<Cell> cellStatuses) {
+		cellColors.clear();
 		for (int i = 0; i < cellStatuses.size(); i++) {
 			cellColors.add(cellStatuses.get(i).getColor());
 		}
