@@ -3,6 +3,9 @@ package cellsociety_UIUX;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import cellsociety_Simulations.CellManager;
+import cellsociety_team04.XMLParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -22,9 +25,12 @@ public class MenuWindow extends Window {
 	
 	private static final int BUTTONOFFSET = 50;
 	private List<Button> buttons;
-	
+	private Button newSimButton;
 	private double buttonPadding;
 
+	private CellManager simulation;
+	private boolean newSim = true;
+	
 	public MenuWindow(Stage s) {
 		super(s);
 		setupScene();
@@ -51,10 +57,33 @@ public class MenuWindow extends Window {
 				}
 			});
 		}
+		newSimButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				newSim = true;
+			}
+		});
+	}
+	
+	public void newSimulation(Stage stage, XMLParser parser) {
+		newSimButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				newSim = true;
+				parser.chooseFile(stage);
+				simulation = parser.getSimulation();
+			}
+		});
 	}
 
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
+		Image newSimImage = new Image(getClass().getClassLoader().getResourceAsStream("newsim.png"));
+		newSimButton = new Button();
+		newSimButton.setGraphic(new ImageView(newSimImage));
+		
+		newSimButton.setLayoutX(WIDTH/2 - newSimButton.getMaxWidth()/2);
+		newSimButton.setLayoutY(HEIGHT*1/2);
+		myRoot.getChildren().add(newSimButton);
+		
 		Image segregationImage = new Image(getClass().getClassLoader().getResourceAsStream("segregation.png"));
 		Button segregationButton = new Button();
 		segregationButton.setGraphic(new ImageView(segregationImage));
@@ -76,7 +105,7 @@ public class MenuWindow extends Window {
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getWidth() + i*buttonPadding);
+			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding);
 			button.setLayoutY(HEIGHT*2/3);
 			myRoot.getChildren().add(button);
 		}
@@ -88,5 +117,17 @@ public class MenuWindow extends Window {
 		title.setLayoutX(WIDTH/2-title.getBoundsInLocal().getWidth()/2);
 		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
 		myRoot.getChildren().add(title);
+	}
+	
+	public CellManager getSimulation() {
+		return simulation;
+	}
+	
+	public boolean getNewSim() {
+		return newSim;
+	}
+	
+	public void setNewSim(boolean b) {
+		newSim = b;
 	}
 }

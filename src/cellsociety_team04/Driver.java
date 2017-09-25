@@ -45,16 +45,25 @@ public class Driver extends Application {
 		menu.setupSceneDimensions();
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
-
+		
 		//NOTE: xml info is parsed and read here to create new simulation
 		// add button to menu for uploading a new file... if user clicks then prompt file choice
-		XMLParser parser = new XMLParser();
+		/*XMLParser parser = new XMLParser();
 		parser.chooseFile(stage);
 		simulation = parser.getSimulation();
-
-		setupSimulation();
-		runSimulation();
-		simulationStage.show();
+		*/
+		
+		//((MenuWindow) menu).newSimulation(menuStage, parser);
+		if (((MenuWindow) menu).getNewSim()) {
+			System.out.println("getting new sim");
+			XMLParser parser = new XMLParser();
+			parser.chooseFile(menuStage);
+			simulation = parser.getSimulation();
+			setupSimulation();
+			runSimulation();
+			simulationStage.show();
+			((MenuWindow) menu).setNewSim(false);
+		}
 	}
 
 	private void setupSimulation() {
@@ -115,7 +124,7 @@ public class Driver extends Application {
 			gameoflife.gameLoop(simulation);
 		}
 	}
-	 
+
 	/**
 	 * Start of the program
 	 */
