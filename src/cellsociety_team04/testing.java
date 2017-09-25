@@ -8,11 +8,16 @@ import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
 
+/**
+ * 
+ * @author Aaron Paskin
+ *
+ */
 public class testing {
 
 	public static void main(String[] args) {
-		//segTesting(.5, .25, .5, 100);
-		fireTesting(.75, 66, 81);
+		segTesting(.5, .25, .5, 16);
+		//fireTesting(.75, 66, 100);
 		//lifeTesting(.5, 100);
 		//waTorTesting(0.2, 0.35, 100);
 	}

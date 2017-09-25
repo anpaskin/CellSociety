@@ -6,7 +6,7 @@ import cellsociety_Cells.Cell;
 import cellsociety_Cells.WaTorCell;
 /**
  * 
- * @author 
+ * @author Aaron Paskin
  *
  */
 public class WaTor extends CellManager {
