@@ -20,9 +20,9 @@ public class SegregationWindow extends SimulationWindow {
 	
 	public SegregationWindow(Stage s) {
 		super(s);
-		addSlider(minSimilar);
+/*		addSlider(minSimilar);
 		addSlider(redToBlue);
-		addSlider(emptyRatio);
+		addSlider(emptyRatio);*/
 	}
 	
 	

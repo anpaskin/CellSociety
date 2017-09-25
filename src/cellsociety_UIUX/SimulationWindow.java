@@ -31,8 +31,9 @@ public abstract class SimulationWindow extends Window {
 	//protected boolean started = false;
 	protected boolean running = false;
 	protected boolean stepping = false;
-	protected Button startButton = new Button();
+	protected Button playButton = new Button();
 	protected Button stepButton = new Button();
+	protected ImageView playImageView, pauseImageView;
 	
 	protected int numCells;
 	protected int cellSize = 50;
@@ -62,9 +63,15 @@ public abstract class SimulationWindow extends Window {
 
 	public void userInteraction() {
 		// TODO Auto-generated method stub
-		startButton.setOnAction(new EventHandler<ActionEvent>() {
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				running = !running;
+				if (running) {
+					playButton.setGraphic(pauseImageView);
+				}
+				else {
+					playButton.setGraphic(playImageView);
+				}
 			}
 		});
 		
@@ -134,13 +141,17 @@ public abstract class SimulationWindow extends Window {
 
 	private void addButtons() {
 		//TODO
-		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
-		startButton.setGraphic(new ImageView(startImage));
+		Image playImage = new Image(getClass().getClassLoader().getResourceAsStream("play.png"));
+		playImageView = new ImageView(playImage);
+		playButton.setGraphic(playImageView);
 
 		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
 		stepButton.setGraphic(new ImageView(stepImage));
-
-		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
+		
+		Image pauseImage = new Image(getClass().getClassLoader().getResourceAsStream("pause.png"));
+		pauseImageView = new ImageView(pauseImage);
+		
+		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
