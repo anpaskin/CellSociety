@@ -33,8 +33,8 @@ public abstract class SimulationWindow extends Window {
 	protected boolean stepping = false;
 	protected Button startButton = new Button();
 	protected Button stepButton = new Button();
-
-	protected int numCells = 50;
+	
+	protected int numCells;
 	protected int cellSize = 10;
 
 	protected List<Button> buttons;
@@ -44,7 +44,7 @@ public abstract class SimulationWindow extends Window {
 	Slider speed = new Slider();
 	
 	protected GridPane grid = new GridPane();
-	protected ArrayList<Color> cellColors;
+	protected ArrayList<Color> cellColors = new ArrayList<>();
 
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
@@ -57,9 +57,10 @@ public abstract class SimulationWindow extends Window {
 	public SimulationWindow(Stage s) {
 		super(s);
 		setupScene();
+		//setRowSize();
 	}
 
-	protected void userInteraction() {
+	public void userInteraction() {
 		// TODO Auto-generated method stub
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
@@ -103,7 +104,7 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		addSlider();
 		addTitle();
-		addGridPane();
+		//displayGridPane();
 		throwErrors();
 	}
 
@@ -115,6 +116,11 @@ public abstract class SimulationWindow extends Window {
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 		myStage.setMaximized(true);
+	}
+	
+	public void setRowSize(CellManager c) {
+		// do nothing
+		numCells = (int) Math.sqrt(c.getSize());
 	}
 
 	private void addButtons() {
@@ -152,23 +158,19 @@ public abstract class SimulationWindow extends Window {
 		myRoot.getChildren().add(speed);
 	}
 
-	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
+	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		/*grid.getStyleClass().add("game-grid");
 		grid.setGridLinesVisible(true);*/
+		getCellColors(currentCells);
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Rectangle rect = new Rectangle();
 				rect.setWidth(cellSize);
 				rect.setHeight(cellSize);
-				if ((row+col) % 2 == 1) {
-					rect.setFill(Color.WHITE);
-				}
-				else {
-					rect.setFill(Color.BLUE);
-				}
+				int cellNum = row*numCells + col;
+				rect.setFill(cellColors.get(cellNum));
 				GridPane.setRowIndex(rect, row);
 				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
 				grid.getChildren().addAll(rect);
 			}
 		}
@@ -178,23 +180,22 @@ public abstract class SimulationWindow extends Window {
 	}
 	
 	// updates grid with cellColors array list data
-	public GridPane updateGridPane(GridPane grid) {
-		for (int row = 0; row < numCells; row++) {
-			for (int col = 0; col < numCells; col++) {
-				Rectangle rect = new Rectangle();
-				rect.setWidth(cellSize);
-				rect.setHeight(cellSize);
-				int cellNum = row + col;
-				rect.setFill(cellColors.get(cellNum));
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
-				grid.getChildren().addAll(rect);
-			}
-		}
-		return grid;
-		
-	}
+//	public GridPane updateGridPane(GridPane grid) {
+//		for (int row = 0; row < numCells; row++) {
+//			for (int col = 0; col < numCells; col++) {
+//				Rectangle rect = new Rectangle();
+//				rect.setWidth(cellSize);
+//				rect.setHeight(cellSize);
+//				int cellNum = row*numCells + col;
+//				rect.setFill(cellColors.get(cellNum));
+//				GridPane.setRowIndex(rect, row);
+//				GridPane.setColumnIndex(rect, col);
+//				grid.getChildren().addAll(rect);
+//			}
+//		}
+//		return grid;
+//		
+//	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
 	private ArrayList<Color> getCellColors(ArrayList<Cell> cellStatuses) {
