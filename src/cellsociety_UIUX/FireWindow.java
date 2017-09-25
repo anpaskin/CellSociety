@@ -10,10 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class FireWindow extends SimulationWindow {
-	private Slider probCatch;
+	private Slider probCatch = new Slider();
 	
 	public FireWindow(Stage s) {
 		super(s);
+		addSlider();
 	}
 	
 	public void addSlider() {
@@ -25,7 +26,7 @@ public class FireWindow extends SimulationWindow {
 		probCatch.setMajorTickUnit(0.25);
 		probCatch.setBlockIncrement(0.05);
 		probCatch.setLayoutX(offset);
-		probCatch.setLayoutY(offset + buttons.size()*padding);
+		probCatch.setLayoutY(HEIGHT - offset*2);
 		myRoot.getChildren().add(probCatch);
 	}
 

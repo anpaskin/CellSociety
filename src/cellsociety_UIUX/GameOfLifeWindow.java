@@ -19,7 +19,7 @@ public class GameOfLifeWindow extends SimulationWindow {
 		aliveRatio.setMajorTickUnit(0.25);
 		aliveRatio.setBlockIncrement(0.05);
 		aliveRatio.setLayoutX(offset);
-		aliveRatio.setLayoutY(offset + buttons.size()*padding);
+		aliveRatio.setLayoutY(HEIGHT - offset*2);
 		myRoot.getChildren().add(aliveRatio);
 	}
 

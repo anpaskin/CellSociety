@@ -8,6 +8,8 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,11 +28,13 @@ public abstract class SimulationWindow extends Window {
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	protected boolean running;
+	protected boolean notStarted = true;
+	protected boolean running = false;
+	protected boolean stepping = false;
 	protected Button startButton = new Button();
 	protected Button stepButton = new Button();
-
-	protected int numCells = 50;
+	
+	protected int numCells;
 	protected int cellSize = 10;
 
 	protected List<Button> buttons;
@@ -40,7 +44,7 @@ public abstract class SimulationWindow extends Window {
 	Slider speed = new Slider();
 	
 	protected GridPane grid = new GridPane();
-	protected ArrayList<Color> cellColors;
+	protected ArrayList<Color> cellColors = new ArrayList<>();
 
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
@@ -53,30 +57,46 @@ public abstract class SimulationWindow extends Window {
 	public SimulationWindow(Stage s) {
 		super(s);
 		setupScene();
-		userInteraction();
-
-		// attach "game loop" to timeline to play it
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY));
-		//TODO multiply seconddelay by amount sound on speed slider
-		Timeline animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();
+		//setRowSize();
 	}
 
-	private void userInteraction() {
+	public void userInteraction() {
 		// TODO Auto-generated method stub
-
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				notStarted = !notStarted;
+				running = !running;
+			}
+		});
+		
+		stepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				stepping = true;
+			}
+		});
 	}
-
+	
+	protected void gameLoop() {
+	// attach "game loop" to timeline to play it
+			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+					e -> step(SECOND_DELAY));
+			//TODO multiply seconddelay by amount sound on speed slider
+			Timeline animation = new Timeline();
+			animation.setCycleCount(Timeline.INDEFINITE);
+			animation.getKeyFrames().add(frame);
+			animation.play();
+	}
+	
 	/**
 	 * Updates the cells for each SimulationWindow
 	 */
-	public void step(double elapsedTime) {
-		// do nothing
+	protected void step(double elapsedTime) {
+		if (!notStarted && running) {
+			//TODO
+		}
 	}
 
+	
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
@@ -84,7 +104,7 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		addSlider();
 		addTitle();
-		addGridPane();
+		//displayGridPane();
 		throwErrors();
 	}
 
@@ -96,6 +116,11 @@ public abstract class SimulationWindow extends Window {
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 		myStage.setMaximized(true);
+	}
+	
+	public void setRowSize(CellManager c) {
+		// do nothing
+		numCells = (int) Math.sqrt(c.getSize());
 	}
 
 	private void addButtons() {
@@ -133,23 +158,19 @@ public abstract class SimulationWindow extends Window {
 		myRoot.getChildren().add(speed);
 	}
 
-	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
+	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		/*grid.getStyleClass().add("game-grid");
 		grid.setGridLinesVisible(true);*/
+		getCellColors(currentCells);
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Rectangle rect = new Rectangle();
 				rect.setWidth(cellSize);
 				rect.setHeight(cellSize);
-				if ((row+col) % 2 == 1) {
-					rect.setFill(Color.WHITE);
-				}
-				else {
-					rect.setFill(Color.BLUE);
-				}
+				int cellNum = row*numCells + col;
+				rect.setFill(cellColors.get(cellNum));
 				GridPane.setRowIndex(rect, row);
 				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
 				grid.getChildren().addAll(rect);
 			}
 		}
@@ -159,23 +180,22 @@ public abstract class SimulationWindow extends Window {
 	}
 	
 	// updates grid with cellColors array list data
-	public GridPane updateGridPane(GridPane grid) {
-		for (int row = 0; row < numCells; row++) {
-			for (int col = 0; col < numCells; col++) {
-				Rectangle rect = new Rectangle();
-				rect.setWidth(cellSize);
-				rect.setHeight(cellSize);
-				int cellNum = row + col;
-				rect.setFill(cellColors.get(cellNum));
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
-				grid.getChildren().addAll(rect);
-			}
-		}
-		return grid;
-		
-	}
+//	public GridPane updateGridPane(GridPane grid) {
+//		for (int row = 0; row < numCells; row++) {
+//			for (int col = 0; col < numCells; col++) {
+//				Rectangle rect = new Rectangle();
+//				rect.setWidth(cellSize);
+//				rect.setHeight(cellSize);
+//				int cellNum = row*numCells + col;
+//				rect.setFill(cellColors.get(cellNum));
+//				GridPane.setRowIndex(rect, row);
+//				GridPane.setColumnIndex(rect, col);
+//				grid.getChildren().addAll(rect);
+//			}
+//		}
+//		return grid;
+//		
+//	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
 	private ArrayList<Color> getCellColors(ArrayList<Cell> cellStatuses) {
@@ -187,6 +207,7 @@ public abstract class SimulationWindow extends Window {
 	
 
 	public void throwErrors() {
+		//TODO do more than just print error in console... need to handle
 		double gridSize = numCells*cellSize;
 		//if (gridSize > WIDTH || gridSize > HEIGHT) {
 		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {

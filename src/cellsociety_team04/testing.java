@@ -6,20 +6,24 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.Segregation;
+import cellsociety_Simulations.WaTor;
 
 public class testing {
 
 	public static void main(String[] args) {
 		//segTesting(.5, .25, .5, 100);
-		//fireTesting(.75, 66, 100);
+		fireTesting(.75, 66, 81);
 		//lifeTesting(.5, 100);
-		waTorTesting(0.2, 0.35, 100);
+		//waTorTesting(0.2, 0.35, 100);
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size);
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 0, 0, 0, 0);
 		waSim.initializeCurrentCells();
+		ArrayList<Cell> p = waSim.setParamCells();
 		ArrayList<Cell> s = waSim.getCurrentCells();
+		System.out.println(p);
+		System.out.println(s);
 		double rc = Math.sqrt(s.size());
 		String[][] grid = new String[(int)rc][(int)rc];
 		int i = 0;
@@ -90,7 +94,7 @@ public class testing {
 	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
 		Fire fireSim = new Fire(probCatch, size);
 		ArrayList<Cell> s = fireSim.getCurrentCells();
-		fireSim.initializeCurrentCells(fireStartLoc);
+		fireSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
 		int i = 0;

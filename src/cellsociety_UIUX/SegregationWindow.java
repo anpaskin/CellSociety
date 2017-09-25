@@ -3,6 +3,7 @@ package cellsociety_UIUX;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import cellsociety_Simulations.CellManager;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -13,9 +14,9 @@ import javafx.stage.Stage;
 public class SegregationWindow extends SimulationWindow {
 	
 	private Button run, step;
-	private Slider minSimilar;
-	private Slider redToBlue;
-	private Slider emptyRatio;
+	private Slider minSimilar = new Slider();
+	private Slider redToBlue = new Slider();
+	private Slider emptyRatio = new Slider();
 	
 	public SegregationWindow(Stage s) {
 		super(s);
@@ -24,7 +25,11 @@ public class SegregationWindow extends SimulationWindow {
 		addSlider(emptyRatio);
 	}
 	
-	private void addButtons() {
+//	@Override
+//	protected void setGridSize(CellManager seg) {
+//		//(int) Math.sqrt(cellColors.size());
+//	}
+/*	private void addButtons() {
 		//TODO
 		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
 		startButton.setGraphic(new ImageView(startImage));
@@ -41,7 +46,7 @@ public class SegregationWindow extends SimulationWindow {
 			myRoot.getChildren().add(button);
 		}
 	}
-	
+	*/
 	public void addSlider(Slider slider) {
 		slider.setMin(0);
 		slider.setMax(1);
