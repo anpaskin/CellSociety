@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<data predatorPrey="PredatorPrey">
+<data simulation="PredatorPrey">
     <title>WaTor World</title>
     <author>A.K. Dewdney</author>
     <fishPercent>0.40</fishPercent>
