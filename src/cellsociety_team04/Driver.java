@@ -75,7 +75,7 @@ public class Driver extends Application {
 			fire.userInteraction();
 			fire.setRowSize(simulation);
 			// TODO:
-			((Fire) simulation).initializeCurrentCells(0);
+			((Fire) simulation).initializeCurrentCells();
 			fire.displayGridPane(simulation.getCurrentCells());
 			
 			System.out.println("fire");

@@ -15,8 +15,7 @@ public class GameOfLife extends CellManager{
 	private double aliveRatio;
 	
 	public GameOfLife(double a, double n) {
-		super();
-		size = Math.pow(Math.sqrt(n) + 2, 2);
+		super(n);
 		aliveRatio = a;
 	}
 	
