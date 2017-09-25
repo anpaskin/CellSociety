@@ -5,5 +5,5 @@
     <minSimilar>0.30</minSimilar>
     <redRatio>0.50</redRatio>
     <emptyRatio>0.10</emptyRatio>
-    <size>20.0</size>
+    <size>100.0</size>
 </data>

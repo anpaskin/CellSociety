@@ -26,6 +26,10 @@ public abstract class CellManager {
 		return currentCells;
 	}
 	
+	public double getSize() {
+		return size;
+	}
+	
 	public void setNextCellStatuses() {
 		//content depends on simulation type
 	}

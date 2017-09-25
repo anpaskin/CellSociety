@@ -63,20 +63,41 @@ public class Driver extends Application {
 
 		if (simulation instanceof Segregation) {
 			segregation.setWindowOpen(true);
+			segregation.userInteraction();
+			segregation.setRowSize(simulation);
+			((Segregation) simulation).initializeCurrentCells();
+			segregation.displayGridPane(simulation.getCurrentCells());
+			
 			System.out.println("segregation");
 		}
 		else if (simulation instanceof Fire) {
 			fire.setWindowOpen(true);
+			fire.userInteraction();
+			fire.setRowSize(simulation);
+			// TODO:
+			((Fire) simulation).initializeCurrentCells(0);
+			fire.displayGridPane(simulation.getCurrentCells());
+			
 			System.out.println("fire");
 		}
 		else if (simulation instanceof GameOfLife) {
 			gameoflife.setWindowOpen(true);
-			System.out.println("gameoflife WHY WONT YOU HAVE BUTTONS");
+			gameoflife.userInteraction();
+			gameoflife.setRowSize(simulation);
+			((GameOfLife) simulation).initializeCurrentCells();
+			gameoflife.displayGridPane(simulation.getCurrentCells());
+			
+			System.out.println("gameoflife");
 		}
-/*		else if (simulation instanceof Wator) {
+		else if (simulation instanceof WaTor) {
 			wator.setWindowOpen(true);
+			wator.userInteraction();
+			wator.setRowSize(simulation);
+			((WaTor) simulation).initializeCurrentCells();
+			wator.displayGridPane(simulation.getCurrentCells());
+			
 			System.out.println("wator");
-		}*/
+		}
 	}
 
 	private void runSimulation() {
