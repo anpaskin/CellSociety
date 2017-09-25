@@ -50,7 +50,7 @@ public abstract class SimulationWindow extends Window {
 	protected boolean simulationRunning = false;
 
 	private static final int FRAMES_PER_SECOND = 60;
-	private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+	private static final int MILLISECOND_DELAY = 10000 / FRAMES_PER_SECOND;
 	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
 
@@ -95,6 +95,13 @@ public abstract class SimulationWindow extends Window {
 			simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGridPane(simType.getCurrentCells());
+		}
+		if (stepping) {
+			running = false;
+			simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGridPane(simType.getCurrentCells());
+			stepping = false;
 		}
 	}
 
