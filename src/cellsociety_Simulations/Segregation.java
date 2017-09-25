@@ -16,13 +16,13 @@ public class Segregation extends CellManager{
 	private double redRatio;
 	private double blueRatio;
 	private double emptyRatio;
+	
 	public Segregation(double t, double empty, double r, double n) {
-		super();
+		super(n);
 		minSimilar = t;
 		redRatio = r;
 		blueRatio = 1 - r;
 		emptyRatio = empty;
-		size = Math.pow(Math.sqrt(n) + 2, 2);
 	}
 	
 	public void initializeCurrentCells() {

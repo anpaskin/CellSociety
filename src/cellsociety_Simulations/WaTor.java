@@ -7,29 +7,43 @@ import cellsociety_Cells.Cell;
 import cellsociety_Cells.WaTorCell;
 
 public class WaTor extends CellManager {
-
-	private static final int DEFAULT_ENERGY = 5;
-	private double size;
-	private int energyStart;
-	private int maxLifeCount;
-	private double sharkRatio;
-	private double fishRatio;
-	private int fishEnergyContent;
+	
+	private int energyStart;						//energy with which every Cell with status "Shark" starts
+	private int sharkBreedCount;					//lifeCount at which Cell with status "Shark" can reproduce
+	private int fishBreedCount;						//lifeCount at which Cell with status "Fish" can reproduce
+	private double sharkRatio;						//percent of all non-"Null" Cells that have status "Shark"
+	private double fishRatio;						//percent of all non-"Null" Cells that have status "Fish"
+	private int fishEnergyContent;					//amount by which energy increases when Cell with status "Shark" eats Cell with status "Fish"
 	private ArrayList<Integer> nextLifeCounts;
 	private ArrayList<Integer> nextEnergies;
 	
-	public WaTor(double sharks, double fish, double n) {
-		super();
-		sharkRatio = sharks;
-		energyStart = DEFAULT_ENERGY;
-		fishEnergyContent = 2;
-		maxLifeCount = 3;
-		fishRatio = fish;
-		size = Math.pow(Math.sqrt(n) + 2, 2);
+	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy) {
+		super(n);
+		sharkRatio = sharksPercent;
+		energyStart = initialEnergy;
+		fishEnergyContent = fishEnergy;
+		sharkBreedCount = sharkBreed;
+		fishBreedCount = fishBreed;
+		fishRatio = fishPercent;
 		nextLifeCounts = new ArrayList<Integer>();
 		nextEnergies = new ArrayList<Integer>();
 	}
 	
+	public WaTor(double sharksPercent, double fishPercent, double n) {
+		super(n);
+		sharkRatio = sharksPercent;
+		energyStart = 5;
+		fishEnergyContent = 2;
+		sharkBreedCount = 5;
+		fishBreedCount = 5;
+		fishRatio = fishPercent;
+		nextLifeCounts = new ArrayList<Integer>();
+		nextEnergies = new ArrayList<Integer>();
+	}
+	
+	/**
+	 * Randomly sets currentCells statuses from setParamCells list. Wraps Cells in a loop of "Null" Cells.
+	 */
 	public void initializeCurrentCells() {
 		ArrayList<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
@@ -47,7 +61,11 @@ public class WaTor extends CellManager {
 			nextEnergies.add(((WaTorCell)(currentCells.get(i))).getEnergy());
 		}
 	}
-		
+	
+	/**
+	 * Creates a sorted list of Cells, the statuses of which are determined by the parameters of the simulation.
+	 * @return			Sorted list of Cells with correct amount of "Shark", "Fish", and "Empty" statuses
+	 */
 	public ArrayList<Cell> setParamCells() {
 		ArrayList<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
@@ -90,11 +108,13 @@ public class WaTor extends CellManager {
 	 * Switch order of for loops to give fish priority
 	 */
 	public void setNextCellStatuses() {
+		
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals("Shark")) {
 				setShark(c);
 			}
 		}
+		
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals("Fish")) {
 				if(!((WaTorCell)c).getEaten()) {
@@ -102,6 +122,7 @@ public class WaTor extends CellManager {
 				}
 			}
 		}
+		
 	}
 	
 	private void setShark(Cell c) {
@@ -162,13 +183,25 @@ public class WaTor extends CellManager {
 	}
 	
 	private void tryReproduce(Cell c) {
-		if(((WaTorCell)c).getLifeCount() == maxLifeCount) {
-			nextCellStatuses.set(currentCells.indexOf(c), c.getStatus());
-			nextLifeCounts.set(currentCells.indexOf(c), 0);
-			nextEnergies.set(currentCells.indexOf(c), DEFAULT_ENERGY);
+		if(c.getStatus().equals("Shark")) {
+			if(((WaTorCell)c).getLifeCount() == sharkBreedCount) {
+				nextCellStatuses.set(currentCells.indexOf(c), c.getStatus());
+				nextLifeCounts.set(currentCells.indexOf(c), 0);
+				nextEnergies.set(currentCells.indexOf(c), energyStart);
+			}
+			else {
+				leaveEmpty(c);
+			}
 		}
-		else {
-			leaveEmpty(c);
+		else if(c.getStatus().equals("Fish")) {
+			if(((WaTorCell)c).getLifeCount() == fishBreedCount) {
+				nextCellStatuses.set(currentCells.indexOf(c), c.getStatus());
+				nextLifeCounts.set(currentCells.indexOf(c), 0);
+				nextEnergies.set(currentCells.indexOf(c), energyStart);
+			}
+			else {
+				leaveEmpty(c);
+			}
 		}
 	}
 
