@@ -17,7 +17,7 @@ public class Segregation extends CellManager{
 	private double blueRatio;
 	private double emptyRatio;
 	
-	public Segregation(double t, double empty, double r, double n) {
+	public Segregation(double t, double r, double empty, double n) {
 		super(n);
 		minSimilar = t;
 		redRatio = r;
