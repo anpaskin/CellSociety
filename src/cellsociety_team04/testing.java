@@ -6,6 +6,7 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.Segregation;
+import cellsociety_Simulations.WaTor;
 
 public class testing {
 

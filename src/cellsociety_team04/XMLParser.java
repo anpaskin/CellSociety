@@ -7,6 +7,7 @@ import cellsociety_Simulations.CellManager;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.Segregation;
+import cellsociety_Simulations.WaTor;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,7 +38,7 @@ public class XMLParser {
 	public CellManager getSimulation() {
 		if (doc.getDocumentElement().getAttribute("simulation").equals("Game of Life")) return createGameOfLifeSim();
 		else if (doc.getDocumentElement().getAttribute("simulation").equals("Fire")) return createFireSim();
-		//else if (doc.getDocumentElement().getAttribute("simulation").equals("Predator Prey")) return createPredatorPreySim();
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("Predator Prey")) return createPredatorPreySim();
 		else if (doc.getDocumentElement().getAttribute("simulation").equals("Segregation")) return createSegregationSim();
 		
 		return null;
@@ -59,29 +60,29 @@ public class XMLParser {
 		return new Segregation(threshold, redRatio, emptyRatio, size);
 	}
 
-//	private CellManager createPredatorPreySim()
-//	{
-//		NodeList nList = doc.getElementsByTagName("fishPercent");
-//		double fishPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkPercent");
-//		double sharkPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("fishBreed");
-//		double fishBreed = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkBreed");
-//		double sharkBreed = extractNodeValue(nList);
-//		
-//		nList = doc.getElementsByTagName("sharkStarve");
-//		double sharkStarve = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("size");
-//		double size = extractNodeValue(nList);
-//
-//		
-//		return new PredatorPrey(fishPercent, sharkPercent, fishBreed, sharkBreed, sharkStarve, size);
-//	}
+	private CellManager createPredatorPreySim()
+	{
+		NodeList nList = doc.getElementsByTagName("fishPercent");
+		double fishPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkPercent");
+		double sharkPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("fishBreed");
+		double fishBreed = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkBreed");
+		double sharkBreed = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("sharkStarve");
+		double sharkStarve = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+
+		
+		return new WaTor(sharkPercent, fishPercent, size);
+	}
 
 	private CellManager createFireSim() {
 		NodeList nList = doc.getElementsByTagName("probCatch");

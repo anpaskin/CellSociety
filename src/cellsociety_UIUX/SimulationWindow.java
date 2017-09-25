@@ -187,6 +187,7 @@ public abstract class SimulationWindow extends Window {
 	
 
 	public void throwErrors() {
+		//TODO do more than just print error in console... need to handle
 		double gridSize = numCells*cellSize;
 		//if (gridSize > WIDTH || gridSize > HEIGHT) {
 		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
