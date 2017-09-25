@@ -36,9 +36,9 @@ public class XMLParser {
 	}
 
 	public CellManager getSimulation() {
-		if (doc.getDocumentElement().getAttribute("simulation").equals("Game of Life")) return createGameOfLifeSim();
+		if (doc.getDocumentElement().getAttribute("simulation").equals("GameOfLife")) return createGameOfLifeSim();
 		else if (doc.getDocumentElement().getAttribute("simulation").equals("Fire")) return createFireSim();
-		else if (doc.getDocumentElement().getAttribute("simulation").equals("Predator Prey")) return createPredatorPreySim();
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("PredatorPrey")) return createPredatorPreySim();
 		else if (doc.getDocumentElement().getAttribute("simulation").equals("Segregation")) return createSegregationSim();
 		
 		return null;
