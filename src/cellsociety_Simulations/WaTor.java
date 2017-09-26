@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.WaTorCell;
+
 /**
  * 
  * @author Aaron Paskin
@@ -92,6 +93,7 @@ public class WaTor extends CellManager {
 			currentCells.get(n).setStatus(nextCellStatuses.get(n));
 			((WaTorCell)currentCells.get(n)).setEnergy(nextEnergies.get(n));
 			((WaTorCell)currentCells.get(n)).setLifeCount(nextLifeCounts.get(n));
+			((WaTorCell)currentCells.get(n)).resetEaten();
 		}
 	}
 	

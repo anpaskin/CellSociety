@@ -72,5 +72,9 @@ public class WaTorCell extends Cell {
 	public void setEaten() {
 		eaten = true;
 	}
+	
+	public void resetEaten() {
+		eaten = false;
+	}
 
 }

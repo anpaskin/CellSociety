@@ -22,6 +22,9 @@ public class SegCell extends Cell{
 		else if(s.equals("Blue")) {
 			color = Color.BLUE;
 		}
+		else if(s.equals("Empty")) {
+			color = Color.WHITE;
+		}
 	}
 	
 }

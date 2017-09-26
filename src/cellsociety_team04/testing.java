@@ -16,14 +16,14 @@ import cellsociety_Simulations.WaTor;
 public class testing {
 
 	public static void main(String[] args) {
-		segTesting(.5, .25, .5, 16);
+		//segTesting(.5, .25, .5, 100);
 		//fireTesting(.75, 66, 100);
 		//lifeTesting(.5, 100);
-		//waTorTesting(0.2, 0.35, 100);
+		waTorTesting(0.2, 0.35, 100);
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 0, 0, 0, 0);
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 5, 5, 5, 2);
 		waSim.initializeCurrentCells();
 		ArrayList<Cell> p = waSim.setParamCells();
 		ArrayList<Cell> s = waSim.getCurrentCells();
