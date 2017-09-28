@@ -84,12 +84,9 @@ public class MenuWindow extends Window {
 
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
-		Image newSimImage = new Image(getClass().getClassLoader().getResourceAsStream("newsim.png"));
-		newSimButton = new Button();
-		newSimButton.setGraphic(new ImageView(newSimImage));
 		
-		newSimButton.setLayoutX(WIDTH/2 - newSimButton.getMaxWidth()/2);
-		newSimButton.setLayoutY(HEIGHT*1/2);
+		Button newSimButton = createButton("newsim.png", "NewSim");
+		setButtonLayout(newSimButton, WIDTH/2 - newSimButton.getMaxWidth()/2, HEIGHT*1/2);
 		myRoot.getChildren().add(newSimButton);
 		
 		Button segregationButton = createButton("segregation.png", "Segregation");
@@ -102,10 +99,14 @@ public class MenuWindow extends Window {
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding);
-			button.setLayoutY(HEIGHT*2/3);
-			myRoot.getChildren().add(button);
+			setButtonLayout(button, BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding, HEIGHT*2/3);
 		}
+		myRoot.getChildren().addAll(buttons);
+	}
+	
+	private void setButtonLayout(Button button, Double x, Double y) {
+		button.setLayoutX(x);
+		button.setLayoutY(y);
 	}
 	
 	private Button createButton(String imageName, String buttonText) {
