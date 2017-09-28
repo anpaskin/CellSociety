@@ -5,9 +5,6 @@ import cellsociety_UIUX.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -28,15 +25,12 @@ public class Driver extends Application {
 	private Stage menuStage;
 	private Stage simulationStage = new Stage();
 	private Window menu;
-	private SimulationWindow segregation;
-	private SimulationWindow wator;
-	private SimulationWindow fire;
-	private SimulationWindow gameoflife;
+	private SimulationWindow simWindow;
 	
 	protected double FRAMES_PER_SECOND = 60.0;
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
-	public CellManager simulation;
+	public CellManager simCellManager;
 	private Timeline animation;
 
 
@@ -51,7 +45,7 @@ public class Driver extends Application {
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
 		
-		menuLoop(simulation);
+		menuLoop(simCellManager);
 		
 	}
 	
@@ -74,74 +68,50 @@ public class Driver extends Application {
 //				simulation = parser.getSimulation();	
 		if(((MenuWindow)menu).getSimChoice() != null) {
 			animation.stop();
-			simulation = ((MenuWindow)menu).getSimChoice();
-			setupSimulation();
+			simCellManager = ((MenuWindow)menu).getSimChoice();
+			determineSim();
 			runSimulation();
 			simulationStage.show();
 		}
 	}
 
-	public void setupSimulation() {
+	public void determineSim() {
 		//TODO use title from xml file... 
 		simulationStage.setTitle(SIMULATIONTITLE);
 
-		if (simulation instanceof Segregation) {
-			segregation = new SegregationWindow(simulationStage, simulation);
-			segregation.setWindowOpen(true);
-			segregation.userInteraction();
-			segregation.setRowSize(simulation);
-			((Segregation) simulation).initializeCurrentCells();
-			segregation.displayGridPane(simulation.getCurrentCells());
-			simulationStage.setScene(segregation.getScene());
+		if (simCellManager instanceof Segregation) {
+			simWindow = new SegregationWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("segregation");
-			//System.out.println(segregation.getCellColors());
 		}
-		else if (simulation instanceof Fire) {
-			fire = new FireWindow(simulationStage, simulation);
-			fire.setWindowOpen(true);
-			fire.userInteraction();
-			fire.setRowSize(simulation);
-			// TODO:
-			((Fire) simulation).initializeCurrentCells();
-			fire.displayGridPane(simulation.getCurrentCells());
-			simulationStage.setScene(fire.getScene());
+		else if (simCellManager instanceof Fire) {
+			simWindow = new FireWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("fire");
 		}
-		else if (simulation instanceof GameOfLife) {
-			gameoflife = new GameOfLifeWindow(simulationStage, simulation);
-			gameoflife.setWindowOpen(true);
-			gameoflife.userInteraction();
-			gameoflife.setRowSize(simulation);
-			((GameOfLife) simulation).initializeCurrentCells();
-			gameoflife.displayGridPane(simulation.getCurrentCells());
-			simulationStage.setScene(gameoflife.getScene());
+		else if (simCellManager instanceof GameOfLife) {
+			simWindow = new GameOfLifeWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("gameoflife");
 		}
-		else if (simulation instanceof WaTor) {
-			wator = new WatorWindow(simulationStage, simulation);
-			wator.setWindowOpen(true);
-			wator.userInteraction();
-			wator.setRowSize(simulation);
-			((WaTor) simulation).initializeCurrentCells();
-			wator.displayGridPane(simulation.getCurrentCells());
-			simulationStage.setScene(wator.getScene());
+		else if (simCellManager instanceof WaTor) {
+			simWindow = new WatorWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("wator");
 		}
 	}
 
+	private void setupSim() {
+		simWindow.setWindowOpen(true);
+		simWindow.userInteraction();
+		simWindow.setRowSize(simCellManager);
+		((Segregation) simCellManager).initializeCurrentCells();
+		simWindow.displayGridPane(simCellManager.getCurrentCells());
+		simulationStage.setScene(simWindow.getScene());
+	}
+
 	public void runSimulation() {
-		if (simulation instanceof Segregation && segregation.getWindowOpen()) {
-			segregation.gameLoop(simulation);
-		}
-		else if (simulation instanceof Fire && fire.getWindowOpen()) {
-			fire.gameLoop(simulation);
-		}
-		else if (simulation instanceof WaTor && wator.getWindowOpen()) {
-			wator.gameLoop(simulation);
-		}
-		else if (simulation instanceof GameOfLife && gameoflife.getWindowOpen()) {
-			gameoflife.gameLoop(simulation);
-		}
+		simWindow.gameLoop(simCellManager);
 	}
 
 	/**
