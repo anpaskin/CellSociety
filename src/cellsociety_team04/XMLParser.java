@@ -148,6 +148,11 @@ public class XMLParser {
 		createDocForFile(selectedFile);
 	}
 	
+	public void buttonChooseFile(File file) {
+		File buttonFile = file;
+		createDocForFile(buttonFile);
+	}
+	
 	public void createDocForFile(File file) {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		try 

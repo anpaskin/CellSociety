@@ -25,13 +25,13 @@ public class Driver extends Application {
 
 	private Stage menuStage;
 	private Stage simulationStage = new Stage();
-	private Window menu = new MenuWindow(menuStage);
+	private Window menu;
 	private SimulationWindow segregation;
 	private SimulationWindow wator;
 	private SimulationWindow fire;
 	private SimulationWindow gameoflife;
 
-	private CellManager simulation;
+	public CellManager simulation;
 
 
 	/**
@@ -41,8 +41,7 @@ public class Driver extends Application {
 	public void start(Stage stage) {
 		menuStage = stage;
 		menuStage.setTitle(MENUTITLE);
-
-		menu.setupSceneDimensions();
+		menu = new MenuWindow(menuStage);
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
 		
@@ -54,15 +53,17 @@ public class Driver extends Application {
 		*/
 		
 		//((MenuWindow) menu).newSimulation(menuStage, parser);
-		if (((MenuWindow) menu).getNewSim()) {
-			System.out.println("getting new sim");
-			XMLParser parser = new XMLParser();
-			parser.chooseFile(menuStage);
-			simulation = parser.getSimulation();
+		
+		System.out.println("getting new sim");
+		if(((MenuWindow)menu).chooseSim()) {
+			simulation = ((MenuWindow) menu).getSimChoice();
+			System.out.println("Simulation Choice: " + simulation);
+//				XMLParser parser = new XMLParser();
+//				parser.chooseFile(menuStage);
+//				simulation = parser.getSimulation();
 			setupSimulation();
 			runSimulation();
 			simulationStage.show();
-			((MenuWindow) menu).setNewSim(false);
 		}
 	}
 

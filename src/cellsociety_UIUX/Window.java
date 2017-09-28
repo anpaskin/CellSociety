@@ -15,16 +15,20 @@ public abstract class Window {
 		
 	}
 	
-	public void setupScene() {
+	protected void setupScene() {
 		//do nothing
 	}
 	
-	public void setupSceneDimensions() {
+	protected void setupSceneDimensions() {
 		//do nothing
 	}
 	
 	public Scene getScene() {
 		return myScene;
-	}	
+	}
+	
+	public void userInteraction() {
+		//do nothing
+	}
 	
 }

@@ -35,13 +35,15 @@ public class MenuWindow extends Window {
 	private Button newSimButton;
 	private double buttonPadding;
 
-	private CellManager simulation;
+	private Stage simStage = new Stage();
 	private boolean newSim = true;
+	private CellManager simChoice;
+	private boolean pressed;
 	
 	public MenuWindow(Stage s) {
 		super(s);
+		setupSceneDimensions();
 		setupScene();
-		userInteraction();
 	}	
 
 	@Override
@@ -50,39 +52,34 @@ public class MenuWindow extends Window {
 		addTitle();
 	}
 	
-	public void setupSceneDimensions() {
+	protected void setupSceneDimensions() {
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
-	private void userInteraction() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+	public boolean chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+		pressed = false;
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
-					String fileString = button.getText();
-					File file = new File("data/" + fileString + ".xml");
+					String fileString = button.getAccessibleText();
+					fileString = fileString + ".xml";
+					ClassLoader cl = getClass().getClassLoader();
+					File file = new File(cl.getResource(fileString).getFile());
 					XMLParser parser = new XMLParser();
-					parser.createDocForFile(file);
-					simulation = parser.getSimulation();
-					Driver driver = new Driver();
-					driver.setupSimulation();
-					driver.runSimulation();
-							//".data/" + button.getText() + ".xml";
+					parser.buttonChooseFile(file);
+					simChoice = parser.getSimulation();
 					System.out.println("button pressed!!");
 					System.out.println(file);
-					//TODO need to have new stage open instead
-					// stage shows info about that simulation
+					pressed = true;
 				}
 			});
+			
 		}
-		newSimButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				newSim = true;
-			}
-		});
+		return pressed;
 	}
 	
-	public void newSimulation(Stage stage, XMLParser parser) {
+	/*public void newSimulation(Stage stage, XMLParser parser) {
 		newSimButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				newSim = true;
@@ -90,7 +87,7 @@ public class MenuWindow extends Window {
 				simulation = parser.getSimulation();
 			}
 		});
-	}
+	}	*/
 
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
@@ -102,25 +99,10 @@ public class MenuWindow extends Window {
 		newSimButton.setLayoutY(HEIGHT*1/2);
 		myRoot.getChildren().add(newSimButton);
 		
-		Image segregationImage = new Image(getClass().getClassLoader().getResourceAsStream("segregation.png"));
-		Button segregationButton = new Button();
-		segregationButton.setGraphic(new ImageView(segregationImage));
-		segregationButton.setText("Segregation");
-		
-		Image watorImage = new Image(getClass().getClassLoader().getResourceAsStream("wator.png"));
-		Button watorButton = new Button();
-		watorButton.setGraphic(new ImageView(watorImage));
-		watorButton.setText("PredatorPrey");
-		
-		Image fireImage = new Image(getClass().getClassLoader().getResourceAsStream("fire.png"));
-		Button fireButton = new Button();
-		fireButton.setGraphic(new ImageView(fireImage));
-		fireButton.setText("Fire");
-		
-		Image gameoflifeImage = new Image(getClass().getClassLoader().getResourceAsStream("gameoflife.png"));
-		Button gameoflifeButton = new Button();
-		gameoflifeButton.setGraphic(new ImageView(gameoflifeImage));
-		gameoflifeButton.setText("GameOfLife");
+		Button segregationButton = createButton("segregation.png", "Segregation");
+		Button watorButton = createButton("wator.png", "PredatorPrey");
+		Button fireButton = createButton("fire.png", "Fire");
+		Button gameoflifeButton = createButton("gameoflife.png", "GameOfLife");
 		
 		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
 		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
@@ -132,6 +114,15 @@ public class MenuWindow extends Window {
 			myRoot.getChildren().add(button);
 		}
 	}
+	
+	private Button createButton(String imageName, String buttonText) {
+		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
+		Button simButton = new Button();
+		simButton.setGraphic(new ImageView(buttonImage));
+		simButton.setAccessibleText(buttonText);
+		
+		return simButton;
+	}
 
 	private void addTitle() {
 		Image titleImage = new Image(getClass().getClassLoader().getResourceAsStream("cellsociety.png"));
@@ -141,8 +132,8 @@ public class MenuWindow extends Window {
 		myRoot.getChildren().add(title);
 	}
 	
-	public CellManager getSimulation() {
-		return simulation;
+	public CellManager getSimChoice() {
+		return simChoice;
 	}
 	
 	public boolean getNewSim() {
