@@ -5,41 +5,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import com.sun.xml.internal.txw2.Document;
-
 import cellsociety_Simulations.CellManager;
-import cellsociety_team04.Driver;
 import cellsociety_team04.XMLParser;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class MenuWindow extends Window {
 
+	private static final String GAMEOFLIFE_TAG = "GameOfLife";
+	private static final String FIRE_TAG = "Fire";
+	private static final String PREDATORPREY_TAG = "PredatorPrey";
+	private static final String SEGREGATION_TAG = "Segregation";
+	private static final String GAMEOFLIFE_PNG = "gameoflife.png";
+	private static final String FIRE_PNG = "fire.png";
+	private static final String WATOR_PNG = "wator.png";
+	private static final String SEGREGATION_PNG = "segregation.png";
 	private static final double WIDTH = 1000;
 	private static final double HEIGHT = 500;
 	
 	private static final int BUTTONOFFSET = 50;
 	private List<Button> buttons;
-	private Button newSimButton;
+//	private Button newSimButton;
 	private double buttonPadding;
 
-	private Stage simStage = new Stage();
-	private boolean newSim = true;
+//	private Stage simStage = new Stage();
+//	private boolean newSim = true;
 	private CellManager simChoice;
 	private boolean pressed;
 	
@@ -85,40 +80,31 @@ public class MenuWindow extends Window {
 		return pressed;
 	}
 	
-	/*public void newSimulation(Stage stage, XMLParser parser) {
-		newSimButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				newSim = true;
-				parser.chooseFile(stage);
-				simulation = parser.getSimulation();
-			}
-		});
-	}	*/
-
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
-		Image newSimImage = new Image(getClass().getClassLoader().getResourceAsStream("newsim.png"));
-		newSimButton = new Button();
-		newSimButton.setGraphic(new ImageView(newSimImage));
 		
-		newSimButton.setLayoutX(WIDTH/2 - newSimButton.getMaxWidth()/2);
-		newSimButton.setLayoutY(HEIGHT*1/2);
-		myRoot.getChildren().add(newSimButton);
+/*		Button newSimButton = createButton("newsim.png", "NewSim");
+		setButtonLayout(newSimButton, WIDTH/2 - newSimButton.getMaxWidth()/2, HEIGHT*1/2);
+		myRoot.getChildren().add(newSimButton);*/
 		
-		Button segregationButton = createButton("segregation.png", "Segregation");
-		Button watorButton = createButton("wator.png", "PredatorPrey");
-		Button fireButton = createButton("fire.png", "Fire");
-		Button gameoflifeButton = createButton("gameoflife.png", "GameOfLife");
+		Button segregationButton = createButton(SEGREGATION_PNG, SEGREGATION_TAG);
+		Button watorButton = createButton(WATOR_PNG, PREDATORPREY_TAG);
+		Button fireButton = createButton(FIRE_PNG, FIRE_TAG);
+		Button gameoflifeButton = createButton(GAMEOFLIFE_PNG, GAMEOFLIFE_TAG);
 		
 		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
 		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			button.setLayoutX(BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding);
-			button.setLayoutY(HEIGHT*2/3);
-			myRoot.getChildren().add(button);
+			setButtonLayout(button, BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding, HEIGHT*2/3);
 		}
+		myRoot.getChildren().addAll(buttons);
+	}
+	
+	private void setButtonLayout(Button button, Double x, Double y) {
+		button.setLayoutX(x);
+		button.setLayoutY(y);
 	}
 	
 	private Button createButton(String imageName, String buttonText) {
@@ -142,11 +128,11 @@ public class MenuWindow extends Window {
 		return simChoice;
 	}
 	
-	public boolean getNewSim() {
+/*	public boolean getNewSim() {
 		return newSim;
 	}
 	
 	public void setNewSim(boolean b) {
 		newSim = b;
-	}
+	}*/
 }
