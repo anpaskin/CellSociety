@@ -13,6 +13,8 @@ import com.sun.xml.internal.txw2.Document;
 import cellsociety_Simulations.CellManager;
 import cellsociety_team04.Driver;
 import cellsociety_team04.XMLParser;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -24,6 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MenuWindow extends Window {
 
@@ -42,6 +45,7 @@ public class MenuWindow extends Window {
 	
 	public MenuWindow(Stage s) {
 		super(s);
+		simChoice = null;
 		setupSceneDimensions();
 		setupScene();
 	}	
@@ -56,6 +60,8 @@ public class MenuWindow extends Window {
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
+	
+	
 	public boolean chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		pressed = false;
 		for (int i = 0; i < buttons.size(); i ++) {

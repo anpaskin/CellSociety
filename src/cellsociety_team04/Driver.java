@@ -2,12 +2,14 @@ package cellsociety_team04;
 
 import cellsociety_Simulations.*;
 import cellsociety_UIUX.*;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * 
@@ -30,8 +32,12 @@ public class Driver extends Application {
 	private SimulationWindow wator;
 	private SimulationWindow fire;
 	private SimulationWindow gameoflife;
+	
+	protected double FRAMES_PER_SECOND = 60.0;
+	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
 	public CellManager simulation;
+	private Timeline animation;
 
 
 	/**
@@ -45,22 +51,30 @@ public class Driver extends Application {
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
 		
-		//NOTE: xml info is parsed and read here to create new simulation
-		// add button to menu for uploading a new file... if user clicks then prompt file choice
-		/*XMLParser parser = new XMLParser();
-		parser.chooseFile(stage);
-		simulation = parser.getSimulation();
-		*/
+		menuLoop(simulation);
 		
-		//((MenuWindow) menu).newSimulation(menuStage, parser);
-		
-		System.out.println("getting new sim");
-		if(((MenuWindow)menu).chooseSim()) {
-			simulation = ((MenuWindow) menu).getSimChoice();
-			System.out.println("Simulation Choice: " + simulation);
+	}
+	
+	public void menuLoop(CellManager simType) {
+		// attach "game loop" to timeline to play it
+				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+						e -> menuStep());
+				//TODO multiply seconddelay by amount sound on speed slider
+				animation = new Timeline();
+				animation.setCycleCount(Timeline.INDEFINITE);
+				animation.getKeyFrames().add(frame);
+				animation.play();
+	}
+	
+	protected void menuStep() {
+		//System.out.println("Enter menu step");
+		((MenuWindow)menu).chooseSim();
 //				XMLParser parser = new XMLParser();
 //				parser.chooseFile(menuStage);
-//				simulation = parser.getSimulation();
+//				simulation = parser.getSimulation();	
+		if(((MenuWindow)menu).getSimChoice() != null) {
+			animation.stop();
+			simulation = ((MenuWindow)menu).getSimChoice();
 			setupSimulation();
 			runSimulation();
 			simulationStage.show();

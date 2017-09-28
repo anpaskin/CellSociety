@@ -8,9 +8,7 @@ import com.sun.glass.events.MouseEvent;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,7 +26,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
 
@@ -59,9 +56,6 @@ public abstract class SimulationWindow extends Window {
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
 
-	private Timeline animation;
-	private double FRAMES_PER_SECOND = 60.0;
-	private double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 	private CellManager simType;
 
 	public SimulationWindow(Stage s, CellManager sim) {
@@ -115,21 +109,11 @@ public abstract class SimulationWindow extends Window {
 		simSpeed = (speed.getValue() + 1) * 1000;
 	}
 	
-	public void gameLoop(CellManager simType) {
-	// attach "game loop" to timeline to play it
-			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-					e -> step());
-			//TODO multiply seconddelay by amount sound on speed slider
-			animation = new Timeline();
-			animation.setCycleCount(Timeline.INDEFINITE);
-			animation.getKeyFrames().add(frame);
-			animation.play();
-	}
-	
 	/**
 	 * Updates the cells for each SimulationWindow
 	 * @param simType 
 	 */
+	@Override
 	protected void step() {
 		userInteraction();
 		if(speedChange) {
