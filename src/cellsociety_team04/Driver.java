@@ -26,10 +26,10 @@ public class Driver extends Application {
 	private Stage menuStage;
 	private Stage simulationStage = new Stage();
 	private Window menu = new MenuWindow(menuStage);
-	private SimulationWindow segregation = new SegregationWindow(simulationStage);
-	private SimulationWindow wator = new WatorWindow(simulationStage);
-	private SimulationWindow fire = new FireWindow(simulationStage);
-	private SimulationWindow gameoflife = new GameOfLifeWindow(simulationStage);
+	private SimulationWindow segregation;
+	private SimulationWindow wator;
+	private SimulationWindow fire;
+	private SimulationWindow gameoflife;
 
 	private CellManager simulation;
 
@@ -66,11 +66,12 @@ public class Driver extends Application {
 		}
 	}
 
-	private void setupSimulation() {
+	public void setupSimulation() {
 		//TODO use title from xml file... 
 		simulationStage.setTitle(SIMULATIONTITLE);
 
 		if (simulation instanceof Segregation) {
+			segregation = new SegregationWindow(simulationStage, simulation);
 			segregation.setWindowOpen(true);
 			segregation.userInteraction();
 			segregation.setRowSize(simulation);
@@ -81,6 +82,7 @@ public class Driver extends Application {
 			//System.out.println(segregation.getCellColors());
 		}
 		else if (simulation instanceof Fire) {
+			fire = new FireWindow(simulationStage, simulation);
 			fire.setWindowOpen(true);
 			fire.userInteraction();
 			fire.setRowSize(simulation);
@@ -91,6 +93,7 @@ public class Driver extends Application {
 			System.out.println("fire");
 		}
 		else if (simulation instanceof GameOfLife) {
+			gameoflife = new GameOfLifeWindow(simulationStage, simulation);
 			gameoflife.setWindowOpen(true);
 			gameoflife.userInteraction();
 			gameoflife.setRowSize(simulation);
@@ -100,6 +103,7 @@ public class Driver extends Application {
 			System.out.println("gameoflife");
 		}
 		else if (simulation instanceof WaTor) {
+			wator = new WatorWindow(simulationStage, simulation);
 			wator.setWindowOpen(true);
 			wator.userInteraction();
 			wator.setRowSize(simulation);
@@ -110,17 +114,17 @@ public class Driver extends Application {
 		}
 	}
 
-	private void runSimulation() {
-		if (segregation.getWindowOpen()) {
+	public void runSimulation() {
+		if (simulation instanceof Segregation && segregation.getWindowOpen()) {
 			segregation.gameLoop(simulation);
 		}
-		else if (fire.getWindowOpen()) {
+		else if (simulation instanceof Fire && fire.getWindowOpen()) {
 			fire.gameLoop(simulation);
 		}
-		else if (wator.getWindowOpen()) {
+		else if (simulation instanceof WaTor && wator.getWindowOpen()) {
 			wator.gameLoop(simulation);
 		}
-		else if (gameoflife.getWindowOpen()) {
+		else if (simulation instanceof GameOfLife && gameoflife.getWindowOpen()) {
 			gameoflife.gameLoop(simulation);
 		}
 	}
