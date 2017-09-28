@@ -8,6 +8,11 @@ import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
 
+/**
+ * 
+ * @author Aaron Paskin
+ *
+ */
 public class testing {
 
 	public static void main(String[] args) {
@@ -18,9 +23,12 @@ public class testing {
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size);
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 5, 5, 5, 2);
 		waSim.initializeCurrentCells();
+		ArrayList<Cell> p = waSim.setParamCells();
 		ArrayList<Cell> s = waSim.getCurrentCells();
+		System.out.println(p);
+		System.out.println(s);
 		double rc = Math.sqrt(s.size());
 		String[][] grid = new String[(int)rc][(int)rc];
 		int i = 0;
@@ -91,7 +99,7 @@ public class testing {
 	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
 		Fire fireSim = new Fire(probCatch, size);
 		ArrayList<Cell> s = fireSim.getCurrentCells();
-		fireSim.initializeCurrentCells(fireStartLoc);
+		fireSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
 		int i = 0;

@@ -2,6 +2,6 @@
 <data simulation="Fire">
     <title>Spreading of Fire</title>
     <author>R. Rothermel</author>
-	<probCatch>0.15</probCatch>
-    <size>20.0</size>
+	<probCatch>0.60</probCatch>
+    <size>100.0</size>
 </data>

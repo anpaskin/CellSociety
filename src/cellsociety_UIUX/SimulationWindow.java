@@ -4,79 +4,142 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sun.glass.events.MouseEvent;
+
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.PauseTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
 
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	protected boolean running;
-	protected Button startButton = new Button();
+	//protected boolean started = false;
+	protected boolean running = false;
+	protected boolean stepping = false;
+	protected Button playButton = new Button();
 	protected Button stepButton = new Button();
-
-	protected int numCells = 50;
-	protected int cellSize = 10;
+	protected ImageView playImageView, pauseImageView;
+	
+	protected int numCells;
+	protected int cellSize = 50;
 
 	protected List<Button> buttons;
 	protected int offset = 50;
 	protected int padding = 100;
 
 	Slider speed = new Slider();
+	private double simSpeed = 1;
+	private boolean speedChange = false;
 	
 	protected GridPane grid = new GridPane();
-	protected ArrayList<Color> cellColors;
+	protected ArrayList<Color> cellColors = new ArrayList<>();
 
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
 
-	private static final int FRAMES_PER_SECOND = 60;
-	private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private CellManager simType;
 
-
-	public SimulationWindow(Stage s) {
+	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
 		setupScene();
-		userInteraction();
-
-		// attach "game loop" to timeline to play it
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> step(SECOND_DELAY));
-		//TODO multiply seconddelay by amount sound on speed slider
-		Timeline animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();
+		simType = sim;
+		//setRowSize();
 	}
 
-	private void userInteraction() {
+	public void userInteraction() {
 		// TODO Auto-generated method stub
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				simSpeed = speed.valueProperty().intValue()*5;
+				running = !running;
+				if (running) {
+					playButton.setGraphic(pauseImageView);
+				}
+				else {
+					playButton.setGraphic(playImageView);
+				}
+			}
+		});
+		
+		stepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				stepping = true;
+			}
+		});
+		
+		speed.setOnMouseReleased(e -> {
+			speedChange = true;
+			updateSimSpeed();
+		});
 
+//		speed.valueProperty().addListener(new ChangeListener<Number>() {
+//	         public void changed(ObservableValue<? extends Number> ov,
+//	        		 Number old_val, Number new_val) {
+//	        	 		speed.set
+//	             	simSpeed = (int) new_val * 10;
+//	            }
+//	     });
+		
 	}
-
+	
+	private double getSimSpeed() {
+		return simSpeed;
+	}
+	
+	private void updateSimSpeed() {
+		simSpeed = (speed.getValue() + 1) * 1000;
+	}
+	
 	/**
 	 * Updates the cells for each SimulationWindow
+	 * @param simType 
 	 */
-	public void step(double elapsedTime) {
-		// do nothing
+	@Override
+	protected void step() {
+		userInteraction();
+		if(speedChange) {
+			resetGameLoop(getSimSpeed());
+		}
+		if (running) {
+			simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGridPane(simType.getCurrentCells());
+		}
+		if (stepping) {
+			running = false;
+			simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGridPane(simType.getCurrentCells());
+			stepping = false;
+		}
+	}
+	
+	private void resetGameLoop(double newSpeed) {
+		animation.stop();
+		FRAMES_PER_SECOND = newSpeed;
+		gameLoop(simType);
 	}
 
+	
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
@@ -84,7 +147,7 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		addSlider();
 		addTitle();
-		addGridPane();
+		//displayGridPane();
 		throwErrors();
 	}
 
@@ -95,18 +158,27 @@ public abstract class SimulationWindow extends Window {
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
-		myStage.setMaximized(true);
+		//myStage.setMaximized(true);
+	}
+	
+	public void setRowSize(CellManager c) {
+		// do nothing
+		numCells = (int) Math.sqrt(c.getSize());
 	}
 
 	private void addButtons() {
 		//TODO
-		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
-		startButton.setGraphic(new ImageView(startImage));
+		Image playImage = new Image(getClass().getClassLoader().getResourceAsStream("play.png"));
+		playImageView = new ImageView(playImage);
+		playButton.setGraphic(playImageView);
 
 		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
 		stepButton.setGraphic(new ImageView(stepImage));
-
-		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
+		
+		Image pauseImage = new Image(getClass().getClassLoader().getResourceAsStream("pause.png"));
+		pauseImageView = new ImageView(pauseImage);
+		
+		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
@@ -122,7 +194,7 @@ public abstract class SimulationWindow extends Window {
 
 	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
 		speed.setMin(0);
-		speed.setMax(5);
+		speed.setMax(3);
 		speed.setValue(1);
 		speed.setShowTickLabels(true);
 		speed.setShowTickMarks(true);
@@ -131,58 +203,98 @@ public abstract class SimulationWindow extends Window {
 		speed.setLayoutX(offset);
 		speed.setLayoutY(offset + buttons.size()*padding);
 		myRoot.getChildren().add(speed);
+		updateSimSpeed();
 	}
 
-	public void addGridPane() { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
-		/*grid.getStyleClass().add("game-grid");
-		grid.setGridLinesVisible(true);*/
+	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
+		getCellColors(currentCells);
+		grid.getChildren().clear();
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
-				Rectangle rect = new Rectangle();
-				rect.setWidth(cellSize);
-				rect.setHeight(cellSize);
-				if ((row+col) % 2 == 1) {
-					rect.setFill(Color.WHITE);
-				}
-				else {
-					rect.setFill(Color.BLUE);
-				}
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
-				grid.getChildren().addAll(rect);
+				Polygon polygon = new Polygon();
+				polygon.getPoints().addAll(new Double[] {
+						0.0, 7.5,
+						5.0, 0.0,
+						10.0, 0.0,
+						15.0, 7.5,
+						10.0, 15.0,
+						5.0, 15.0
+				});
+//				Polygon polygon = new Polygon();
+//				if (row % 2 == 1) {
+//					if (col % 2 == 0) {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 0.0,
+//							    10.0, 20.0,
+//							    20.0, 0.0 });
+//					} else {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 20.0,
+//							    10.0, 0.0,
+//							    20.0, 20.0 });
+//					}
+//				} else {
+//					if (col % 2 == 1) {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 0.0,
+//							    10.0, 20.0,
+//							    20.0, 0.0 });
+//					} else {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 20.0,
+//							    10.0, 0.0,
+//							    20.0, 20.0 });
+//					}
+//				}
+				int cellNum = row*numCells + col;
+				polygon.setFill(cellColors.get(cellNum));
+				polygon.setStroke(Color.WHITE);
+				GridPane.setRowIndex(polygon, row);
+				GridPane.setColumnIndex(polygon, col);
+				grid.getChildren().addAll(polygon);
+				/*
+				 * RECTANGLE
+				 */
+				//Rectangle rect = new Rectangle();
+				//rect.setWidth(cellSize);
+				//rect.setHeight(cellSize);
+				//rect.setFill(cellColors.get(cellNum));
+				//GridPane.setRowIndex(rect, row);
+				//GridPane.setColumnIndex(rect, col);
+				//grid.getChildren().addAll(rect);
 			}
 		}
 		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
 		grid.setLayoutY(offset);
-		myRoot.getChildren().add(grid);
+		if (!myRoot.getChildren().contains(grid)) {
+			myRoot.getChildren().add(grid);
+		}
 	}
 	
 	// updates grid with cellColors array list data
-	public GridPane updateGridPane(GridPane grid) {
-		for (int row = 0; row < numCells; row++) {
-			for (int col = 0; col < numCells; col++) {
-				Rectangle rect = new Rectangle();
-				rect.setWidth(cellSize);
-				rect.setHeight(cellSize);
-				int cellNum = row + col;
-				rect.setFill(cellColors.get(cellNum));
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
-				//grid.add(rect, col, row);
-				grid.getChildren().addAll(rect);
-			}
-		}
-		return grid;
-		
-	}
+//	public GridPane updateGridPane(GridPane grid) {
+//		for (int row = 0; row < numCells; row++) {
+//			for (int col = 0; col < numCells; col++) {
+//				Rectangle rect = new Rectangle();
+//				rect.setWidth(cellSize);
+//				rect.setHeight(cellSize);
+//				int cellNum = row*numCells + col;
+//				rect.setFill(cellColors.get(cellNum));
+//				GridPane.setRowIndex(rect, row);
+//				GridPane.setColumnIndex(rect, col);
+//				grid.getChildren().addAll(rect);
+//			}
+//		}
+//		return grid;
+//		
+//	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
-	private ArrayList<Color> getCellColors(ArrayList<Cell> cellStatuses) {
+	private void getCellColors(ArrayList<Cell> cellStatuses) {
+		cellColors.clear();
 		for (int i = 0; i < cellStatuses.size(); i++) {
 			cellColors.add(cellStatuses.get(i).getColor());
 		}
-		return cellColors;
 	}
 	
 
@@ -200,6 +312,10 @@ public abstract class SimulationWindow extends Window {
 		windowOpen = false;
 	}
 
+	public ArrayList<Color> getCellColors() {
+		return cellColors;
+	}
+	
 	public boolean getWindowOpen() {
 		return windowOpen;
 	}

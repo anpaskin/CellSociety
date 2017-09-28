@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class XMLParser {
 	private FileChooser fileChooser;
-	private Document doc;
+	private static Document doc;
 
 	public XMLParser() {
 		fileChooser = new FileChooser();
@@ -34,7 +34,8 @@ public class XMLParser {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
 		fileChooser.setInitialDirectory(new File("./data"));
 	}
-
+	
+	
 	public CellManager getSimulation() {
 		if (doc.getDocumentElement().getAttribute("simulation").equals("GameOfLife")) return createGameOfLifeSim();
 		else if (doc.getDocumentElement().getAttribute("simulation").equals("Fire")) return createFireSim();
@@ -144,12 +145,20 @@ public class XMLParser {
 
 	public void chooseFile(Stage s) {
 		File selectedFile = fileChooser.showOpenDialog(s);
+		createDocForFile(selectedFile);
+	}
+	
+	public void buttonChooseFile(File file) {
+		File buttonFile = file;
+		createDocForFile(buttonFile);
+	}
+	
+	public void createDocForFile(File file) {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		
 		try 
 		{
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			doc = dBuilder.parse(selectedFile);
+			doc = dBuilder.parse(file);
 			doc.getDocumentElement().normalize();
 		}
 		catch (Exception e)

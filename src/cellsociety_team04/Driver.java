@@ -2,12 +2,11 @@ package cellsociety_team04;
 
 import cellsociety_Simulations.*;
 import cellsociety_UIUX.*;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * 
@@ -25,13 +24,14 @@ public class Driver extends Application {
 
 	private Stage menuStage;
 	private Stage simulationStage = new Stage();
-	private Window menu = new MenuWindow(menuStage);
-	private SimulationWindow segregation = new SegregationWindow(simulationStage);
-	private SimulationWindow wator = new WatorWindow(simulationStage);
-	private SimulationWindow fire = new FireWindow(simulationStage);
-	private SimulationWindow gameoflife = new GameOfLifeWindow(simulationStage);
+	private Window menu;
+	private SimulationWindow simWindow;
+	
+	protected double FRAMES_PER_SECOND = 60.0;
+	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
-	private CellManager simulation;
+	public CellManager simCellManager;
+	private Timeline animation;
 
 
 	/**
@@ -41,59 +41,79 @@ public class Driver extends Application {
 	public void start(Stage stage) {
 		menuStage = stage;
 		menuStage.setTitle(MENUTITLE);
-
-		menu.setupSceneDimensions();
+		menu = new MenuWindow(menuStage);
 		menuStage.setScene(menu.getScene());
 		menuStage.show();
-
-		//NOTE: xml info is parsed and read here to create new simulation
-		// add button to menu for uploading a new file... if user clicks then prompt file choice
-		XMLParser parser = new XMLParser();
-		parser.chooseFile(stage);
-		simulation = parser.getSimulation();
-
-		setupSimulation();
-		runSimulation();
-		simulationStage.show();
+		
+		menuLoop(simCellManager);
+		
+	}
+	
+	public void menuLoop(CellManager simType) {
+		// attach "game loop" to timeline to play it
+				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+						e -> menuStep());
+				//TODO multiply seconddelay by amount sound on speed slider
+				animation = new Timeline();
+				animation.setCycleCount(Timeline.INDEFINITE);
+				animation.getKeyFrames().add(frame);
+				animation.play();
+	}
+	
+	protected void menuStep() {
+		//System.out.println("Enter menu step");
+		((MenuWindow)menu).chooseSim();
+//				XMLParser parser = new XMLParser();
+//				parser.chooseFile(menuStage);
+//				simulation = parser.getSimulation();	
+		if(((MenuWindow)menu).getSimChoice() != null) {
+			animation.stop();
+			simCellManager = ((MenuWindow)menu).getSimChoice();
+			determineSim();
+			runSimulation();
+			simulationStage.show();
+		}
 	}
 
-	private void setupSimulation() {
+	public void determineSim() {
 		//TODO use title from xml file... 
 		simulationStage.setTitle(SIMULATIONTITLE);
 
-		if (simulation instanceof Segregation) {
-			segregation.setWindowOpen(true);
+		if (simCellManager instanceof Segregation) {
+			simWindow = new SegregationWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("segregation");
 		}
-		else if (simulation instanceof Fire) {
-			fire.setWindowOpen(true);
+		else if (simCellManager instanceof Fire) {
+			simWindow = new FireWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("fire");
 		}
-		else if (simulation instanceof GameOfLife) {
-			gameoflife.setWindowOpen(true);
-			System.out.println("gameoflife WHY WONT YOU HAVE BUTTONS");
+		else if (simCellManager instanceof GameOfLife) {
+			simWindow = new GameOfLifeWindow(simulationStage, simCellManager);
+			setupSim();
+			System.out.println("gameoflife");
 		}
-		else if (simulation instanceof WaTor) {
-			wator.setWindowOpen(true);
+		else if (simCellManager instanceof WaTor) {
+			simWindow = new WatorWindow(simulationStage, simCellManager);
+			setupSim();
 			System.out.println("wator");
 		}
 	}
 
-	private void runSimulation() {
-		if (segregation.getWindowOpen()) {
-			simulationStage.setScene(segregation.getScene());
-		}
-		else if (fire.getWindowOpen()) {
-			simulationStage.setScene(fire.getScene());
-		}
-		else if (wator.getWindowOpen()) {
-			simulationStage.setScene(wator.getScene());
-		}
-		else if (gameoflife.getWindowOpen()) {
-			simulationStage.setScene(gameoflife.getScene());
-		}
+	private void setupSim() {
+		simWindow.setWindowOpen(true);
+		simWindow.userInteraction();
+		simWindow.setRowSize(simCellManager);
+		((Segregation) simCellManager).initializeCurrentCells();
+		simWindow.displayGridPane(simCellManager.getCurrentCells());
+		simulationStage.setScene(simWindow.getScene());
 	}
-	 
+
+	public void runSimulation() {
+		simWindow.gameLoop(simCellManager);
+	}
+
 	/**
 	 * Start of the program
 	 */

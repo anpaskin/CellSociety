@@ -8,43 +8,57 @@ import cellsociety_Cells.FireCell;
 
 public class Fire extends CellManager {
 
-	private double pCatch;
+	private double pCatch;	//the probability that a neighbor of a Cell with status "Fire" takes on status "Fire"
 	
 	public Fire(double probCatch, double n) {
-		super();
+		super(n);
 		pCatch = probCatch;
-		size = Math.pow(Math.sqrt(n) + 2, 2);
 	}
 	
-	public void initializeCurrentCells(int fireStartLoc) {
+	/**
+	 * Sets all current Cell statuses equal to "Tree" so that the simulation is ready to start.
+	 * Sets center Cell status to "Fire" by calling startFire.
+	 */
+	public void initializeCurrentCells() {
 		for(int n = 0; n < size; n++) {
 			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
-				currentCells.add(new FireCell("Null"));
+				currentCells.add(new FireCell(Cell.NULL));
 			}
 			else {
-				currentCells.add(new FireCell("Tree"));
+				currentCells.add(new FireCell(FireCell.TREE));
 			}
 			nextCellStatuses.add(currentCells.get(n).getStatus());
 		}
-		startFire(fireStartLoc);
+		startFire();
 	}
 	
-	private void startFire(int fireStartLoc) {
-		currentCells.get(fireStartLoc).setStatus("Fire");
+	/**
+	 * Sets center Cell status to "Fire".
+	 */
+	private void startFire() {
+		int i;
+		if(size % 2 == 0) {
+			i = (int)(size/2 + Math.sqrt(size)/2);
+		}
+		else i = (int)(size/2);
+		currentCells.get(i).setStatus(FireCell.FIRE);
 	}
 	
+	/**
+	 * If Cell with status "Tree" is adjacent to Cell with status "Fire", it has a probCatch chance of its next status being set to "Fire".
+	 */
 	public void setNextCellStatuses() {
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals("Fire")) {
-				nextCellStatuses.set(currentCells.indexOf(c), "Empty");
+				nextCellStatuses.set(currentCells.indexOf(c), Cell.EMPTY);
 			}
 			else if(c.getStatus().equals("Tree")) {
 				ArrayList<Cell> neighbors = getNeighbors(c);
 				if(checkNeighbors(neighbors)) {
 					double spread = Math.random();
 					if(spread < pCatch) {
-						nextCellStatuses.set(currentCells.indexOf(c), "Fire");
+						nextCellStatuses.set(currentCells.indexOf(c), FireCell.FIRE);
 					}
 				}
 			}
@@ -52,9 +66,9 @@ public class Fire extends CellManager {
 	}
 	
 	/**
-	 * @override
-	 * @return
+	 * Redefines neighbors to be adjacent only (no diagonals).
 	 */
+	@Override
 	public ArrayList<Integer> getNeighborLocationNums(Cell c) {
 		ArrayList<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
@@ -66,9 +80,15 @@ public class Fire extends CellManager {
 		return locNums;
 	}
 	
+	/**
+	 * Checks if any neighbors of a Cell have status "Fire".
+	 * @param neighbors		ArrayList of neighboring Cells
+	 * @return				true if at least one neighbor has status "Fire"
+	 * 						false otherwise
+	 */
 	private boolean checkNeighbors(ArrayList<Cell> neighbors) {
 		for(Cell c : neighbors) {
-			if(c.getStatus().equals("Fire")) {
+			if(c.getStatus().equals(FireCell.FIRE)) {
 				return true;
 			}
 		}
