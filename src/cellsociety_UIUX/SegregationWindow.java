@@ -18,8 +18,8 @@ public class SegregationWindow extends SimulationWindow {
 	private Slider redToBlue = new Slider();
 	private Slider emptyRatio = new Slider();
 	
-	public SegregationWindow(Stage s) {
-		super(s);
+	public SegregationWindow(Stage s, CellManager sim) {
+		super(s, sim);
 /*		addSlider(minSimilar);
 		addSlider(redToBlue);
 		addSlider(emptyRatio);*/

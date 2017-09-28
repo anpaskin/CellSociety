@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sun.glass.events.MouseEvent;
+
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -44,9 +48,10 @@ public abstract class SimulationWindow extends Window {
 	protected List<Button> buttons;
 	protected int offset = 50;
 	protected int padding = 100;
-	protected int simSpeed = 1;
 
 	Slider speed = new Slider();
+	private double simSpeed = 1;
+	private boolean speedChange = false;
 	
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
@@ -54,14 +59,15 @@ public abstract class SimulationWindow extends Window {
 	protected boolean windowOpen = false;
 	protected boolean simulationRunning = false;
 
-	private static final int FRAMES_PER_SECOND = 60;
-	private static final int MILLISECOND_DELAY = 10000 / FRAMES_PER_SECOND;
-	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private Timeline animation;
+	private double FRAMES_PER_SECOND = 60.0;
+	private double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
+	private CellManager simType;
 
-
-	public SimulationWindow(Stage s) {
+	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
 		setupScene();
+		simType = sim;
 		//setRowSize();
 	}
 
@@ -86,12 +92,11 @@ public abstract class SimulationWindow extends Window {
 			}
 		});
 		
-		
-		speed.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
-			@Override public void handle(MouseDragEvent e) {
-				simSpeed = (int) speed.getValue();
-			}
+		speed.setOnMouseReleased(e -> {
+			speedChange = true;
+			updateSimSpeed();
 		});
+
 //		speed.valueProperty().addListener(new ChangeListener<Number>() {
 //	         public void changed(ObservableValue<? extends Number> ov,
 //	        		 Number old_val, Number new_val) {
@@ -102,12 +107,20 @@ public abstract class SimulationWindow extends Window {
 		
 	}
 	
+	private double getSimSpeed() {
+		return simSpeed;
+	}
+	
+	private void updateSimSpeed() {
+		simSpeed = (speed.getValue() + 1) * 1000;
+	}
+	
 	public void gameLoop(CellManager simType) {
 	// attach "game loop" to timeline to play it
-			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY*simSpeed),
-					e -> step(SECOND_DELAY, simType));
+			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+					e -> step());
 			//TODO multiply seconddelay by amount sound on speed slider
-			Timeline animation = new Timeline();
+			animation = new Timeline();
 			animation.setCycleCount(Timeline.INDEFINITE);
 			animation.getKeyFrames().add(frame);
 			animation.play();
@@ -117,7 +130,11 @@ public abstract class SimulationWindow extends Window {
 	 * Updates the cells for each SimulationWindow
 	 * @param simType 
 	 */
-	protected void step(double elapsedTime, CellManager simType) {
+	protected void step() {
+		userInteraction();
+		if(speedChange) {
+			resetGameLoop(getSimSpeed());
+		}
 		if (running) {
 			simType.setNextCellStatuses();
 			simType.updateCurrentCells();
@@ -130,6 +147,12 @@ public abstract class SimulationWindow extends Window {
 			displayGridPane(simType.getCurrentCells());
 			stepping = false;
 		}
+	}
+	
+	private void resetGameLoop(double newSpeed) {
+		animation.stop();
+		FRAMES_PER_SECOND = newSpeed;
+		gameLoop(simType);
 	}
 
 	
@@ -196,6 +219,7 @@ public abstract class SimulationWindow extends Window {
 		speed.setLayoutX(offset);
 		speed.setLayoutY(offset + buttons.size()*padding);
 		myRoot.getChildren().add(speed);
+		updateSimSpeed();
 	}
 
 	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
@@ -203,14 +227,57 @@ public abstract class SimulationWindow extends Window {
 		grid.getChildren().clear();
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
-				Rectangle rect = new Rectangle();
-				rect.setWidth(cellSize);
-				rect.setHeight(cellSize);
+				Polygon polygon = new Polygon();
+				polygon.getPoints().addAll(new Double[] {
+						0.0, 7.5,
+						5.0, 0.0,
+						10.0, 0.0,
+						15.0, 7.5,
+						10.0, 15.0,
+						5.0, 15.0
+				});
+//				Polygon polygon = new Polygon();
+//				if (row % 2 == 1) {
+//					if (col % 2 == 0) {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 0.0,
+//							    10.0, 20.0,
+//							    20.0, 0.0 });
+//					} else {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 20.0,
+//							    10.0, 0.0,
+//							    20.0, 20.0 });
+//					}
+//				} else {
+//					if (col % 2 == 1) {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 0.0,
+//							    10.0, 20.0,
+//							    20.0, 0.0 });
+//					} else {
+//						polygon.getPoints().addAll(new Double[]{
+//							    0.0, 20.0,
+//							    10.0, 0.0,
+//							    20.0, 20.0 });
+//					}
+//				}
 				int cellNum = row*numCells + col;
-				rect.setFill(cellColors.get(cellNum));
-				GridPane.setRowIndex(rect, row);
-				GridPane.setColumnIndex(rect, col);
-				grid.getChildren().addAll(rect);
+				polygon.setFill(cellColors.get(cellNum));
+				polygon.setStroke(Color.WHITE);
+				GridPane.setRowIndex(polygon, row);
+				GridPane.setColumnIndex(polygon, col);
+				grid.getChildren().addAll(polygon);
+				/*
+				 * RECTANGLE
+				 */
+				//Rectangle rect = new Rectangle();
+				//rect.setWidth(cellSize);
+				//rect.setHeight(cellSize);
+				//rect.setFill(cellColors.get(cellNum));
+				//GridPane.setRowIndex(rect, row);
+				//GridPane.setColumnIndex(rect, col);
+				//grid.getChildren().addAll(rect);
 			}
 		}
 		grid.setLayoutX(WIDTH - numCells*cellSize - offset);

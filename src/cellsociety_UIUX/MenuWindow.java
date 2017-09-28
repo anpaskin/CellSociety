@@ -1,10 +1,17 @@
 package cellsociety_UIUX;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.sun.xml.internal.txw2.Document;
+
 import cellsociety_Simulations.CellManager;
+import cellsociety_team04.Driver;
 import cellsociety_team04.XMLParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -52,6 +59,17 @@ public class MenuWindow extends Window {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
+					String fileString = button.getText();
+					File file = new File("data/" + fileString + ".xml");
+					XMLParser parser = new XMLParser();
+					parser.createDocForFile(file);
+					simulation = parser.getSimulation();
+					Driver driver = new Driver();
+					driver.setupSimulation();
+					driver.runSimulation();
+							//".data/" + button.getText() + ".xml";
+					System.out.println("button pressed!!");
+					System.out.println(file);
 					//TODO need to have new stage open instead
 					// stage shows info about that simulation
 				}
@@ -87,18 +105,22 @@ public class MenuWindow extends Window {
 		Image segregationImage = new Image(getClass().getClassLoader().getResourceAsStream("segregation.png"));
 		Button segregationButton = new Button();
 		segregationButton.setGraphic(new ImageView(segregationImage));
+		segregationButton.setText("Segregation");
 		
 		Image watorImage = new Image(getClass().getClassLoader().getResourceAsStream("wator.png"));
 		Button watorButton = new Button();
 		watorButton.setGraphic(new ImageView(watorImage));
+		watorButton.setText("PredatorPrey");
 		
 		Image fireImage = new Image(getClass().getClassLoader().getResourceAsStream("fire.png"));
 		Button fireButton = new Button();
 		fireButton.setGraphic(new ImageView(fireImage));
+		fireButton.setText("Fire");
 		
 		Image gameoflifeImage = new Image(getClass().getClassLoader().getResourceAsStream("gameoflife.png"));
 		Button gameoflifeButton = new Button();
 		gameoflifeButton.setGraphic(new ImageView(gameoflifeImage));
+		gameoflifeButton.setText("GameOfLife");
 		
 		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
 		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
