@@ -9,18 +9,20 @@ import javafx.scene.paint.Color;
  */
 public class GameofLifeCell extends Cell{
 
+	public static final String ALIVE = "Alive";
+	public static final String DEAD = "Dead";
+	
 	public GameofLifeCell(String s) {
 		super(s);
 	}
 	
 	public void setStatus(String s) {
-		//this.setStatus(s);
 		status = s;
-		if(s.equals("Alive")) {
-			color = Color.BLACK; //no null cells, so we can reuse black as a color
+		if(s.equals(ALIVE)) {
+			color = Color.BLACK;
 		}
-		else if(s.equals("Dead")) {
-			color = Color.WHITE; //no empty cells
+		else if(s.equals(DEAD)) {
+			color = Color.WHITE;
 		}
 	}
 	

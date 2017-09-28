@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
  */
 public class SegCell extends Cell{
 
+	public static final String RED = "Red";
+	public static final String BLUE = "Blue";
+	
 	public SegCell(String s) {
 		super(s);
 	}
@@ -16,13 +19,13 @@ public class SegCell extends Cell{
 	public void setStatus(String s) {
 		//this.setStatus(s);
 		status = s;
-		if(s.equals("Red")) {
+		if(s.equals(RED)) {
 			color = Color.RED;
 		}
-		else if(s.equals("Blue")) {
+		else if(s.equals(BLUE)) {
 			color = Color.BLUE;
 		}
-		else if(s.equals("Empty")) {
+		else if(s.equals(EMPTY)) {
 			color = Color.WHITE;
 		}
 	}

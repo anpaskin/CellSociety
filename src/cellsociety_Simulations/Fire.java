@@ -23,10 +23,10 @@ public class Fire extends CellManager {
 		for(int n = 0; n < size; n++) {
 			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
-				currentCells.add(new FireCell("Null"));
+				currentCells.add(new FireCell(Cell.NULL));
 			}
 			else {
-				currentCells.add(new FireCell("Tree"));
+				currentCells.add(new FireCell(FireCell.TREE));
 			}
 			nextCellStatuses.add(currentCells.get(n).getStatus());
 		}
@@ -42,7 +42,7 @@ public class Fire extends CellManager {
 			i = (int)(size/2 + Math.sqrt(size)/2);
 		}
 		else i = (int)(size/2);
-		currentCells.get(i).setStatus("Fire");
+		currentCells.get(i).setStatus(FireCell.FIRE);
 	}
 	
 	/**
@@ -51,14 +51,14 @@ public class Fire extends CellManager {
 	public void setNextCellStatuses() {
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals("Fire")) {
-				nextCellStatuses.set(currentCells.indexOf(c), "Empty");
+				nextCellStatuses.set(currentCells.indexOf(c), Cell.EMPTY);
 			}
 			else if(c.getStatus().equals("Tree")) {
 				ArrayList<Cell> neighbors = getNeighbors(c);
 				if(checkNeighbors(neighbors)) {
 					double spread = Math.random();
 					if(spread < pCatch) {
-						nextCellStatuses.set(currentCells.indexOf(c), "Fire");
+						nextCellStatuses.set(currentCells.indexOf(c), FireCell.FIRE);
 					}
 				}
 			}
@@ -88,7 +88,7 @@ public class Fire extends CellManager {
 	 */
 	private boolean checkNeighbors(ArrayList<Cell> neighbors) {
 		for(Cell c : neighbors) {
-			if(c.getStatus().equals("Fire")) {
+			if(c.getStatus().equals(FireCell.FIRE)) {
 				return true;
 			}
 		}

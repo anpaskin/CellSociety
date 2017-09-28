@@ -12,6 +12,9 @@ public abstract class Cell {
 	protected String status;
 	protected Color color;
 	
+	public static final String EMPTY = "Empty";
+	public static final String NULL = "Null";
+	
 	public Cell(String s) {
 		setStatus(s);
 	}
@@ -26,10 +29,10 @@ public abstract class Cell {
 	
 	public void setStatus(String s) {
 		status = s;
-		if(s.equals("Empty")) {
+		if(s.equals(EMPTY)) {
 			color = Color.WHITE;
 		}
-		else if(s.equals("Null")) {
+		else if(s.equals(NULL)) {
 			color = Color.BLACK;
 		}
 	}

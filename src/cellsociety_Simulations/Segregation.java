@@ -30,7 +30,7 @@ public class Segregation extends CellManager{
 		for(int i = 0; i < size; i++) {
 			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new SegCell("Null"));
+				currentCells.add(new SegCell(SegCell.NULL));
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
@@ -46,13 +46,13 @@ public class Segregation extends CellManager{
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * emptyRatio) {
-				paramCells.add(new SegCell("Empty"));
+				paramCells.add(new SegCell(Cell.EMPTY));
 			}
 			else if(k < (pSize * emptyRatio) + ((pSize - pSize * emptyRatio) * redRatio)) {
-				paramCells.add(new SegCell("Red"));
+				paramCells.add(new SegCell(SegCell.RED));
 			}
 			else {
-				paramCells.add(new SegCell("Blue"));
+				paramCells.add(new SegCell(SegCell.BLUE));
 			}
 		}
 		return paramCells;
@@ -61,13 +61,13 @@ public class Segregation extends CellManager{
 	public void setNextCellStatuses() {
 		ArrayList<Integer> empties = getValidMoveLocs();
 		for(Cell c : currentCells) {
-			if(!c.getStatus().equals("Empty") && !c.getStatus().equals("Null")) {
+			if(!c.getStatus().equals(Cell.EMPTY) && !c.getStatus().equals(SegCell.NULL)) {
 				ArrayList<Cell> neighbors = getNeighbors(c);
 				if(checkNeighbors(c, neighbors)) {
 					nextCellStatuses.set(empties.get(0), c.getStatus());
 					empties.remove(0);
 					empties.add(currentCells.indexOf(c));
-					nextCellStatuses.set(currentCells.indexOf(c), "Empty");
+					nextCellStatuses.set(currentCells.indexOf(c), Cell.EMPTY);
 				}
 			}
 		}
@@ -76,7 +76,7 @@ public class Segregation extends CellManager{
 	private ArrayList<Integer> getValidMoveLocs() {
 		ArrayList<Integer> ret = new ArrayList<Integer>();
 		for(Cell c : currentCells) {
-			if(c.getStatus().equals("Empty")) ret.add(currentCells.indexOf(c));
+			if(c.getStatus().equals(Cell.EMPTY)) ret.add(currentCells.indexOf(c));
 		}
 		return ret;
 	}
@@ -94,7 +94,7 @@ public class Segregation extends CellManager{
 			if(n.getStatus().equals(c.getStatus())) {
 				simCount++;
 			}
-			if(!n.getStatus().equals("Empty")) {
+			if(!n.getStatus().equals(Cell.EMPTY)) {
 				occupiedNeighbors++;
 			}
 		}

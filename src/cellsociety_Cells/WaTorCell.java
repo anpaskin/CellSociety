@@ -8,6 +8,9 @@ public class WaTorCell extends Cell {
 	private int lifeCount;
 	private boolean eaten;
 	
+	public static final String FISH = "Fish";
+	public static final String SHARK = "Shark";
+	
 	public WaTorCell(String s) {
 		super(s);
 		energy = 5;
@@ -22,10 +25,10 @@ public class WaTorCell extends Cell {
 	
 	public void setStatus(String s) {
 		status = s;
-		if(s.equals("Fish")) {
+		if(s.equals(FISH)) {
 			color = Color.TURQUOISE;
 		}
-		else if(s.equals("Shark")) {
+		else if(s.equals(SHARK)) {
 			color = Color.GRAY;
 		}
 		else if(s.equals("Empty")) {

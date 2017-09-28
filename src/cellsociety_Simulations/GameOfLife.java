@@ -24,7 +24,7 @@ public class GameOfLife extends CellManager{
 		for(int i = 0; i < size; i++) {
 			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new LifeCell("Null"));
+				currentCells.add(new LifeCell(Cell.NULL));
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
@@ -40,10 +40,10 @@ public class GameOfLife extends CellManager{
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * aliveRatio) {
-				paramCells.add(new LifeCell("Alive"));
+				paramCells.add(new LifeCell(LifeCell.ALIVE));
 			}
 			else {
-				paramCells.add(new LifeCell("Dead"));
+				paramCells.add(new LifeCell(LifeCell.DEAD));
 			}
 		}
 		return paramCells;
@@ -51,12 +51,12 @@ public class GameOfLife extends CellManager{
 	
 	public void setNextCellStatuses() {
 		for(Cell c : currentCells) {
-			if(!c.getStatus().equals("Null") && checkNeighbors(c, getNeighbors(c))) {
-				if(c.getStatus().equals("Alive")) {
-					nextCellStatuses.set(currentCells.indexOf(c), "Dead");
+			if(!c.getStatus().equals(Cell.NULL) && checkNeighbors(c, getNeighbors(c))) {
+				if(c.getStatus().equals(LifeCell.ALIVE)) {
+					nextCellStatuses.set(currentCells.indexOf(c), LifeCell.DEAD);
 				}
-				else if(c.getStatus().equals("Dead")) {
-					nextCellStatuses.set(currentCells.indexOf(c), "Alive");
+				else if(c.getStatus().equals(LifeCell.DEAD)) {
+					nextCellStatuses.set(currentCells.indexOf(c), LifeCell.ALIVE);
 				}
 			}
 			
@@ -72,11 +72,11 @@ public class GameOfLife extends CellManager{
 	private boolean checkNeighbors(Cell c, ArrayList<Cell> neighbors) {
 		int liveNeighbors = 0;
 		for(Cell n : neighbors) {
-			if(n.getStatus().equals("Alive")) {
+			if(n.getStatus().equals(LifeCell.ALIVE)) {
 				liveNeighbors++;
 			}
 		}
-		if(c.getStatus().equals("Alive")) {
+		if(c.getStatus().equals(LifeCell.ALIVE)) {
 			if(liveNeighbors < 2 || liveNeighbors > 3) {
 				return true;
 			}
