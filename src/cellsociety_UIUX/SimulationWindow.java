@@ -113,13 +113,13 @@ public abstract class SimulationWindow extends Window {
 //			speedChange = false;
 //		}
 		if (running) {
-			simType.setNextCellStatuses();
+			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGridPane(simType.getCurrentCells());
 		}
 		if (stepping) {
 			running = false;
-			simType.setNextCellStatuses();
+			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGridPane(simType.getCurrentCells());
 			stepping = false;
@@ -197,7 +197,7 @@ public abstract class SimulationWindow extends Window {
 		myRoot.getChildren().add(speed);
 	}
 
-	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
+	public void displayGridPane(List<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		getCellColors(currentCells);
 		grid.getChildren().clear();
 		for (int row = 0; row < numCells; row++) {
@@ -281,7 +281,7 @@ public abstract class SimulationWindow extends Window {
 //	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
-	private void getCellColors(ArrayList<Cell> cellStatuses) {
+	private void getCellColors(List<Cell> cellStatuses) {
 		cellColors.clear();
 		for (int i = 0; i < cellStatuses.size(); i++) {
 			cellColors.add(cellStatuses.get(i).getColor());

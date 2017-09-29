@@ -1,6 +1,7 @@
 package cellsociety_Simulations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.LifeCell;
@@ -20,7 +21,7 @@ public class GameOfLife extends CellManager{
 	}
 	
 	public void initializeCurrentCells() {
-		ArrayList<Cell> paramCells = setParamCells();
+		List<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
 			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
@@ -35,8 +36,8 @@ public class GameOfLife extends CellManager{
 		}
 	}
 
-	public ArrayList<Cell> setParamCells() {
-		ArrayList<Cell> paramCells = new ArrayList<Cell>();
+	public List<Cell> setParamCells() {
+		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * aliveRatio) {
@@ -49,7 +50,7 @@ public class GameOfLife extends CellManager{
 		return paramCells;
 	}
 	
-	public void setNextCellStatuses() {
+	protected void setNextCellStatuses() {
 		for(Cell c : currentCells) {
 			if(!c.getStatus().equals(Cell.NULL) && checkNeighbors(c, getNeighbors(c))) {
 				if(c.getStatus().equals(LifeCell.ALIVE)) {
@@ -69,7 +70,7 @@ public class GameOfLife extends CellManager{
 	 * @param neighbors
 	 * @return returns true if cell needs to be moved (does not have enough similar neighbors)
 	 */
-	private boolean checkNeighbors(Cell c, ArrayList<Cell> neighbors) {
+	private boolean checkNeighbors(Cell c, List<Cell> neighbors) {
 		int liveNeighbors = 0;
 		for(Cell n : neighbors) {
 			if(n.getStatus().equals(LifeCell.ALIVE)) {

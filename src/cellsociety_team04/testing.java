@@ -1,10 +1,12 @@
 package cellsociety_team04;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
+import cellsociety_Simulations.RPS;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
 
@@ -19,15 +21,48 @@ public class testing {
 		//segTesting(.5, .25, .5, 100);
 		//fireTesting(.75, 66, 100);
 		//lifeTesting(.5, 100);
-		waTorTesting(0.2, 0.35, 100);
+		//waTorTesting(0.2, 0.35, 100);
+		rpsTesting(.25, .25, .25, 100);
+	}
+	
+	private static void rpsTesting(double rocks, double papers, double scissors, double size) {
+		RPS rpsSim = new RPS(rocks, papers, scissors, size);
+		rpsSim.initializeCurrentCells();
+		List<Cell> s = rpsSim.getCurrentCells();
+		double rc = Math.sqrt(s.size());
+		String[][] grid = new String[(int)rc][(int)rc];
+		int i = 0;
+		for(int x = 0; x < size; x++) {
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					String sStatus = s.get(i).getStatus();
+					if(sStatus.equals("Rock")) grid[r][c] = "R";
+					else if(sStatus.equals("Paper")) grid[r][c] = "P";
+					else if(sStatus.equals("Scissors")) grid[r][c] = "S";
+					else if(sStatus.equals("Empty")) grid[r][c] = "_";
+					else if(sStatus.equals("Null")) grid[r][c] = "N";
+					i++;
+				}
+			}
+			i = 0;
+			
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					System.out.print(grid[r][c] + "  ");
+				}
+				System.out.println();
+			}
+			System.out.println("===================================================");
+			//waSim.setNextCellStatuses();
+			rpsSim.updateCurrentCells();
+		}
+		
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
 		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 5, 5, 5, 2);
 		waSim.initializeCurrentCells();
-		ArrayList<Cell> p = waSim.setParamCells();
-		ArrayList<Cell> s = waSim.getCurrentCells();
-		System.out.println(p);
+		List<Cell> s = waSim.getCurrentCells();
 		System.out.println(s);
 		double rc = Math.sqrt(s.size());
 		String[][] grid = new String[(int)rc][(int)rc];
@@ -59,14 +94,14 @@ public class testing {
 				System.out.println();
 			}
 			System.out.println("===================================================");
-			waSim.setNextCellStatuses();
+			//waSim.setNextCellStatuses();
 			waSim.updateCurrentCells();
 		}
 	}
 	
 	private static void lifeTesting(double alive, double size) {
 		GameOfLife lifeSim = new GameOfLife(alive, size);
-		ArrayList<Cell> s = lifeSim.getCurrentCells();
+		List<Cell> s = lifeSim.getCurrentCells();
 		lifeSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
@@ -90,7 +125,7 @@ public class testing {
 				System.out.println();
 			}
 			System.out.println("===================================================");
-			lifeSim.setNextCellStatuses();
+			//lifeSim.setNextCellStatuses();
 			lifeSim.updateCurrentCells();
 		}
 	}
@@ -98,7 +133,7 @@ public class testing {
 	
 	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
 		Fire fireSim = new Fire(probCatch, size);
-		ArrayList<Cell> s = fireSim.getCurrentCells();
+		List<Cell> s = fireSim.getCurrentCells();
 		fireSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
@@ -123,7 +158,7 @@ public class testing {
 				System.out.println();
 			}
 			System.out.println("===================================================");
-			fireSim.setNextCellStatuses();
+			//fireSim.setNextCellStatuses();
 			fireSim.updateCurrentCells();
 		}
 		
@@ -132,7 +167,7 @@ public class testing {
 	private static void segTesting(double minSim, double emptyCount, double redCount, double size) {
 		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size);
 		segSim.initializeCurrentCells();
-		ArrayList<Cell> s = segSim.getCurrentCells();
+		List<Cell> s = segSim.getCurrentCells();
 		//ArrayList<Cell> p = segSim.setParamCells();
 		System.out.println("Current Cells Size: " + s.size());
 		int red = 0;
@@ -176,7 +211,7 @@ public class testing {
 				System.out.println();
 			}
 			System.out.println("===================================================");
-			segSim.setNextCellStatuses();
+//			segSim.setNextCellStatuses();
 			segSim.updateCurrentCells();
 		}
 		
