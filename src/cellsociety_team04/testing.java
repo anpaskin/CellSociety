@@ -6,6 +6,7 @@ import java.util.List;
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
+import cellsociety_Simulations.RPS;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
 
@@ -20,7 +21,42 @@ public class testing {
 		//segTesting(.5, .25, .5, 100);
 		//fireTesting(.75, 66, 100);
 		//lifeTesting(.5, 100);
-		waTorTesting(0.2, 0.35, 100);
+		//waTorTesting(0.2, 0.35, 100);
+		rpsTesting(.25, .25, .25, 100);
+	}
+	
+	private static void rpsTesting(double rocks, double papers, double scissors, double size) {
+		RPS rpsSim = new RPS(rocks, papers, scissors, size);
+		rpsSim.initializeCurrentCells();
+		List<Cell> s = rpsSim.getCurrentCells();
+		double rc = Math.sqrt(s.size());
+		String[][] grid = new String[(int)rc][(int)rc];
+		int i = 0;
+		for(int x = 0; x < size; x++) {
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					String sStatus = s.get(i).getStatus();
+					if(sStatus.equals("Rock")) grid[r][c] = "R";
+					else if(sStatus.equals("Paper")) grid[r][c] = "P";
+					else if(sStatus.equals("Scissors")) grid[r][c] = "S";
+					else if(sStatus.equals("Empty")) grid[r][c] = "_";
+					else if(sStatus.equals("Null")) grid[r][c] = "N";
+					i++;
+				}
+			}
+			i = 0;
+			
+			for(int r = 0; r < rc; r++) {
+				for(int c = 0; c < rc; c++) {
+					System.out.print(grid[r][c] + "  ");
+				}
+				System.out.println();
+			}
+			System.out.println("===================================================");
+			//waSim.setNextCellStatuses();
+			rpsSim.updateCurrentCells();
+		}
+		
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {

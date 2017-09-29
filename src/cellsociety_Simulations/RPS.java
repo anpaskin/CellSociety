@@ -32,6 +32,7 @@ public class RPS extends CellManager {
 				currentCells.add(paramCells.get(k));
 				paramCells.remove(k);
 			}
+			nextCellStatuses.add(currentCells.get(n).getStatus());
 		}
 	}
 	
@@ -49,14 +50,67 @@ public class RPS extends CellManager {
 				paramCells.add(new RPSCell(RPSCell.SCISSORS));
 			}
 			else {
-				paramCells.add(new RPSCell(Cell.EMPTY));
+				paramCells.add(new RPSCell(RPSCell.EMPTY));
 			}
 		}
 		return paramCells;
 	}
 	
 	protected void setNextCellStatuses() {
-		//
+		for(Cell c : currentCells) {
+			if(!c.getStatus().equals(Cell.EMPTY) && !c.getStatus().equals(Cell.NULL) && c.getStatus().equals(nextCellStatuses.get(currentCells.indexOf(c)))) {
+				List<Cell> neighbors = removeEmpties(getNeighbors(c));
+				if(neighbors.size() > 0) {
+					int nChoice = (int)Math.random()*neighbors.size();
+					if(c.getStatus().equals(RPSCell.ROCK)) {
+						rockMatchup(c, neighbors, nChoice);
+					}
+					else if(c.getStatus().equals(RPSCell.PAPER)) {
+						paperMatchup(c, neighbors, nChoice);
+					}
+					else if(c.getStatus().equals(RPSCell.SCISSORS)) {
+						scissorsMatchup(c, neighbors, nChoice);
+					}
+				}	
+			}
+		}
+	}
+
+	private void scissorsMatchup(Cell c, List<Cell> neighbors, int nChoice) {
+		if(neighbors.get(nChoice).getStatus().equals(RPSCell.ROCK)) {
+			nextCellStatuses.set(currentCells.indexOf(c), RPSCell.ROCK);
+		}
+		else if(neighbors.get(nChoice).getStatus().equals(RPSCell.PAPER)) {
+			nextCellStatuses.set(currentCells.indexOf(neighbors.get(nChoice)), RPSCell.SCISSORS);
+		}
+	}
+
+	private void paperMatchup(Cell c, List<Cell> neighbors, int nChoice) {
+		if(neighbors.get(nChoice).getStatus().equals(RPSCell.SCISSORS)) {
+			nextCellStatuses.set(currentCells.indexOf(c), RPSCell.SCISSORS);
+		}
+		else if(neighbors.get(nChoice).getStatus().equals(RPSCell.ROCK)) {
+			nextCellStatuses.set(currentCells.indexOf(neighbors.get(nChoice)), RPSCell.PAPER);
+		}
+	}
+
+	private void rockMatchup(Cell c, List<Cell> neighbors, int nChoice) {
+		if(neighbors.get(nChoice).getStatus().equals(RPSCell.PAPER)) {
+			nextCellStatuses.set(currentCells.indexOf(c), RPSCell.PAPER);
+		}
+		else if(neighbors.get(nChoice).getStatus().equals(RPSCell.SCISSORS)) {
+			nextCellStatuses.set(currentCells.indexOf(neighbors.get(nChoice)), RPSCell.ROCK);
+		}
+	}
+	
+	private List<Cell> removeEmpties(List<Cell> neighbors) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(Cell c : neighbors) {
+			if(!c.getStatus().equals(Cell.EMPTY)) {
+				ret.add(c);
+			}
+		}
+		return ret;
 	}
 
 }
