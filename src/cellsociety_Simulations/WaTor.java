@@ -2,6 +2,8 @@ package cellsociety_Simulations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.WaTorCell;
 
@@ -49,7 +51,7 @@ public class WaTor extends CellManager {
 	 * Randomly sets currentCells statuses from setParamCells list. Wraps Cells in a loop of "Null" Cells.
 	 */
 	public void initializeCurrentCells() {
-		ArrayList<Cell> paramCells = setParamCells();
+		List<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
 			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
@@ -70,8 +72,8 @@ public class WaTor extends CellManager {
 	 * Creates a sorted list of Cells, the statuses of which are determined by the parameters of the simulation.
 	 * @return			Sorted list of Cells with correct amount of "Shark", "Fish", and "Empty" statuses
 	 */
-	public ArrayList<Cell> setParamCells() {
-		ArrayList<Cell> paramCells = new ArrayList<Cell>();
+	private List<Cell> setParamCells() {
+		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * fishRatio) {
@@ -89,6 +91,7 @@ public class WaTor extends CellManager {
 	
 	@Override
 	public void updateCurrentCells() {
+		setNextCellStatuses();
 		for(int n = 0; n < currentCells.size(); n++) {
 			currentCells.get(n).setStatus(nextCellStatuses.get(n));
 			((WaTorCell)currentCells.get(n)).setEnergy(nextEnergies.get(n));
@@ -112,8 +115,7 @@ public class WaTor extends CellManager {
 	/**
 	 * Switch order of for loops to give fish priority
 	 */
-	public void setNextCellStatuses() {
-		
+	protected void setNextCellStatuses() {
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals(WaTorCell.SHARK)) {
 				setShark(c);
@@ -131,14 +133,14 @@ public class WaTor extends CellManager {
 	}
 	
 	private void setShark(Cell c) {
-		ArrayList<Cell> neighbors = getNeighbors(c);
+		List<Cell> neighbors = getNeighbors(c);
 		if(((WaTorCell)c).getEnergy() == 0) {
 			leaveEmpty(c);
 		}
 		else {
-			ArrayList<Integer> fishLocs = fishNeighbors(neighbors);
-			ArrayList<Integer> sharkLocs = sharkNeighbors(neighbors);
-			ArrayList<Integer> emptyLocs = emptyNeighbors(neighbors);
+			List<Integer> fishLocs = fishNeighbors(neighbors);
+			List<Integer> sharkLocs = sharkNeighbors(neighbors);
+			List<Integer> emptyLocs = emptyNeighbors(neighbors);
 			if(fishLocs.size() > 0) {
 				int moveLoc = fishLocs.get((int)(Math.random()*fishLocs.size()));
 				moveCell(c, moveLoc);
@@ -158,8 +160,8 @@ public class WaTor extends CellManager {
 	}
 	
 	private void setFish(Cell c) {
-		ArrayList<Cell> neighbors = getNeighbors(c);
-		ArrayList<Integer> emptyLocs = emptyNeighbors(neighbors);
+		List<Cell> neighbors = getNeighbors(c);
+		List<Integer> emptyLocs = emptyNeighbors(neighbors);
 		if(!((WaTorCell)c).getEaten() && emptyLocs.size() > 0) {
 			int moveLoc = emptyLocs.get((int)(Math.random()*emptyLocs.size()));
 			moveCell(c, moveLoc);
@@ -210,8 +212,8 @@ public class WaTor extends CellManager {
 		}
 	}
 
-	private ArrayList<Integer> fishNeighbors(ArrayList<Cell> neighbors) {
-		ArrayList<Integer> fishNeighborLocs = new ArrayList<Integer>();
+	private List<Integer> fishNeighbors(List<Cell> neighbors) {
+		List<Integer> fishNeighborLocs = new ArrayList<Integer>();
 		for(Cell n : neighbors) {
 			if((n.getStatus().equals(WaTorCell.FISH) && nextCellStatuses.get(currentCells.indexOf(n)).equals(WaTorCell.FISH) && !((WaTorCell)n).getEaten())) {
 				fishNeighborLocs.add(currentCells.indexOf(n));
@@ -220,8 +222,8 @@ public class WaTor extends CellManager {
 		return fishNeighborLocs;
 	}
 
-	private ArrayList<Integer> sharkNeighbors(ArrayList<Cell> neighbors) {
-		ArrayList<Integer> sharkNeighborLocs = new ArrayList<Integer>();
+	private List<Integer> sharkNeighbors(List<Cell> neighbors) {
+		List<Integer> sharkNeighborLocs = new ArrayList<Integer>();
 		for(Cell n : neighbors) {
 			if(n.getStatus().equals(WaTorCell.SHARK) && nextCellStatuses.get(currentCells.indexOf(n)).equals(WaTorCell.SHARK)) {
 				sharkNeighborLocs.add(currentCells.indexOf(n));
@@ -230,8 +232,8 @@ public class WaTor extends CellManager {
 		return sharkNeighborLocs;
 	}
 	
-	private ArrayList<Integer> emptyNeighbors(ArrayList<Cell> neighbors) {
-		ArrayList<Integer> emptyNeighborLocs = new ArrayList<Integer>();
+	private List<Integer> emptyNeighbors(List<Cell> neighbors) {
+		List<Integer> emptyNeighborLocs = new ArrayList<Integer>();
 		for(Cell n : neighbors) {
 			if(n.getStatus().equals(Cell.EMPTY) && nextCellStatuses.get(currentCells.indexOf(n)).equals(Cell.EMPTY)) {
 				emptyNeighborLocs.add(currentCells.indexOf(n));
