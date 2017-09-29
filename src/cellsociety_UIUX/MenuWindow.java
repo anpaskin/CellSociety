@@ -36,7 +36,6 @@ public class MenuWindow extends Window {
 //	private Stage simStage = new Stage();
 //	private boolean newSim = true;
 	private CellManager simChoice;
-	private boolean pressed;
 	
 	public MenuWindow(Stage s) {
 		super(s);
@@ -57,8 +56,7 @@ public class MenuWindow extends Window {
 
 	
 	
-	public boolean chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
-		pressed = false;
+	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
@@ -71,13 +69,15 @@ public class MenuWindow extends Window {
 					parser.buttonChooseFile(file);
 					simChoice = parser.getSimulation();
 					System.out.println("button pressed!!");
-					System.out.println(file);
-					pressed = true;
+					//System.out.println(file);
 				}
 			});
 			
 		}
-		return pressed;
+	}
+	
+	public void resetMenu() {
+		simChoice = null;
 	}
 	
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
