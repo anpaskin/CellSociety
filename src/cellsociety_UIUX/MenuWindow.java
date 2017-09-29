@@ -62,13 +62,6 @@ public class MenuWindow extends Window {
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
 					simChoice = getSimFromFile(button);
-					String fileString = button.getAccessibleText();
-					fileString = fileString + ".xml";
-					ClassLoader cl = getClass().getClassLoader();
-					File file = new File(cl.getResource(fileString).getFile());
-					XMLParser parser = new XMLParser();
-					parser.buttonChooseFile(file);
-					simChoice = parser.getSimulation();
 					System.out.println("button pressed!!");
 					//System.out.println(file);
 				}

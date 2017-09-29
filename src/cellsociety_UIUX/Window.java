@@ -13,8 +13,6 @@ public abstract class Window {
 	protected Group myRoot;
 	protected Scene myScene;
 	protected Timeline animation;
-	protected double FRAMES_PER_SECOND = 60.0;
-	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 	
 	public Window(Stage s) {
 		myStage = s;
@@ -24,7 +22,7 @@ public abstract class Window {
 	
 	public void gameLoop(CellManager simType, double simSpeed) {
 		// attach "game loop" to timeline to play it
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+		KeyFrame frame = new KeyFrame(Duration.millis(simSpeed),
 				e -> step());
 		//TODO multiply seconddelay by amount sound on speed slider
 		animation = new Timeline();
