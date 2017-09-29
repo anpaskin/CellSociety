@@ -44,6 +44,10 @@ public abstract class CellManager {
 		}
 	}
 	
+	public void initializeCurrentCells() {
+		//do nothing
+	}
+	
 	/**
 	 * Gets neighbors of given Cell. Neighbors is defined by the getNeighborLocationNums method.
 	 * @param c			Cell of which to get the neighbors

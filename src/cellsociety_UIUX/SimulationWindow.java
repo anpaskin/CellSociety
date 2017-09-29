@@ -47,8 +47,8 @@ public abstract class SimulationWindow extends Window {
 	protected int padding = 100;
 
 	Slider speed = new Slider();
-	private double simSpeed = 1;
-	private boolean speedChange = false;
+	private double simSpeed = 10000;
+	//private boolean speedChange = false;
 	
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
@@ -69,7 +69,7 @@ public abstract class SimulationWindow extends Window {
 		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
-				simSpeed = speed.valueProperty().intValue()*5;
+				//simSpeed = speed.valueProperty().doubleValue()*5;
 				running = !running;
 				if (running) {
 					playButton.setGraphic(pauseImageView);
@@ -87,18 +87,9 @@ public abstract class SimulationWindow extends Window {
 		});
 		
 		speed.setOnMouseReleased(e -> {
-			speedChange = true;
 			updateSimSpeed();
 		});
 
-//		speed.valueProperty().addListener(new ChangeListener<Number>() {
-//	         public void changed(ObservableValue<? extends Number> ov,
-//	        		 Number old_val, Number new_val) {
-//	        	 		speed.set
-//	             	simSpeed = (int) new_val * 10;
-//	            }
-//	     });
-		
 	}
 	
 	private double getSimSpeed() {
@@ -106,7 +97,8 @@ public abstract class SimulationWindow extends Window {
 	}
 	
 	private void updateSimSpeed() {
-		simSpeed = (speed.getValue() + 1) * 1000;
+		simSpeed = (double) Math.pow(speed.getValue(), -2) * 100;
+		resetGameLoop(simSpeed);
 	}
 	
 	/**
@@ -116,9 +108,10 @@ public abstract class SimulationWindow extends Window {
 	@Override
 	protected void step() {
 		userInteraction();
-		if(speedChange) {
-			resetGameLoop(getSimSpeed());
-		}
+//		if (speedChange) {
+//			resetGameLoop(getSimSpeed());
+//			speedChange = false;
+//		}
 		if (running) {
 			simType.setNextCellStatuses();
 			simType.updateCurrentCells();
@@ -132,11 +125,10 @@ public abstract class SimulationWindow extends Window {
 			stepping = false;
 		}
 	}
-	
+
 	private void resetGameLoop(double newSpeed) {
 		animation.stop();
-		FRAMES_PER_SECOND = newSpeed;
-		gameLoop(simType);
+		gameLoop(simType, newSpeed);
 	}
 
 	
@@ -193,7 +185,7 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
-		speed.setMin(0);
+		speed.setMin(1);
 		speed.setMax(3);
 		speed.setValue(1);
 		speed.setShowTickLabels(true);
@@ -203,7 +195,6 @@ public abstract class SimulationWindow extends Window {
 		speed.setLayoutX(offset);
 		speed.setLayoutY(offset + buttons.size()*padding);
 		myRoot.getChildren().add(speed);
-		updateSimSpeed();
 	}
 
 	public void displayGridPane(ArrayList<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx

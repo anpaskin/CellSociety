@@ -105,13 +105,13 @@ public class Driver extends Application {
 		simWindow.setWindowOpen(true);
 		simWindow.userInteraction();
 		simWindow.setRowSize(simCellManager);
-		((Segregation) simCellManager).initializeCurrentCells();
+		simCellManager.initializeCurrentCells();
 		simWindow.displayGridPane(simCellManager.getCurrentCells());
 		simulationStage.setScene(simWindow.getScene());
 	}
 
 	public void runSimulation() {
-		simWindow.gameLoop(simCellManager);
+		simWindow.gameLoop(simCellManager, MILLISECOND_DELAY);
 	}
 
 	/**
