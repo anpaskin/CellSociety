@@ -8,7 +8,9 @@ import com.sun.glass.events.MouseEvent;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,6 +28,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
 
@@ -40,7 +43,7 @@ public abstract class SimulationWindow extends Window {
 	protected ImageView playImageView, pauseImageView;
 	
 	protected int numCells;
-	protected int cellSize = 50;
+	protected int cellSize = 100;
 
 	protected List<Button> buttons;
 	protected int offset = 50;
@@ -53,10 +56,8 @@ public abstract class SimulationWindow extends Window {
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
 
-	protected boolean windowOpen = false;
-	protected boolean simulationRunning = false;
-
 	private CellManager simType;
+	private List<Integer> numSimTypes;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -65,7 +66,7 @@ public abstract class SimulationWindow extends Window {
 		//setRowSize();
 	}
 
-	public void userInteraction() {
+	public void buttonClick() {
 		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
@@ -105,9 +106,8 @@ public abstract class SimulationWindow extends Window {
 	 * Updates the cells for each SimulationWindow
 	 * @param simType 
 	 */
-	@Override
-	protected void step() {
-		userInteraction();
+	public void step() {
+		buttonClick();
 //		if (speedChange) {
 //			resetGameLoop(getSimSpeed());
 //			speedChange = false;
@@ -128,7 +128,7 @@ public abstract class SimulationWindow extends Window {
 
 	private void resetGameLoop(double newSpeed) {
 		animation.stop();
-		gameLoop(simType, newSpeed);
+	//	gameLoop(simType, newSpeed);
 	}
 
 	
@@ -140,7 +140,7 @@ public abstract class SimulationWindow extends Window {
 		addSlider();
 		addTitle();
 		//displayGridPane();
-		throwErrors();
+		//throwErrors();
 	}
 
 	public void setupSceneDimensions() {
@@ -289,35 +289,16 @@ public abstract class SimulationWindow extends Window {
 	}
 	
 
-	public void throwErrors() {
+	/*public void throwErrors() {
 		//TODO do more than just print error in console... need to handle
 		double gridSize = numCells*cellSize;
 		//if (gridSize > WIDTH || gridSize > HEIGHT) {
 		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
 			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
 		}
-	}
-
-	public void closeSimulation() {
-		myStage.close();
-		windowOpen = false;
-	}
+	}*/
 
 	public ArrayList<Color> getCellColors() {
 		return cellColors;
-	}
-	
-	public boolean getWindowOpen() {
-		return windowOpen;
-	}
-	public void setWindowOpen(boolean b) {
-		windowOpen = b;
-	}
-
-	public boolean getSimulationRunning() {
-		return simulationRunning;
-	}	
-	public void setSimulationRunning(boolean b) {
-		simulationRunning = b;
 	}
 }

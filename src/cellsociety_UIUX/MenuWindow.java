@@ -71,7 +71,7 @@ public class MenuWindow extends Window {
 					parser.buttonChooseFile(file);
 					simChoice = parser.getSimulation();
 					System.out.println("button pressed!!");
-					System.out.println(file);
+					//System.out.println(file);
 					pressed = true;
 				}
 			});
