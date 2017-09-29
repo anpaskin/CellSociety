@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 public class SegregationWindow extends SimulationWindow {
 	
-	private Button run, step;
 	private Slider minSimilar = new Slider();
 	private Slider redToBlue = new Slider();
 	private Slider emptyRatio = new Slider();
