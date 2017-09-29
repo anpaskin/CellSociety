@@ -72,6 +72,8 @@ public class Driver extends Application {
 			determineSim();
 			runSimulation();
 			simulationStage.show();
+			((MenuWindow)menu).resetMenu();
+			animation.playFromStart();
 		}
 	}
 

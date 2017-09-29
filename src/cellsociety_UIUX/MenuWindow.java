@@ -43,7 +43,12 @@ public class MenuWindow extends Window {
 		simChoice = null;
 		setupSceneDimensions();
 		setupScene();
-	}	
+	}
+	
+	public void resetMenu() {
+		simChoice = null;
+		pressed = false;
+	}
 
 	@Override
 	public void setupScene() {
@@ -135,4 +140,5 @@ public class MenuWindow extends Window {
 	public void setNewSim(boolean b) {
 		newSim = b;
 	}*/
+	
 }
