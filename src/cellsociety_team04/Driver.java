@@ -126,7 +126,7 @@ private void setupSim(int simNum) {
 
 public void runSimulation(int simNum) {
 	for (int i = 0; i < simWindows.size(); i++) {
-		simWindows.get(simNum).step();
+		((SimulationWindow) simWindows.get(simNum)).gameLoop(simCellManager, MILLISECOND_DELAY);
 		System.out.println(i+1);
 	}
 }

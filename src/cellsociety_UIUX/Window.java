@@ -22,6 +22,21 @@ public abstract class Window {
 		
 	}
 	
+	public void gameLoop(CellManager simType, double simSpeed) {
+		// attach "game loop" to timeline to play it
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+				e -> step());
+		//TODO multiply seconddelay by amount sound on speed slider
+		animation = new Timeline();
+		animation.setCycleCount(Timeline.INDEFINITE);
+		animation.getKeyFrames().add(frame);
+		animation.play();
+	}
+	
+	protected void step() {
+		//do nothing
+	}
+	
 	protected void setupScene() {
 		//do nothing
 	}
