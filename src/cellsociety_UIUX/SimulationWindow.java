@@ -29,6 +29,10 @@ import javafx.stage.Stage;
 
 public abstract class SimulationWindow extends Window {
 
+	private static final String PLAY_PNG = "play.png";
+	private static final String PAUSE_PNG = "pause.png";
+	private static final String STEP_PNG = "step.png";
+	
 	protected double WIDTH;
 	protected double HEIGHT;
 
@@ -153,15 +157,12 @@ public abstract class SimulationWindow extends Window {
 
 	private void addButtons() {
 		//TODO
-		Image playImage = new Image(getClass().getClassLoader().getResourceAsStream("play.png"));
-		playImageView = new ImageView(playImage);
-		playButton.setGraphic(playImageView);
+		playImageView = getImageView(PLAY_PNG);
+		playButton.setGraphic(getImageView(PLAY_PNG));
 
-		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
-		stepButton.setGraphic(new ImageView(stepImage));
-		
-		Image pauseImage = new Image(getClass().getClassLoader().getResourceAsStream("pause.png"));
-		pauseImageView = new ImageView(pauseImage);
+		stepButton.setGraphic(getImageView(STEP_PNG));
+
+		pauseImageView = getImageView(PAUSE_PNG);
 		
 		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
 		
@@ -173,6 +174,12 @@ public abstract class SimulationWindow extends Window {
 		}
 	}
 
+	private ImageView getImageView(String imageName) {
+		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
+		return new ImageView(buttonImage);
+	}
+	
+	
 	private void addTitle() {
 		//do nothing
 	}
