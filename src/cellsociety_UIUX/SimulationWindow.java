@@ -32,7 +32,6 @@ public abstract class SimulationWindow extends Window {
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	//protected boolean started = false;
 	protected boolean running = false;
 	protected boolean stepping = false;
 	protected Button playButton = new Button();
@@ -48,7 +47,6 @@ public abstract class SimulationWindow extends Window {
 
 	Slider speed = new Slider();
 	private double simSpeed = 10000;
-	//private boolean speedChange = false;
 	
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
@@ -69,7 +67,6 @@ public abstract class SimulationWindow extends Window {
 		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
-				//simSpeed = speed.valueProperty().doubleValue()*5;
 				running = !running;
 				if (running) {
 					playButton.setGraphic(pauseImageView);
@@ -108,10 +105,6 @@ public abstract class SimulationWindow extends Window {
 	@Override
 	protected void step() {
 		userInteraction();
-//		if (speedChange) {
-//			resetGameLoop(getSimSpeed());
-//			speedChange = false;
-//		}
 		if (running) {
 			simType.setNextCellStatuses();
 			simType.updateCurrentCells();
