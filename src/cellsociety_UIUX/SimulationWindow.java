@@ -63,7 +63,6 @@ public abstract class SimulationWindow extends Window {
 		super(s);
 		setupScene();
 		simType = sim;
-		//setRowSize();
 	}
 
 	public void userInteraction() {
@@ -91,10 +90,6 @@ public abstract class SimulationWindow extends Window {
 		});
 
 	}
-	
-//	private double getSimSpeed() {
-//		return simSpeed;
-//	}
 	
 	private void updateSimSpeed() {
 		simSpeed = (double) Math.pow(speed.getValue(), -2) * 100;
@@ -134,7 +129,6 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		addSlider();
 		addTitle();
-		//displayGridPane();
 		throwErrors();
 	}
 
@@ -145,11 +139,9 @@ public abstract class SimulationWindow extends Window {
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
-		//myStage.setMaximized(true);
 	}
 	
 	public void setRowSize(CellManager c) {
-		// do nothing
 		numCells = (int) Math.sqrt(c.getSize());
 	}
 
@@ -176,6 +168,7 @@ public abstract class SimulationWindow extends Window {
 		button.setLayoutX(x);
 		button.setLayoutY(y);
 	}
+	
 	
 	private void addTitle() {
 		//do nothing
