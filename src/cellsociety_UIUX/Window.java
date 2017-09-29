@@ -38,9 +38,9 @@ public abstract class Window {
 		//do nothing
 	}
 
-	public void gameLoop(CellManager simType) {
+	public void gameLoop(CellManager simType, Double simSpeed) {
 	// attach "game loop" to timeline to play it
-			KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+			KeyFrame frame = new KeyFrame(Duration.millis(simSpeed),
 					e -> step());
 			//TODO multiply seconddelay by amount sound on speed slider
 			animation = new Timeline();
