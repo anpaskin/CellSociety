@@ -8,6 +8,7 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,16 +16,20 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 public abstract class SimulationWindow extends Window {
 
 	private static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
 	private static final String STEP_PNG = "step.png";
+	private static final String NULL = "Null";
 	
 	private static final double half = 0.5;
 	private static final double third = 0.33;
@@ -47,8 +52,8 @@ public abstract class SimulationWindow extends Window {
 	protected double offset = 50;
 	protected double padding = 100;
 
-	Slider speed = new Slider();
-	private double simSpeed = 10000;
+	Slider speed;
+	private double simSpeed;
 
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
@@ -89,7 +94,7 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void updateSimSpeed() {
-		simSpeed = (double) Math.pow(speed.getValue(), -2) * 100;
+		simSpeed = (double) (1 / speed.getValue()) * 300;
 		resetGameLoop(simSpeed);
 	}
 
@@ -172,9 +177,12 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
+		speed = new Slider();
 		speed.setMin(1);
 		speed.setMax(3);
 		speed.setValue(1);
+		labelSpeedSlider(speed);
+		speed.setMinWidth(180);
 		speed.setShowTickLabels(true);
 		speed.setShowTickMarks(true);
 		speed.setMajorTickUnit(1);
@@ -183,14 +191,38 @@ public abstract class SimulationWindow extends Window {
 		speed.setLayoutY(offset + buttons.size()*padding);
 		myRoot.getChildren().add(speed);
 	}
+	
+	private void labelSpeedSlider(Slider speed) {
+		speed.setLabelFormatter(new StringConverter<Double>() {
+            @Override
+            public String toString(Double n) {
+                if (n <= 1.5) return "Slow";
+                if (n <= 2.5) return "Medium";
+                return "Fast";
+            }
 
+            @Override
+            public Double fromString(String s) {
+                switch (s) {
+                    case "Slow":
+                        return 0d;
+                    case "Medium":
+                        return 1d;
+                    case "Fast":
+                        return 2d;
+                    default:
+                        return 2d;
+                }
+            }
+        });
+	}
+ 	
 	public void displayGridPane(List<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		getCellColors(currentCells);
 		grid.getChildren().clear();
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				Polygon polygon = new Polygon();
-				
 				//if hexagon
 //				polygon.getPoints().addAll(new Double[] {
 //						// if hexagon
@@ -228,7 +260,9 @@ public abstract class SimulationWindow extends Window {
 				
 				int cellNum = row*numCells + col;
 				polygon.setFill(cellColors.get(cellNum));
-				polygon.setStroke(Color.WHITE);
+				if (!currentCells.get(cellNum).getStatus().equals(NULL)) {
+					polygon.setStroke(Color.BLACK);
+				}
 				GridPane.setRowIndex(polygon, row);
 				GridPane.setColumnIndex(polygon, col);
 				grid.getChildren().addAll(polygon);
