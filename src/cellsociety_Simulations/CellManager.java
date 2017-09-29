@@ -54,7 +54,7 @@ public abstract class CellManager {
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));
-			if(!curCell.getStatus().equals("Null")) {
+			if(!curCell.getStatus().equals(Cell.NULL)) {
 				neighbors.add(curCell);
 			}
 		}
