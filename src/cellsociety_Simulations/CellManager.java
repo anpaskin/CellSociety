@@ -2,6 +2,8 @@ package cellsociety_Simulations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import cellsociety_Cells.Cell;
 
 /**
@@ -11,8 +13,8 @@ import cellsociety_Cells.Cell;
  */
 public abstract class CellManager {
 
-	protected ArrayList<Cell> currentCells;
-	protected ArrayList<String> nextCellStatuses;
+	protected List<Cell> currentCells;
+	protected List<String> nextCellStatuses;
 	protected double size;
 	
 	public CellManager(double n) {
@@ -21,7 +23,7 @@ public abstract class CellManager {
 		size = Math.pow(Math.sqrt(n) + 2, 2);
 	}
 	
-	public ArrayList<Cell> getCurrentCells() {
+	public List<Cell> getCurrentCells() {
 		return currentCells;
 	}
 	
@@ -29,7 +31,7 @@ public abstract class CellManager {
 		return size;
 	}
 	
-	public void setNextCellStatuses() {
+	protected void setNextCellStatuses() {
 		//content depends on simulation type
 	}
 	
@@ -39,6 +41,7 @@ public abstract class CellManager {
 	 * a given simulation step.
 	 */
 	public void updateCurrentCells() {
+		setNextCellStatuses();
 		for(int n = 0; n < currentCells.size(); n++) {
 			currentCells.get(n).setStatus(nextCellStatuses.get(n));
 		}
@@ -53,9 +56,9 @@ public abstract class CellManager {
 	 * @param c			Cell of which to get the neighbors
 	 * @return			An ArrayList of Cells, each a different neighbor of c
 	 */
-	protected final ArrayList<Cell> getNeighbors(Cell c) {
-		ArrayList<Integer> neighborLocNums = getNeighborLocationNums(c);
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+	protected final List<Cell> getNeighbors(Cell c) {
+		List<Integer> neighborLocNums = getNeighborLocationNums(c);
+		List<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));
 			if(!curCell.getStatus().equals(Cell.NULL)) {
@@ -72,8 +75,8 @@ public abstract class CellManager {
 	 * @return			An ArrayList of Integers, each representing a different neighbor 
 	 * 					location of c
 	 */
-	protected ArrayList<Integer> getNeighborLocationNums(Cell c) {
-		ArrayList<Integer> locNums = new ArrayList<Integer>();
+	protected List<Integer> getNeighborLocationNums(Cell c) {
+		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
 		for(int i = -1; i < 2; i++) {
 			locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);

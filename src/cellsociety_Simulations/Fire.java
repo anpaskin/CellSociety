@@ -2,6 +2,7 @@ package cellsociety_Simulations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.FireCell;
@@ -48,13 +49,13 @@ public class Fire extends CellManager {
 	/**
 	 * If Cell with status "Tree" is adjacent to Cell with status "Fire", it has a probCatch chance of its next status being set to "Fire".
 	 */
-	public void setNextCellStatuses() {
+	protected void setNextCellStatuses() {
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals("Fire")) {
 				nextCellStatuses.set(currentCells.indexOf(c), Cell.EMPTY);
 			}
 			else if(c.getStatus().equals("Tree")) {
-				ArrayList<Cell> neighbors = getNeighbors(c);
+				List<Cell> neighbors = getNeighbors(c);
 				if(checkNeighbors(neighbors)) {
 					double spread = Math.random();
 					if(spread < pCatch) {
@@ -69,8 +70,8 @@ public class Fire extends CellManager {
 	 * Redefines neighbors to be adjacent only (no diagonals).
 	 */
 	@Override
-	public ArrayList<Integer> getNeighborLocationNums(Cell c) {
-		ArrayList<Integer> locNums = new ArrayList<Integer>();
+	public List<Integer> getNeighborLocationNums(Cell c) {
+		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
 		locNums.add(cNum - (int)Math.sqrt(currentCells.size()));
 		locNums.add(cNum + (int)Math.sqrt(currentCells.size()));
@@ -86,7 +87,7 @@ public class Fire extends CellManager {
 	 * @return				true if at least one neighbor has status "Fire"
 	 * 						false otherwise
 	 */
-	private boolean checkNeighbors(ArrayList<Cell> neighbors) {
+	private boolean checkNeighbors(List<Cell> neighbors) {
 		for(Cell c : neighbors) {
 			if(c.getStatus().equals(FireCell.FIRE)) {
 				return true;
