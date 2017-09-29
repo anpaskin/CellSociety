@@ -68,72 +68,74 @@ public class Driver extends Application {
 	}
 
 	protected void menuStep() {
-		//System.out.println("Enter menu step");
+		//animation.play();
 		((MenuWindow)menu).chooseSim();
-		//				XMLParser parser = new XMLParser();
-		//				parser.chooseFile(menuStage);
-		//				simulation = parser.getSimulation();	
 		if(((MenuWindow)menu).getSimChoice() != null) {
+			animation.stop();
 			simCellManager = ((MenuWindow)menu).getSimChoice();
 			simStages.add(new Stage());
 			System.out.println(simStages);
 			determineSim(simStages.size()-1);
 			runSimulation(simStages.size()-1);
 			simStages.get(simStages.size()-1).show();
+			((MenuWindow) menu).resetMenu();
+			animation.playFromStart();
+			System.out.println("playing from start");
 		}
 	}
 
-	public void determineSim(int simNum) {
-		//TODO use title from xml file... 
-		if (simCellManager instanceof Segregation) {
-			simWindows.add(new SegregationWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
-			System.out.println("segregation");
-		}
-		else if (simCellManager instanceof Fire) {
-			simWindows.add(new FireWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
-			System.out.println("fire");
-		}
-		else if (simCellManager instanceof GameOfLife) {
-			simWindows.add(new GameOfLifeWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
-			System.out.println("gameoflife");
-		}
-		else if (simCellManager instanceof WaTor) {
-			simWindows.add(new WatorWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
-			System.out.println("wator");
-		}
-		System.out.println(simWindows);
+public void determineSim(int simNum) {
+	//TODO use title from xml file... 
+	if (simCellManager instanceof Segregation) {
+		simWindows.add(new SegregationWindow(simStages.get(simNum), simCellManager));
+		setupSim(simNum);
+		System.out.println("segregation");
 	}
-
-	private void setupSim(int simNum) {
-		simWindows.get(simNum).buttonClick();
-		simWindows.get(simNum).setRowSize(simCellManager);
-		simCellManager.initializeCurrentCells();
-		simWindows.get(simNum).displayGridPane(simCellManager.getCurrentCells());
-		simStages.get(simNum).setScene(simWindows.get(simNum).getScene());
-		simStages.get(simNum).setTitle(simCellManager.getClass().toString());
-		simStages.get(simNum).setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				System.out.println("Stage is closing");
-			}
-		});        
-
+	else if (simCellManager instanceof Fire) {
+		simWindows.add(new FireWindow(simStages.get(simNum), simCellManager));
+		setupSim(simNum);
+		System.out.println("fire");
 	}
+	else if (simCellManager instanceof GameOfLife) {
+		simWindows.add(new GameOfLifeWindow(simStages.get(simNum), simCellManager));
+		setupSim(simNum);
+		System.out.println("gameoflife");
+	}
+	else if (simCellManager instanceof WaTor) {
+		simWindows.add(new WatorWindow(simStages.get(simNum), simCellManager));
+		setupSim(simNum);
+		System.out.println("wator");
+	}
+	System.out.println(simWindows);
+}
 
-	public void runSimulation(int simNum) {
-		for (int i = 0; i < simWindows.size(); i++) {
-			simWindows.get(simNum).step();
+private void setupSim(int simNum) {
+	simWindows.get(simNum).buttonClick();
+	simWindows.get(simNum).setRowSize(simCellManager);
+	simCellManager.initializeCurrentCells();
+	simWindows.get(simNum).displayGridPane(simCellManager.getCurrentCells());
+	simStages.get(simNum).setScene(simWindows.get(simNum).getScene());
+	simStages.get(simNum).setTitle(simCellManager.getClass().toString());
+	simStages.get(simNum).setOnCloseRequest(new EventHandler<WindowEvent>() {
+		public void handle(WindowEvent we) {
+			System.out.println("Stage is closing");
 		}
-	}
+	});        
 
-	/**
-	 * Start of the program
-	 */
-	public static void main(String[] args) {
-		launch(args);
+}
+
+public void runSimulation(int simNum) {
+	for (int i = 0; i < simWindows.size(); i++) {
+		simWindows.get(simNum).step();
+		System.out.println(i+1);
 	}
+}
+
+/**
+ * Start of the program
+ */
+public static void main(String[] args) {
+	launch(args);
+}
 
 }
