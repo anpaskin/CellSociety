@@ -54,8 +54,6 @@ public class MenuWindow extends Window {
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
-	
-	
 	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
@@ -93,10 +91,6 @@ public class MenuWindow extends Window {
 	
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
-		
-/*		Button newSimButton = createButton("newsim.png", "NewSim");
-		setButtonLayout(newSimButton, WIDTH/2 - newSimButton.getMaxWidth()/2, HEIGHT*1/2);
-		myRoot.getChildren().add(newSimButton);*/
 		
 		Button segregationButton = createMenuButton(SEGREGATION_PNG, SEGREGATION_TAG);
 		Button watorButton = createMenuButton(WATOR_PNG, PREDATORPREY_TAG);
@@ -138,12 +132,4 @@ public class MenuWindow extends Window {
 	public CellManager getSimChoice() {
 		return simChoice;
 	}
-	
-/*	public boolean getNewSim() {
-		return newSim;
-	}
-	
-	public void setNewSim(boolean b) {
-		newSim = b;
-	}*/
 }
