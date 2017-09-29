@@ -61,6 +61,7 @@ public class MenuWindow extends Window {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent e) {
+					simChoice = getSimFromFile(button);
 					String fileString = button.getAccessibleText();
 					fileString = fileString + ".xml";
 					ClassLoader cl = getClass().getClassLoader();
@@ -80,6 +81,16 @@ public class MenuWindow extends Window {
 		simChoice = null;
 	}
 	
+	private CellManager getSimFromFile(Button buttonPressed) {
+		String simFileString = buttonPressed.getAccessibleText();
+		simFileString += ".xml";
+		ClassLoader cl = getClass().getClassLoader();
+		File simFile = new File(cl.getResource(simFileString).getFile());
+		XMLParser parser = new XMLParser();
+		parser.buttonChooseFile(simFile);
+		return parser.getSimulation();
+	}
+	
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
 		//http://docs.oracle.com/javafx/2/ui_controls/button.htm
 		
@@ -87,27 +98,27 @@ public class MenuWindow extends Window {
 		setButtonLayout(newSimButton, WIDTH/2 - newSimButton.getMaxWidth()/2, HEIGHT*1/2);
 		myRoot.getChildren().add(newSimButton);*/
 		
-		Button segregationButton = createButton(SEGREGATION_PNG, SEGREGATION_TAG);
-		Button watorButton = createButton(WATOR_PNG, PREDATORPREY_TAG);
-		Button fireButton = createButton(FIRE_PNG, FIRE_TAG);
-		Button gameoflifeButton = createButton(GAMEOFLIFE_PNG, GAMEOFLIFE_TAG);
+		Button segregationButton = createMenuButton(SEGREGATION_PNG, SEGREGATION_TAG);
+		Button watorButton = createMenuButton(WATOR_PNG, PREDATORPREY_TAG);
+		Button fireButton = createMenuButton(FIRE_PNG, FIRE_TAG);
+		Button gameoflifeButton = createMenuButton(GAMEOFLIFE_PNG, GAMEOFLIFE_TAG);
 		
 		buttons = new ArrayList<Button>(Arrays.asList(segregationButton, watorButton, fireButton, gameoflifeButton));
 		buttonPadding = (WIDTH - BUTTONOFFSET*2 - buttons.get(0).getWidth())/buttons.size();
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
-			setButtonLayout(button, BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding, HEIGHT*2/3);
+			setMenuButtonLayout(button, BUTTONOFFSET + buttons.get(i).getMaxWidth() + i*buttonPadding, HEIGHT*2/3);
 		}
 		myRoot.getChildren().addAll(buttons);
 	}
 	
-	private void setButtonLayout(Button button, Double x, Double y) {
+	private void setMenuButtonLayout(Button button, Double x, Double y) {
 		button.setLayoutX(x);
 		button.setLayoutY(y);
 	}
 	
-	private Button createButton(String imageName, String buttonText) {
+	private Button createMenuButton(String imageName, String buttonText) {
 		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
 		Button simButton = new Button();
 		simButton.setGraphic(new ImageView(buttonImage));
