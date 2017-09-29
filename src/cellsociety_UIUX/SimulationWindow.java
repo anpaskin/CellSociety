@@ -38,16 +38,15 @@ public abstract class SimulationWindow extends Window {
 
 	protected boolean running = false;
 	protected boolean stepping = false;
-	protected Button playButton = new Button();
-	protected Button stepButton = new Button();
-	protected ImageView playImageView, pauseImageView;
+	protected Button playButton;
+	protected Button stepButton;
 	
 	protected int numCells;
 	protected int cellSize = 50;
 
 	protected List<Button> buttons;
-	protected int offset = 50;
-	protected int padding = 100;
+	protected double offset = 50;
+	protected double padding = 100;
 
 	Slider speed = new Slider();
 	private double simSpeed = 10000;
@@ -73,10 +72,10 @@ public abstract class SimulationWindow extends Window {
 			@Override public void handle(ActionEvent e) {
 				running = !running;
 				if (running) {
-					playButton.setGraphic(pauseImageView);
+					playButton.setGraphic(getImageView(PAUSE_PNG));
 				}
 				else {
-					playButton.setGraphic(playImageView);
+					playButton.setGraphic(getImageView(PLAY_PNG));
 				}
 			}
 		});
@@ -93,9 +92,9 @@ public abstract class SimulationWindow extends Window {
 
 	}
 	
-	private double getSimSpeed() {
-		return simSpeed;
-	}
+//	private double getSimSpeed() {
+//		return simSpeed;
+//	}
 	
 	private void updateSimSpeed() {
 		simSpeed = (double) Math.pow(speed.getValue(), -2) * 100;
@@ -132,7 +131,6 @@ public abstract class SimulationWindow extends Window {
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
-		buttons = new ArrayList<Button>();
 		addButtons();
 		addSlider();
 		addTitle();
@@ -157,21 +155,16 @@ public abstract class SimulationWindow extends Window {
 
 	private void addButtons() {
 		//TODO
-		playImageView = getImageView(PLAY_PNG);
+		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
-
+		setControlButtonLayout(playButton, offset, offset);
+		
+		stepButton = new Button();
 		stepButton.setGraphic(getImageView(STEP_PNG));
+		setControlButtonLayout(stepButton, offset, offset + padding);
 
-		pauseImageView = getImageView(PAUSE_PNG);
-		
 		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
-		
-		for (int i = 0; i < buttons.size(); i++) {
-			Button button = buttons.get(i);
-			button.setLayoutX(offset);
-			button.setLayoutY(offset + i*padding);
-			myRoot.getChildren().add(button);
-		}
+		myRoot.getChildren().addAll(buttons);
 	}
 
 	private ImageView getImageView(String imageName) {
@@ -179,6 +172,10 @@ public abstract class SimulationWindow extends Window {
 		return new ImageView(buttonImage);
 	}
 	
+	private void setControlButtonLayout(Button button, Double x, Double y) {
+		button.setLayoutX(x);
+		button.setLayoutY(y);
+	}
 	
 	private void addTitle() {
 		//do nothing
