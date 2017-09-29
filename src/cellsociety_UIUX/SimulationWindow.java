@@ -8,7 +8,9 @@ import com.sun.glass.events.MouseEvent;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,56 +28,54 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public abstract class SimulationWindow extends Window {
 
+	private static final String PLAY_PNG = "play.png";
+	private static final String PAUSE_PNG = "pause.png";
+	private static final String STEP_PNG = "step.png";
+	
 	protected double WIDTH;
 	protected double HEIGHT;
 
-	//protected boolean started = false;
 	protected boolean running = false;
 	protected boolean stepping = false;
-	protected Button playButton = new Button();
-	protected Button stepButton = new Button();
-	protected ImageView playImageView, pauseImageView;
+	protected Button playButton;
+	protected Button stepButton;
 	
 	protected int numCells;
-	protected int cellSize = 50;
+	protected int cellSize = 100;
 
 	protected List<Button> buttons;
-	protected int offset = 50;
-	protected int padding = 100;
+	protected double offset = 50;
+	protected double padding = 100;
 
 	Slider speed = new Slider();
 	private double simSpeed = 10000;
-	//private boolean speedChange = false;
 	
 	protected GridPane grid = new GridPane();
 	protected ArrayList<Color> cellColors = new ArrayList<>();
 
-	protected boolean windowOpen = false;
-	protected boolean simulationRunning = false;
-
 	private CellManager simType;
+	private List<Integer> numSimTypes;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
 		setupScene();
 		simType = sim;
-		//setRowSize();
 	}
 
-	public void userInteraction() {
+	public void buttonClick() {
 		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
-				//simSpeed = speed.valueProperty().doubleValue()*5;
 				running = !running;
 				if (running) {
-					playButton.setGraphic(pauseImageView);
+					playButton.setGraphic(getImageView(PAUSE_PNG));
 				}
 				else {
-					playButton.setGraphic(playImageView);
+					playButton.setGraphic(getImageView(PLAY_PNG));
 				}
 			}
 		});
@@ -92,10 +92,6 @@ public abstract class SimulationWindow extends Window {
 
 	}
 	
-	private double getSimSpeed() {
-		return simSpeed;
-	}
-	
 	private void updateSimSpeed() {
 		simSpeed = (double) Math.pow(speed.getValue(), -2) * 100;
 		resetGameLoop(simSpeed);
@@ -106,12 +102,8 @@ public abstract class SimulationWindow extends Window {
 	 * @param simType 
 	 */
 	@Override
-	protected void step() {
-		userInteraction();
-//		if (speedChange) {
-//			resetGameLoop(getSimSpeed());
-//			speedChange = false;
-//		}
+	public void step() {
+		buttonClick();
 		if (running) {
 			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
@@ -128,19 +120,17 @@ public abstract class SimulationWindow extends Window {
 
 	private void resetGameLoop(double newSpeed) {
 		animation.stop();
-		gameLoop(simType, newSpeed);
+	//	gameLoop(simType, newSpeed);
 	}
 
 	
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
-		buttons = new ArrayList<Button>();
 		addButtons();
 		addSlider();
 		addTitle();
-		//displayGridPane();
-		throwErrors();
+		//throwErrors();
 	}
 
 	public void setupSceneDimensions() {
@@ -150,36 +140,37 @@ public abstract class SimulationWindow extends Window {
 		myStage.setX(dimensions.getMinX());
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
-		//myStage.setMaximized(true);
 	}
 	
 	public void setRowSize(CellManager c) {
-		// do nothing
 		numCells = (int) Math.sqrt(c.getSize());
 	}
 
 	private void addButtons() {
 		//TODO
-		Image playImage = new Image(getClass().getClassLoader().getResourceAsStream("play.png"));
-		playImageView = new ImageView(playImage);
-		playButton.setGraphic(playImageView);
+		playButton = new Button();
+		playButton.setGraphic(getImageView(PLAY_PNG));
+		setControlButtonLayout(playButton, offset, offset);
+		
+		stepButton = new Button();
+		stepButton.setGraphic(getImageView(STEP_PNG));
+		setControlButtonLayout(stepButton, offset, offset + padding);
 
-		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
-		stepButton.setGraphic(new ImageView(stepImage));
-		
-		Image pauseImage = new Image(getClass().getClassLoader().getResourceAsStream("pause.png"));
-		pauseImageView = new ImageView(pauseImage);
-		
 		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
-		
-		for (int i = 0; i < buttons.size(); i++) {
-			Button button = buttons.get(i);
-			button.setLayoutX(offset);
-			button.setLayoutY(offset + i*padding);
-			myRoot.getChildren().add(button);
-		}
+		myRoot.getChildren().addAll(buttons);
 	}
 
+	private ImageView getImageView(String imageName) {
+		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
+		return new ImageView(buttonImage);
+	}
+	
+	private void setControlButtonLayout(Button button, Double x, Double y) {
+		button.setLayoutX(x);
+		button.setLayoutY(y);
+	}
+	
+	
 	private void addTitle() {
 		//do nothing
 	}
@@ -289,35 +280,16 @@ public abstract class SimulationWindow extends Window {
 	}
 	
 
-	public void throwErrors() {
+	/*public void throwErrors() {
 		//TODO do more than just print error in console... need to handle
 		double gridSize = numCells*cellSize;
 		//if (gridSize > WIDTH || gridSize > HEIGHT) {
 		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
 			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
 		}
-	}
-
-	public void closeSimulation() {
-		myStage.close();
-		windowOpen = false;
-	}
+	}*/
 
 	public ArrayList<Color> getCellColors() {
 		return cellColors;
-	}
-	
-	public boolean getWindowOpen() {
-		return windowOpen;
-	}
-	public void setWindowOpen(boolean b) {
-		windowOpen = b;
-	}
-
-	public boolean getSimulationRunning() {
-		return simulationRunning;
-	}	
-	public void setSimulationRunning(boolean b) {
-		simulationRunning = b;
 	}
 }
