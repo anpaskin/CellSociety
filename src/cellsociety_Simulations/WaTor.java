@@ -24,8 +24,8 @@ public class WaTor extends CellManager {
 	private ArrayList<Integer> nextLifeCounts;
 	private ArrayList<Integer> nextEnergies;
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape) {
-		super(n, shape);
+	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		sharkRatio = sharksPercent;
 		energyStart = initialEnergy;
 		fishEnergyContent = fishEnergy;
@@ -36,13 +36,13 @@ public class WaTor extends CellManager {
 		nextEnergies = new ArrayList<Integer>();
 	}
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, String shape) {
-		super(n, shape);
+	public WaTor(double sharksPercent, double fishPercent, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		sharkRatio = sharksPercent;
-		energyStart = 5;
-		fishEnergyContent = 2;
-		sharkBreedCount = 5;
-		fishBreedCount = 5;
+		energyStart = 3;
+		fishEnergyContent = 1;
+		sharkBreedCount = 9;
+		fishBreedCount = 2;
 		fishRatio = fishPercent;
 		nextLifeCounts = new ArrayList<Integer>();
 		nextEnergies = new ArrayList<Integer>();
@@ -55,17 +55,41 @@ public class WaTor extends CellManager {
 	public void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
-			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new WaTorCell(Cell.NULL));
-			}
-			else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				currentCells.add(new WaTorCell(Cell.NULL));
+			if(!isToroidal) {
+				if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
 				currentCells.add(paramCells.get(k));
 				paramCells.remove(k);
+			}
+			nextCellStatuses.add(currentCells.get(i).getStatus());
+			nextLifeCounts.add(((WaTorCell)(currentCells.get(i))).getLifeCount());
+			nextEnergies.add(((WaTorCell)(currentCells.get(i))).getEnergy());
+		}
+	}
+	
+	@Override
+	public void initializeCurrentCells(List<String> statuses) {
+		List<Cell> paramCells = setParamCells(statuses);
+		for(int i = 0; i < size; i++) {
+			if(!isToroidal) {
+				if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+			}
+			else {
+				currentCells.add(paramCells.get(i));
 			}
 			nextCellStatuses.add(currentCells.get(i).getStatus());
 			nextLifeCounts.add(((WaTorCell)(currentCells.get(i))).getLifeCount());
@@ -80,19 +104,28 @@ public class WaTor extends CellManager {
 	@Override
 	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
-		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * fishRatio) {
-				paramCells.add(new WaTorCell(WaTorCell.FISH, 0, 0));
+				paramCells.add(new WaTorCell(WaTorCell.FISH, 0));
 			}
 			else if(k < (pSize * fishRatio) + (pSize * sharkRatio)) {
-				paramCells.add(new WaTorCell(WaTorCell.SHARK, energyStart, 0));
+				paramCells.add(new WaTorCell(WaTorCell.SHARK, energyStart));
 			}
 			else {
-				paramCells.add(new WaTorCell(Cell.EMPTY, 0, 0));
+				paramCells.add(new WaTorCell(Cell.EMPTY, 0));
 			}
 		}
 		return paramCells;
+	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new WaTorCell(s, energyStart));
+		}
+		return ret;
 	}
 	
 	@Override
@@ -122,6 +155,7 @@ public class WaTor extends CellManager {
 	 * Switch order of for loops to give fish priority
 	 */
 	protected void setNextCellStatuses() {
+		
 		for(Cell c : currentCells) {
 			if(c.getStatus().equals(WaTorCell.SHARK)) {
 				setShark(c);
@@ -156,12 +190,11 @@ public class WaTor extends CellManager {
 			else if(emptyLocs.size() > 0){
 				int moveLoc = emptyLocs.get((int)(Math.random()*emptyLocs.size()));
 				moveCell(c, moveLoc);
-				tryReproduce(c);
 			}
 			else {
-				nextLifeCounts.set(currentCells.indexOf(c), ((WaTorCell)c).getLifeCount() + 1);
 				nextEnergies.set(currentCells.indexOf(c), ((WaTorCell)c).getEnergy() - 1);
 			}
+			nextLifeCounts.set(currentCells.indexOf(c), ((WaTorCell)c).getLifeCount() + 1);
 		}
 	}
 	
@@ -171,8 +204,8 @@ public class WaTor extends CellManager {
 		if(!((WaTorCell)c).getEaten() && emptyLocs.size() > 0) {
 			int moveLoc = emptyLocs.get((int)(Math.random()*emptyLocs.size()));
 			moveCell(c, moveLoc);
-			tryReproduce(c);
 		}
+		nextLifeCounts.set(currentCells.indexOf(c), ((WaTorCell)c).getLifeCount() + 1);
 	}
 	
 	private void leaveEmpty(Cell c) {
@@ -193,11 +226,12 @@ public class WaTor extends CellManager {
 		else {
 			nextEnergies.set(moveLoc, ((WaTorCell)c).getEnergy());
 		}
+		tryReproduce(c);
 	}
 	
 	private void tryReproduce(Cell c) {
 		if(c.getStatus().equals(WaTorCell.SHARK)) {
-			if(((WaTorCell)c).getLifeCount() == sharkBreedCount) {
+			if(((WaTorCell)c).getLifeCount() >= sharkBreedCount) {
 				nextCellStatuses.set(currentCells.indexOf(c), c.getStatus());
 				nextLifeCounts.set(currentCells.indexOf(c), 0);
 				nextEnergies.set(currentCells.indexOf(c), energyStart);
@@ -207,7 +241,7 @@ public class WaTor extends CellManager {
 			}
 		}
 		else if(c.getStatus().equals(WaTorCell.FISH)) {
-			if(((WaTorCell)c).getLifeCount() == fishBreedCount) {
+			if(((WaTorCell)c).getLifeCount() >= fishBreedCount) {
 				nextCellStatuses.set(currentCells.indexOf(c), c.getStatus());
 				nextLifeCounts.set(currentCells.indexOf(c), 0);
 				nextEnergies.set(currentCells.indexOf(c), energyStart);

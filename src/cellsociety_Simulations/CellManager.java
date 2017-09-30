@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.NullCell;
+import cellsociety_Cells.WaTorCell;
 
 /**
  * 
@@ -18,6 +19,7 @@ public abstract class CellManager {
 	protected List<String> nextCellStatuses;
 	protected double size;
 	protected String cellShape;
+	protected boolean isToroidal;
 	
 	public static final String SQUARE = "square";
 	public static final String TRI = "triangle";
@@ -29,12 +31,14 @@ public abstract class CellManager {
 		cellShape = shape;
 		if(cellShape.equals(SQUARE)) size = Math.pow(Math.sqrt(n) + 2, 2);
 		else if(cellShape.equals(TRI)) size = Math.pow(Math.sqrt(n) + 4, 2);
+		isToroidal = false;
 	}
 	
-//	public CellManager(double n, String shape) {
-//		this(n);
-//		cellShape = shape;
-//	}
+	public CellManager(double n, String shape, boolean toroidal) {
+		this(n, shape);
+		isToroidal = toroidal;
+		if(toroidal) size = n;
+	}
 	
 	public List<Cell> getCurrentCells() {
 		return currentCells;
@@ -131,14 +135,14 @@ public abstract class CellManager {
 	public void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int n = 0; n < size; n++) {
-			System.out.println("N = " + n);
-			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
-				currentCells.add(new NullCell());
-			}
-			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				System.out.println("Add inner null loop");
-				currentCells.add(new NullCell());
+			if(!isToroidal) {
+				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+					currentCells.add(new NullCell());
+				}
+				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new NullCell());
+				}
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
@@ -149,8 +153,39 @@ public abstract class CellManager {
 		}
 	}
 	
+	public void initializeCurrentCells(List<String> statuses) {
+		List<Cell> paramCells = setParamCells(statuses);
+		for(int n = 0; n < size; n++) {
+			if(!isToroidal) {
+				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+					currentCells.add(new NullCell());
+				}
+				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new NullCell());
+				}
+			}
+			else {
+				currentCells.add(paramCells.get(n));
+			}
+			nextCellStatuses.add(currentCells.get(n).getStatus());
+		}
+	}
+	
 	protected List<Cell> setParamCells() {
 		return new ArrayList<Cell>();
+	}
+	
+	protected List<Cell> setParamCells(List<String> statuses) {
+		return new ArrayList<Cell>();
+	}
+
+	protected int getPSize() {
+		int pSize;
+		if(isToroidal) pSize = (int)size;
+		else if(cellShape.equals(TRI)) pSize = (int)(Math.pow((Math.sqrt(size) - 4), 2));
+		else pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		return pSize;
 	}
 
 }

@@ -7,13 +7,14 @@ import java.util.List;
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.FireCell;
 import cellsociety_Cells.NullCell;
+import cellsociety_Cells.WaTorCell;
 
 public class Fire extends CellManager {
 
 	private double pCatch;	//the probability that a neighbor of a Cell with status "Fire" takes on status "Fire"
 	
-	public Fire(double probCatch, double n, String shape) {
-		super(n, shape);
+	public Fire(double probCatch, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		pCatch = probCatch;
 	}
 	
@@ -24,12 +25,14 @@ public class Fire extends CellManager {
 	@Override
 	public void initializeCurrentCells() {
 		for(int n = 0; n < size; n++) {
-			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
-				currentCells.add(new NullCell());
-			}
-			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				currentCells.add(new NullCell());
+			if(!isToroidal) {
+				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+					currentCells.add(new NullCell());
+				}
+				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new NullCell());
+				}
 			}
 			else {
 				currentCells.add(new FireCell(FireCell.TREE));
@@ -37,6 +40,35 @@ public class Fire extends CellManager {
 			nextCellStatuses.add(currentCells.get(n).getStatus());
 		}
 		startFire();
+	}
+	
+	@Override
+	public void initializeCurrentCells(List<String> statuses) {
+		List<Cell> paramCells = setParamCells(statuses);
+		for(int n = 0; n < size; n++) {
+			if(!isToroidal) {
+				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+					currentCells.add(new NullCell());
+				}
+				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new NullCell());
+				}
+			}
+			else {
+				currentCells.add(paramCells.get(n));
+			}
+			nextCellStatuses.add(currentCells.get(n).getStatus());
+		}
+	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new FireCell(s));
+		}
+		return ret;
 	}
 	
 	/**
