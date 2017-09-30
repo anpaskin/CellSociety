@@ -131,13 +131,11 @@ public abstract class CellManager {
 	public void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int n = 0; n < size; n++) {
-			System.out.println("N = " + n);
 			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
 				currentCells.add(new NullCell());
 			}
 			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				System.out.println("Add inner null loop");
 				currentCells.add(new NullCell());
 			}
 			else {
