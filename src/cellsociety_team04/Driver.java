@@ -25,51 +25,61 @@ import javafx.util.Duration;
 public class Driver {
 
 	private static final String MENUTITLE = "Cell Society";
+
 	private Stage menuStage;
 	private List<Stage> simStages;
-	private Window menuWindow;
+	private Window menu;
 	private List<SimulationWindow> simWindows;
 
 	protected double FRAMES_PER_SECOND = 60.0;
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
-	private CellManager simCellManager;
+	public CellManager simCellManager;
 	private Timeline animation;
 
-
 	public Driver(Stage stage) {
-		setupDriver(stage);
+		setup(stage);
 	}
 
 	/**
 	 * Displays the menu in the window
 	 */
-	public void setupDriver(Stage stage) {
+	public void setup(Stage stage) {
 		menuStage = stage;
 		menuStage.setTitle(MENUTITLE);
-		menuWindow = new MenuWindow(menuStage);
-		menuStage.setScene(menuWindow.getScene());
+		menu = new MenuWindow(menuStage);
+		menuStage.setScene(menu.getScene());
 		menuStage.show();
 
 		simWindows = new ArrayList<>();
 		simStages = new ArrayList<>();
 
-		//menuWindow.gameLoop(simCellManager, default_SPEED);
-		menuStep();
+		menuLoop(simCellManager);
+	}
+
+	public void menuLoop(CellManager simType) {
+		// attach "game loop" to timeline to play it
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+				e -> menuStep());
+		//TODO multiply seconddelay by amount sound on speed slider
+		animation = new Timeline();
+		animation.setCycleCount(Timeline.INDEFINITE);
+		animation.getKeyFrames().add(frame);
+		animation.play();
 	}
 
 	protected void menuStep() {
 		//animation.play();
-		((MenuWindow)menuWindow).chooseSim();
-		if(((MenuWindow)menuWindow).getSimChoice() != null) {
+		((MenuWindow)menu).chooseSim();
+		if(((MenuWindow)menu).getSimChoice() != null) {
 			animation.stop();
-			simCellManager = ((MenuWindow)menuWindow).getSimChoice();
+			simCellManager = ((MenuWindow)menu).getSimChoice();
 			simStages.add(new Stage());
 			System.out.println(simStages);
 			determineSim(simStages.size()-1);
 			runSimulation(simStages.size()-1);
 			simStages.get(simStages.size()-1).show();
-			((MenuWindow) menuWindow).resetMenu();
+			((MenuWindow) menu).resetMenu();
 			animation.playFromStart();
 			System.out.println("playing from start");
 		}
