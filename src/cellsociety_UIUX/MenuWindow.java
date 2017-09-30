@@ -60,12 +60,10 @@ public class MenuWindow extends Window {
 	@Override
 	protected void step() {
 		//animation.play();
-		//chooseSim();
-		if(chooseSim() >= -1) {
+		chooseSim();
+		if(simChoice != null) {
 			animation.stop();
-			simDriver.getSimChoice();
-			//Stage simStage = new Stage();
-			simDriver.determineSim();
+			simDriver.determineSim(simChoice);
 			simDriver.runSimulation();
 			resetMenu();
 			animation.playFromStart();
@@ -73,25 +71,32 @@ public class MenuWindow extends Window {
 		}
 	}
 
-	public int chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
-		int simButton = -1;
-		for (int i = 0; i < buttons.size(); i++) {
+	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent e, int i) {
+				@Override public void handle(ActionEvent e) {
+					simChoice = getSimFromFile(button);
 					System.out.println("button pressed!!");
-					simButton = i;
-					//TODO need what button is pressed
 					//System.out.println(file);
 				}
 			});
-			
 			
 		}
 	}
 	
 	public void resetMenu() {
 		simChoice = null;
+	}
+	
+	private CellManager getSimFromFile(Button buttonPressed) {
+		String simFileString = buttonPressed.getAccessibleText();
+		simFileString += ".xml";
+		ClassLoader cl = getClass().getClassLoader();
+		File simFile = new File(cl.getResource(simFileString).getFile());
+		XMLParser parser = new XMLParser();
+		parser.buttonChooseFile(simFile);
+		return parser.getSimulation();
 	}
 	
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox

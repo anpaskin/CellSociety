@@ -50,22 +50,24 @@ public class Driver {
 		simStages = new ArrayList<>();
 	}
 
-	public void getSimChoice() {
-		simCellManager = getSimFromFile(button);
-	}
+//	public void getSimChoice() {
+//		simCellManager = getSimFromFile(button);
+//	}
+//	
+//	private CellManager getSimFromFile(Button buttonPressed) {
+//		String simFileString = buttonPressed.getAccessibleText();
+//		simFileString += ".xml";
+//		ClassLoader cl = getClass().getClassLoader();
+//		File simFile = new File(cl.getResource(simFileString).getFile());
+//		XMLParser parser = new XMLParser();
+//		parser.buttonChooseFile(simFile);
+//		return parser.getSimulation();
+//	}
 	
-	private CellManager getSimFromFile(Button buttonPressed) {
-		String simFileString = buttonPressed.getAccessibleText();
-		simFileString += ".xml";
-		ClassLoader cl = getClass().getClassLoader();
-		File simFile = new File(cl.getResource(simFileString).getFile());
-		XMLParser parser = new XMLParser();
-		parser.buttonChooseFile(simFile);
-		return parser.getSimulation();
-	}
-	
-	public void determineSim() {
+	public void determineSim(CellManager simChoice) {
+		simStages.add(new Stage());
 		int simNum = simStages.size()-1;
+		simCellManager = simChoice;
 		if (simCellManager instanceof Segregation) {
 			simWindows.add(new SegregationWindow(simStages.get(simNum), simCellManager));
 			setupSim(simNum);
