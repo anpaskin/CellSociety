@@ -44,7 +44,7 @@ public abstract class SimulationWindow extends Window {
 	protected Button stepButton;
 
 	protected int numCells;
-	protected int cellSize = 50;
+	protected int cellSize = 20;
 
 	protected List<Node> buttons;
 	protected double offset = 50;
@@ -80,6 +80,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				stepping = true;
+				playButton.setGraphic(getImageView(PLAY_PNG));
 			}
 		});
 
@@ -134,8 +135,8 @@ public abstract class SimulationWindow extends Window {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX()*twothirds;
 		HEIGHT = dimensions.getMaxY()*twothirds;
-		myStage.setX(dimensions.getMinX());
-		myStage.setY(dimensions.getMinY());
+		//myStage.setX(dimensions.getMinX());
+		//myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
@@ -263,7 +264,7 @@ public abstract class SimulationWindow extends Window {
 				grid.getChildren().addAll(polygon);
 			}
 		}
-		grid.setLayoutX(WIDTH - numCells*cellSize - offset* half);
+		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
 		grid.setLayoutY(offset*half);
 		if (!myRoot.getChildren().contains(grid)) {
 			myRoot.getChildren().add(grid);
