@@ -49,20 +49,6 @@ public class Driver {
 		simWindows = new ArrayList<>();
 		simStages = new ArrayList<>();
 	}
-
-//	public void getSimChoice() {
-//		simCellManager = getSimFromFile(button);
-//	}
-//	
-//	private CellManager getSimFromFile(Button buttonPressed) {
-//		String simFileString = buttonPressed.getAccessibleText();
-//		simFileString += ".xml";
-//		ClassLoader cl = getClass().getClassLoader();
-//		File simFile = new File(cl.getResource(simFileString).getFile());
-//		XMLParser parser = new XMLParser();
-//		parser.buttonChooseFile(simFile);
-//		return parser.getSimulation();
-//	}
 	
 	public void determineSim(CellManager simChoice) {
 		simStages.add(new Stage());
@@ -70,24 +56,25 @@ public class Driver {
 		simCellManager = simChoice;
 		if (simCellManager instanceof Segregation) {
 			simWindows.add(new SegregationWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
 			System.out.println("segregation");
 		}
 		else if (simCellManager instanceof Fire) {
 			simWindows.add(new FireWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
 			System.out.println("fire");
 		}
 		else if (simCellManager instanceof GameOfLife) {
 			simWindows.add(new GameOfLifeWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
 			System.out.println("gameoflife");
 		}
 		else if (simCellManager instanceof WaTor) {
 			simWindows.add(new WatorWindow(simStages.get(simNum), simCellManager));
-			setupSim(simNum);
 			System.out.println("wator");
 		}
+		else {
+			//TODO throw exception
+			return;
+		}
+		setupSim(simNum);
 		System.out.println(simWindows);
 	}
 
