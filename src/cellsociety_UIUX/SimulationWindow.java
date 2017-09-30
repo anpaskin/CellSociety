@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import cellsociety_team04.GridDisplay;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,15 +30,9 @@ public abstract class SimulationWindow extends Window {
 	private static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
 	private static final String STEP_PNG = "step.png";
-	private static final String NULL = "Null";
-	
-	private static final double half = 0.5;
-	private static final double third = 0.33;
-	private static final double twothirds = 0.66;
-	private static final double one = 1.0;
-	private static final double zero = 0.0;
+	private String shape = "square";
 
-	protected double WIDTH;
+	protected static double WIDTH;
 	protected double HEIGHT;
 
 	protected boolean running = false;
@@ -49,14 +44,14 @@ public abstract class SimulationWindow extends Window {
 	protected int cellSize = 50;
 
 	protected List<Button> buttons;
-	protected double offset = 50;
+	protected static double offset = 50;
 	protected double padding = 100;
 
 	Slider speed;
 	private double simSpeed;
 
-	protected GridPane grid = new GridPane();
-	protected ArrayList<Color> cellColors = new ArrayList<>();
+	protected GridPane grid;
+	private GridDisplay gridDisplay;
 
 	private CellManager simType;
 	private List<Integer> numSimTypes;
@@ -65,6 +60,10 @@ public abstract class SimulationWindow extends Window {
 		super(s);
 		setupScene();
 		simType = sim;
+		grid = new GridPane();
+		setRowSize(simType);
+		System.out.println(numCells);
+		gridDisplay = new GridDisplay(numCells, cellSize, shape);
 	}
 
 	public void buttonClick() {
@@ -108,13 +107,13 @@ public abstract class SimulationWindow extends Window {
 		if (running) {
 			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
-			displayGridPane(simType.getCurrentCells());
+			displayGrid(simType.getCurrentCells());
 		}
 		if (stepping) {
 			running = false;
 			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
-			displayGridPane(simType.getCurrentCells());
+			displayGrid(simType.getCurrentCells());
 			stepping = false;
 		}
 	}
@@ -142,9 +141,21 @@ public abstract class SimulationWindow extends Window {
 		myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
+	
+	public static double getWidth() {
+		return WIDTH;
+	}
+	
+	public static double getOffset() {
+		return offset;
+	}
 
 	public void setRowSize(CellManager c) {
 		numCells = (int) Math.sqrt(c.getSize());
+	}
+	
+	public void setCellShape(String cellShape) {
+		shape = cellShape;
 	}
 
 	private void addButtons() {
@@ -217,100 +228,12 @@ public abstract class SimulationWindow extends Window {
         });
 	}
  	
-	public void displayGridPane(List<Cell> currentCells) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
-		getCellColors(currentCells);
-		grid.getChildren().clear();
-		for (int row = 0; row < numCells; row++) {
-			for (int col = 0; col < numCells; col++) {
-				Polygon polygon = new Polygon();
-				//if hexagon
-//				polygon.getPoints().addAll(new Double[] {
-//						// if hexagon
-//						zero, half*cellSize,
-//						third*cellSize, zero,
-//						twothirds*cellSize, zero,
-//						one*cellSize, half*cellSize,
-//						twothirds*cellSize, one*cellSize,
-//						third*cellSize, one*cellSize
-//				});
-				
-				// if triangle
-//				if ((row + col)% 2 == 0) {
-//					polygon.getPoints().addAll(new Double[]{
-//							half*cellSize, zero,
-//							zero, one*cellSize,
-//							one*cellSize, one*cellSize
-//					});
-//				}
-//				else {
-//					polygon.getPoints().addAll(new Double[]{
-//							zero, zero,
-//							half*cellSize, one*cellSize,
-//							one*cellSize, zero
-//					});
-//				}
-				
-				// if rectangle
-				polygon.getPoints().addAll(new Double[]{
-						zero, zero,
-						one*cellSize, zero,
-						one*cellSize, one*cellSize,
-						zero, one*cellSize
-				});
-				
-				int cellNum = row*numCells + col;
-				polygon.setFill(cellColors.get(cellNum));
-				if (!currentCells.get(cellNum).getStatus().equals(NULL)) {
-					polygon.setStroke(Color.BLACK);
-				}
-				GridPane.setRowIndex(polygon, row);
-				GridPane.setColumnIndex(polygon, col);
-				grid.getChildren().addAll(polygon);
-				/*
-				 * RECTANGLE
-				 */
-				//Rectangle rect = new Rectangle();
-				//rect.setWidth(cellSize);
-				//rect.setHeight(cellSize);
-				//rect.setFill(cellColors.get(cellNum));
-				//GridPane.setRowIndex(rect, row);
-				//GridPane.setColumnIndex(rect, col);
-				//grid.getChildren().addAll(rect);
-			}
-		}
-		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
-		grid.setLayoutY(offset);
+	public void displayGrid(List<Cell> currentCellStatuses) {
+		gridDisplay.updateGridDisplay(currentCellStatuses, grid);
 		if (!myRoot.getChildren().contains(grid)) {
 			myRoot.getChildren().add(grid);
 		}
 	}
-
-	// updates grid with cellColors array list data
-	//	public GridPane updateGridPane(GridPane grid) {
-	//		for (int row = 0; row < numCells; row++) {
-	//			for (int col = 0; col < numCells; col++) {
-	//				Rectangle rect = new Rectangle();
-	//				rect.setWidth(cellSize);
-	//				rect.setHeight(cellSize);
-	//				int cellNum = row*numCells + col;
-	//				rect.setFill(cellColors.get(cellNum));
-	//				GridPane.setRowIndex(rect, row);
-	//				GridPane.setColumnIndex(rect, col);
-	//				grid.getChildren().addAll(rect);
-	//			}
-	//		}
-	//		return grid;
-	//		
-	//	}
-
-	// pass in currentCells array list and get array list of colors to fill grid
-	private void getCellColors(List<Cell> cellStatuses) {
-		cellColors.clear();
-		for (int i = 0; i < cellStatuses.size(); i++) {
-			cellColors.add(cellStatuses.get(i).getColor());
-		}
-	}
-
 
 	/*public void throwErrors() {
 		//TODO do more than just print error in console... need to handle
@@ -320,8 +243,4 @@ public abstract class SimulationWindow extends Window {
 			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
 		}
 	}*/
-
-	public ArrayList<Color> getCellColors() {
-		return cellColors;
-	}
 }

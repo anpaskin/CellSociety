@@ -113,7 +113,7 @@ private void setupSim(int simNum) {
 	simWindows.get(simNum).buttonClick();
 	simWindows.get(simNum).setRowSize(simCellManager);
 	simCellManager.initializeCurrentCells();
-	simWindows.get(simNum).displayGridPane(simCellManager.getCurrentCells());
+	simWindows.get(simNum).displayGrid(simCellManager.getCurrentCells());
 	simStages.get(simNum).setScene(simWindows.get(simNum).getScene());
 	simStages.get(simNum).setTitle(simCellManager.getClass().toString());
 	simStages.get(simNum).setOnCloseRequest(new EventHandler<WindowEvent>() {
