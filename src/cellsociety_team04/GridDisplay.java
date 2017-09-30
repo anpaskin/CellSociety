@@ -9,18 +9,34 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+/**
+ * 
+ * @author Dara Buggay
+ *
+ */
+
 public class GridDisplay {
 	private static final double half = 0.5;
 	private static final double third = 0.33;
 	private static final double twothirds = 0.66;
 	private static final double one = 1.0;
 	private static final double zero = 0.0;
+	private static final int gridXStart = 250;
+	
 	private static final String NULL = "Null";
+	private static final String SQUARE = "square";
+	private static final String TRI = "triangle";
+	private static final String HEX = "hexagon";
+	
+	private boolean isSquare = false;
+	private boolean isTri = false;
+	private boolean isHex = false;
 	
 	private int numCells;
-	private int cellSize = 50;
+	private int cellSize;
 	private int currRow;
 	private int currCol;
+	private int everyOther;
 	private String cellShape;
 	private ArrayList<Color> cellColors = new ArrayList<Color>();
 	private double width;
@@ -38,26 +54,29 @@ public class GridDisplay {
 	public void updateGridDisplay(List<Cell> currentCells, GridPane grid) { //https://stackoverflow.com/questions/35367060/gridpane-of-squares-in-javafx
 		getCellColors(currentCells);
 		grid.getChildren().clear();
+		determineCellShape();
 		for (int row = 0; row < numCells; row++) {
 			for (int col = 0; col < numCells; col++) {
 				currRow = row;
 				currCol = col;
+				everyOther = currRow + currCol;
 				Polygon polygon = new Polygon();
-				createCellShape(polygon);
+				createCell(polygon);
 				setCellColorAndLocation(polygon, currentCells);
 				grid.getChildren().addAll(polygon);
 			}
 		}
-		grid.setLayoutX(width - numCells*cellSize - offset);
-		grid.setLayoutY(offset);
+		grid.setLayoutX(gridXStart);
+		grid.setLayoutY(offset/2);
 		setHVGaps(grid);
 	}
 	
 	private void setHVGaps(GridPane grid) {
-		if (cellShape.equals("triangle")) {
-			grid.setHgap(-10);
-		} else if (cellShape.equals("hexagon")) {
-			
+		if (isTri) {
+			grid.setHgap(-0.5*cellSize);
+		} else if (isHex) {
+			grid.setVgap(-0.5*cellSize);
+			grid.setHgap(-0.5/(Math.pow(3, 0.5))*cellSize);
 		} else {
 			// do nothing
 		}
@@ -71,13 +90,24 @@ public class GridDisplay {
 		}
 	}
 	
-	private void createCellShape(Polygon polygon) {
-		if (cellShape.equals("square")) {
+	private void determineCellShape() {
+		if (cellShape.equals(SQUARE)) {
+			isSquare = true;
+		} else if (cellShape.equals(TRI)) {
+			isTri = true;
+		} else {
+			isHex = true;
+		}
+	}
+	private void createCell(Polygon polygon) {
+		if (isSquare) {
 			squareCell(polygon);
-		} else if (cellShape.equals("triangle")) {
+		} else if (isTri) {
 			triangleCell(polygon);
 		} else {
-			hexagonCell(polygon);
+			if (everyOther % 2 == 0) {
+				hexagonCell(polygon);
+			}
 		}
 	}
 	
@@ -91,7 +121,7 @@ public class GridDisplay {
 	}
 	
 	private void triangleCell(Polygon polygon) {
-		if ((currRow + currCol) % 2 == 0) {
+		if (everyOther % 2 == 0) {
 			polygon.getPoints().addAll(new Double[]{
 					half*cellSize, zero,
 					zero, one*cellSize,
