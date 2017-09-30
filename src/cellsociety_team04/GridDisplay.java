@@ -53,6 +53,17 @@ public class GridDisplay {
 		}
 		grid.setLayoutX(gridXStart);
 		grid.setLayoutY(offset/2);
+		setHVGaps(grid);
+	}
+	
+	private void setHVGaps(GridPane grid) {
+		if (cellShape.equals("triangle")) {
+			grid.setHgap(-10);
+		} else if (cellShape.equals("hexagon")) {
+			
+		} else {
+			// do nothing
+		}
 	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
@@ -64,11 +75,11 @@ public class GridDisplay {
 	}
 	
 	private void createCellShape(Polygon polygon) {
-		if (cellShape == "square") {
+		if (cellShape.equals("square")) {
 			squareCell(polygon);
-		} else if (cellShape == "triangle") {
+		} else if (cellShape.equals("triangle")) {
 			triangleCell(polygon);
-		} else if (cellShape == "hexagon") {
+		} else {
 			hexagonCell(polygon);
 		}
 	}
