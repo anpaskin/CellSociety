@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cellsociety_Simulations.CellManager;
+import cellsociety_team04.Driver;
 import cellsociety_team04.XMLParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,12 +37,14 @@ public class MenuWindow extends Window {
 //	private Stage simStage = new Stage();
 //	private boolean newSim = true;
 	private CellManager simChoice;
+	private Driver simDriver;
 	
 	public MenuWindow(Stage s) {
 		super(s);
 		simChoice = null;
 		setupSceneDimensions();
 		setupScene();
+		simDriver = new Driver(s);
 	}	
 
 	@Override
@@ -53,51 +56,42 @@ public class MenuWindow extends Window {
 	protected void setupSceneDimensions() {
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
-	
-/*	@Override
+
+	@Override
 	protected void step() {
 		//animation.play();
-		chooseSim();
-		if(getSimChoice() != null) {
+		//chooseSim();
+		if(chooseSim() >= -1) {
 			animation.stop();
-			CellManager simCellManager = getSimChoice();
-			Stage simStage = new Stage();
-			System.out.println(simStage);
-			determineSim(simStages.size()-1);
-			runSimulation(simStages.size()-1);
-			simStages.get(simStages.size()-1).show();
-			((MenuWindow) menuWindow).resetMenu();
+			simDriver.getSimChoice();
+			//Stage simStage = new Stage();
+			simDriver.determineSim();
+			simDriver.runSimulation();
+			resetMenu();
 			animation.playFromStart();
 			System.out.println("playing from start");
 		}
-	}*/
+	}
 
-	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
-		for (int i = 0; i < buttons.size(); i ++) {
+	public int chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+		int simButton = -1;
+		for (int i = 0; i < buttons.size(); i++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent e) {
-					simChoice = getSimFromFile(button);
+				@Override public void handle(ActionEvent e, int i) {
 					System.out.println("button pressed!!");
+					simButton = i;
+					//TODO need what button is pressed
 					//System.out.println(file);
 				}
 			});
+			
 			
 		}
 	}
 	
 	public void resetMenu() {
 		simChoice = null;
-	}
-	
-	private CellManager getSimFromFile(Button buttonPressed) {
-		String simFileString = buttonPressed.getAccessibleText();
-		simFileString += ".xml";
-		ClassLoader cl = getClass().getClassLoader();
-		File simFile = new File(cl.getResource(simFileString).getFile());
-		XMLParser parser = new XMLParser();
-		parser.buttonChooseFile(simFile);
-		return parser.getSimulation();
 	}
 	
 	private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
@@ -137,9 +131,5 @@ public class MenuWindow extends Window {
 		title.setLayoutX(WIDTH/2-title.getBoundsInLocal().getWidth()/2);
 		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
 		myRoot.getChildren().add(title);
-	}
-	
-	public CellManager getSimChoice() {
-		return simChoice;
 	}
 }

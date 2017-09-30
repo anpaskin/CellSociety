@@ -1,5 +1,6 @@
 package cellsociety_team04;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -28,14 +30,13 @@ public class Driver {
 
 	private Stage menuStage;
 	private List<Stage> simStages;
-	private Window menu;
+	private Window menuWindow;
 	private List<SimulationWindow> simWindows;
 
 	protected double FRAMES_PER_SECOND = 60.0;
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
 	public CellManager simCellManager;
-	private Timeline animation;
 
 	public Driver(Stage stage) {
 		setup(stage);
@@ -45,48 +46,26 @@ public class Driver {
 	 * Displays the menu in the window
 	 */
 	public void setup(Stage stage) {
-		menuStage = stage;
-		menuStage.setTitle(MENUTITLE);
-		menu = new MenuWindow(menuStage);
-		menuStage.setScene(menu.getScene());
-		menuStage.show();
-
 		simWindows = new ArrayList<>();
 		simStages = new ArrayList<>();
-
-		menuLoop(simCellManager);
 	}
 
-	public void menuLoop(CellManager simType) {
-		// attach "game loop" to timeline to play it
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-				e -> menuStep());
-		//TODO multiply seconddelay by amount sound on speed slider
-		animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();
+	public void getSimChoice() {
+		simCellManager = getSimFromFile(button);
 	}
-
-	protected void menuStep() {
-		//animation.play();
-		((MenuWindow)menu).chooseSim();
-		if(((MenuWindow)menu).getSimChoice() != null) {
-			animation.stop();
-			simCellManager = ((MenuWindow)menu).getSimChoice();
-			simStages.add(new Stage());
-			System.out.println(simStages);
-			determineSim(simStages.size()-1);
-			runSimulation(simStages.size()-1);
-			simStages.get(simStages.size()-1).show();
-			((MenuWindow) menu).resetMenu();
-			animation.playFromStart();
-			System.out.println("playing from start");
-		}
+	
+	private CellManager getSimFromFile(Button buttonPressed) {
+		String simFileString = buttonPressed.getAccessibleText();
+		simFileString += ".xml";
+		ClassLoader cl = getClass().getClassLoader();
+		File simFile = new File(cl.getResource(simFileString).getFile());
+		XMLParser parser = new XMLParser();
+		parser.buttonChooseFile(simFile);
+		return parser.getSimulation();
 	}
-
-	public void determineSim(int simNum) {
-		//TODO use title from xml file... 
+	
+	public void determineSim() {
+		int simNum = simStages.size()-1;
 		if (simCellManager instanceof Segregation) {
 			simWindows.add(new SegregationWindow(simStages.get(simNum), simCellManager));
 			setupSim(simNum);
@@ -121,22 +100,13 @@ public class Driver {
 			public void handle(WindowEvent we) {
 				System.out.println("Stage is closing");
 			}
-		});        
-
+		});  
+		simStages.get(simNum).show();
 	}
 
-	public void runSimulation(int simNum) {
-		for (int i = 0; i < simWindows.size(); i++) {
-			((SimulationWindow) simWindows.get(simNum)).gameLoop(simCellManager, MILLISECOND_DELAY);
-			System.out.println(i+1);
-		}
+	public void runSimulation() {
+		int simNum = simStages.size()-1;
+		simWindows.get(simNum).gameLoop(simCellManager, MILLISECOND_DELAY);
+		System.out.println("running sim");
 	}
-
-	/**
-	 * Start of the program
-	 */
-//	public static void main(String[] args) {
-//		launch(args);
-//	}
-
 }
