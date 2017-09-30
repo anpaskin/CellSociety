@@ -1,4 +1,4 @@
-### Refactoring
+# Refactoring
 Below are the classes we refactored during lab. We specify what we changed as well as how it betters the code (removing duplicated code, simplification, clarity)
 
 ## MenuWindow.java
