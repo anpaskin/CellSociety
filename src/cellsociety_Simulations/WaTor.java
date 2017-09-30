@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
+import cellsociety_Cells.NullCell;
 import cellsociety_Cells.WaTorCell;
 
 /**
@@ -23,8 +24,8 @@ public class WaTor extends CellManager {
 	private ArrayList<Integer> nextLifeCounts;
 	private ArrayList<Integer> nextEnergies;
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy) {
-		super(n);
+	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape) {
+		super(n, shape);
 		sharkRatio = sharksPercent;
 		energyStart = initialEnergy;
 		fishEnergyContent = fishEnergy;
@@ -35,8 +36,8 @@ public class WaTor extends CellManager {
 		nextEnergies = new ArrayList<Integer>();
 	}
 	
-	public WaTor(double sharksPercent, double fishPercent, double n) {
-		super(n);
+	public WaTor(double sharksPercent, double fishPercent, double n, String shape) {
+		super(n, shape);
 		sharkRatio = sharksPercent;
 		energyStart = 5;
 		fishEnergyContent = 2;
@@ -50,11 +51,15 @@ public class WaTor extends CellManager {
 	/**
 	 * Randomly sets currentCells statuses from setParamCells list. Wraps Cells in a loop of "Null" Cells.
 	 */
+	@Override
 	public void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
 			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+				currentCells.add(new WaTorCell(Cell.NULL));
+			}
+			else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 				currentCells.add(new WaTorCell(Cell.NULL));
 			}
 			else {
@@ -72,7 +77,8 @@ public class WaTor extends CellManager {
 	 * Creates a sorted list of Cells, the statuses of which are determined by the parameters of the simulation.
 	 * @return			Sorted list of Cells with correct amount of "Shark", "Fish", and "Empty" statuses
 	 */
-	private List<Cell> setParamCells() {
+	@Override
+	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
