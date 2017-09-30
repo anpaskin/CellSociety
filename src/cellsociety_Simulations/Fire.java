@@ -133,6 +133,9 @@ public class Fire extends CellManager {
 		return false;
 	}
 	
+	private void setPCatch(double newPCatch) {
+		pCatch = newPCatch;
+	}
 	
 	
 }
