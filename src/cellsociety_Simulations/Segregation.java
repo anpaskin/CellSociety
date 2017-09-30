@@ -18,31 +18,16 @@ public class Segregation extends CellManager{
 	private double blueRatio;
 	private double emptyRatio;
 	
-	public Segregation(double t, double r, double empty, double n) {
-		super(n);
+	public Segregation(double t, double r, double empty, double n, String shape) {
+		super(n, shape);
 		minSimilar = t;
 		redRatio = r;
 		blueRatio = 1 - r;
 		emptyRatio = empty;
 	}
-	
-	public void initializeCurrentCells() {
-		List<Cell> paramCells = setParamCells();
-		for(int i = 0; i < size; i++) {
-			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new SegCell(SegCell.NULL));
-			}
-			else {
-				int k = (int)(Math.random()*paramCells.size());
-				currentCells.add(paramCells.get(k));
-				paramCells.remove(k);
-			}
-			nextCellStatuses.add(currentCells.get(i).getStatus());
-		}
-	}
 
-	public List<Cell> setParamCells() {
+	@Override
+	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {
@@ -64,6 +49,11 @@ public class Segregation extends CellManager{
 		for(Cell c : currentCells) {
 			if(!c.getStatus().equals(Cell.EMPTY) && !c.getStatus().equals(SegCell.NULL)) {
 				List<Cell> neighbors = getNeighbors(c);
+				List<Integer> neighborNums = new ArrayList<Integer>();
+				for(Cell x : neighbors) {
+					neighborNums.add(currentCells.indexOf(x));
+				}
+				System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborNums);
 				if(checkNeighbors(c, neighbors)) {
 					nextCellStatuses.set(empties.get(0), c.getStatus());
 					empties.remove(0);
