@@ -11,16 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class FireWindow extends SimulationWindow {
-	private Slider probCatch = new Slider();
+	private Slider probCatch;
 	
 	public FireWindow(Stage s, CellManager sim) {
 		super(s, sim);
-//		addSlider(probCatch);
-	}
-	
-	private void addExtras() {
-		
-		buttons.add(probCatch);
-		myRoot.getChildren().add(probCatch);
+		controls.add(probCatch);
+		addExtraSliders(probCatch, 0.0, 1.0, 0.5, 0.25, 0.5);
 	}
 }
