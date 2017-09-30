@@ -13,6 +13,7 @@ public class GridDisplay {
 	private static final double half = 0.5;
 	private static final double third = 0.33;
 	private static final double twothirds = 0.66;
+	private static final double hexshift = 0.5/Math.pow(3,0.5);
 	private static final double one = 1.0;
 	private static final double zero = 0.0;
 	private static final String NULL = "Null";
@@ -99,11 +100,11 @@ public class GridDisplay {
 	private void hexagonCell(Polygon polygon) {
 		polygon.getPoints().addAll(new Double[] {
 				zero, half*cellSize,
-				third*cellSize, zero,
-				twothirds*cellSize, zero,
+				hexshift*cellSize, zero,
+				(1-hexshift)*cellSize, zero,
 				one*cellSize, half*cellSize,
-				twothirds*cellSize, one*cellSize,
-				third*cellSize, one*cellSize
+				(1-hexshift)*cellSize, one*cellSize,
+				hexshift*cellSize, one*cellSize
 		});
 	}
 	
