@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import cellsociety_Simulations.CellManager;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -13,54 +14,28 @@ import javafx.stage.Stage;
 
 public class SegregationWindow extends SimulationWindow {
 	
-	private Button run, step;
 	private Slider minSimilar = new Slider();
 	private Slider redToBlue = new Slider();
 	private Slider emptyRatio = new Slider();
 	
 	public SegregationWindow(Stage s, CellManager sim) {
 		super(s, sim);
-/*		addSlider(minSimilar);
-		addSlider(redToBlue);
-		addSlider(emptyRatio);*/
+//		addSlider(minSimilar);
+//		addSlider(redToBlue);
+//		addSlider(emptyRatio);
 	}
 	
-	
-	
-//	@Override
-//	protected void setGridSize(CellManager seg) {
-//		//(int) Math.sqrt(cellColors.size());
-//	}
-/*	private void addButtons() {
+/*	private void addExtras() {
 		//TODO
-		Image startImage = new Image(getClass().getClassLoader().getResourceAsStream("start.png"));
-		startButton.setGraphic(new ImageView(startImage));
+		playButton = new Button();
+		playButton.setGraphic(getImageView(PLAY_PNG));
+		setControlButtonLayout(playButton, offset, offset);
 
-		Image stepImage = new Image(getClass().getClassLoader().getResourceAsStream("step.png"));
-		stepButton.setGraphic(new ImageView(stepImage));
+		stepButton = new Button();
+		stepButton.setGraphic(getImageView(STEP_PNG));
+		setControlButtonLayout(stepButton, offset, offset + padding);
 
-		buttons = new ArrayList<Button>(Arrays.asList(startButton, stepButton));
-		
-		for (int i = 0; i < buttons.size(); i++) {
-			Button button = buttons.get(i);
-			button.setLayoutX(offset);
-			button.setLayoutY(offset + i*padding);
-			myRoot.getChildren().add(button);
-		}
-	}
-	*/
-	public void addSlider(Slider slider) {
-		slider.setMin(0);
-		slider.setMax(1);
-		slider.setValue(0.5);
-		slider.setShowTickLabels(true);
-		slider.setShowTickMarks(true);
-		slider.setMajorTickUnit(0.25);
-		slider.setBlockIncrement(0.05);
-		slider.setLayoutX(offset);
-		slider.setLayoutY(offset + buttons.size()*padding);
-		myRoot.getChildren().add(slider);
-	}
-
-
+		buttons = new ArrayList<Node>(Arrays.asList(playButton, stepButton));
+		myRoot.getChildren().addAll(buttons);
+	}*/
 }

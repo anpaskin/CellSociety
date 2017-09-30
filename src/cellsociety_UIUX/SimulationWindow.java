@@ -9,20 +9,18 @@ import cellsociety_Simulations.CellManager;
 import cellsociety_team04.GridDisplay;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 public abstract class SimulationWindow extends Window {
@@ -31,7 +29,8 @@ public abstract class SimulationWindow extends Window {
 	private static final String PAUSE_PNG = "pause.png";
 	private static final String STEP_PNG = "step.png";
 	private String shape = "square";
-
+	
+	private static final double twothirds = 0.66;
 	protected static double WIDTH;
 	protected double HEIGHT;
 
@@ -41,9 +40,9 @@ public abstract class SimulationWindow extends Window {
 	protected Button stepButton;
 
 	protected int numCells;
-	protected int cellSize = 50;
+	protected int cellSize = 20;
 
-	protected List<Button> buttons;
+	protected List<Node> buttons;
 	protected static double offset = 50;
 	protected double padding = 100;
 
@@ -54,7 +53,6 @@ public abstract class SimulationWindow extends Window {
 	private GridDisplay gridDisplay;
 
 	private CellManager simType;
-	private List<Integer> numSimTypes;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -67,7 +65,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	public void buttonClick() {
-		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				running = !running;
@@ -83,6 +80,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				stepping = true;
+				playButton.setGraphic(getImageView(PLAY_PNG));
 			}
 		});
 
@@ -135,10 +133,10 @@ public abstract class SimulationWindow extends Window {
 
 	public void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
-		WIDTH = dimensions.getMaxX();
-		HEIGHT = dimensions.getMaxY();
-		myStage.setX(dimensions.getMinX());
-		myStage.setY(dimensions.getMinY());
+		WIDTH = dimensions.getMaxX()*twothirds;
+		HEIGHT = dimensions.getMaxY()*twothirds;
+		//myStage.setX(dimensions.getMinX());
+		//myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 	
@@ -159,7 +157,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addButtons() {
-		//TODO
 		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
 		setControlButtonLayout(playButton, offset, offset);
@@ -168,7 +165,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setGraphic(getImageView(STEP_PNG));
 		setControlButtonLayout(stepButton, offset, offset + padding);
 
-		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
+		buttons = new ArrayList<Node>(Arrays.asList(playButton, stepButton));
 		myRoot.getChildren().addAll(buttons);
 	}
 
