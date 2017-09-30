@@ -19,8 +19,8 @@ public class Segregation extends CellManager{
 	private double blueRatio;
 	private double emptyRatio;
 	
-	public Segregation(double t, double r, double empty, double n, String shape) {
-		super(n, shape);
+	public Segregation(double t, double r, double empty, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		minSimilar = t;
 		redRatio = r;
 		blueRatio = 1 - r;
@@ -30,7 +30,7 @@ public class Segregation extends CellManager{
 	@Override
 	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
-		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * emptyRatio) {
 				paramCells.add(new SegCell(Cell.EMPTY));
@@ -63,7 +63,6 @@ public class Segregation extends CellManager{
 				for(Cell x : neighbors) {
 					neighborNums.add(currentCells.indexOf(x));
 				}
-				System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborNums);
 				if(checkNeighbors(c, neighbors)) {
 					nextCellStatuses.set(empties.get(0), c.getStatus());
 					empties.remove(0);

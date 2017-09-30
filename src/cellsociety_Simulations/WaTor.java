@@ -24,8 +24,8 @@ public class WaTor extends CellManager {
 	private ArrayList<Integer> nextLifeCounts;
 	private ArrayList<Integer> nextEnergies;
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape) {
-		super(n, shape);
+	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		sharkRatio = sharksPercent;
 		energyStart = initialEnergy;
 		fishEnergyContent = fishEnergy;
@@ -36,8 +36,8 @@ public class WaTor extends CellManager {
 		nextEnergies = new ArrayList<Integer>();
 	}
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, String shape) {
-		super(n, shape);
+	public WaTor(double sharksPercent, double fishPercent, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		sharkRatio = sharksPercent;
 		energyStart = 3;
 		fishEnergyContent = 1;
@@ -55,12 +55,14 @@ public class WaTor extends CellManager {
 	public void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int i = 0; i < size; i++) {
-			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new WaTorCell(Cell.NULL));
-			}
-			else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				currentCells.add(new WaTorCell(Cell.NULL));
+			if(!isToroidal) {
+				if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
@@ -77,12 +79,14 @@ public class WaTor extends CellManager {
 	public void initializeCurrentCells(List<String> statuses) {
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int i = 0; i < size; i++) {
-			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new WaTorCell(Cell.NULL));
-			}
-			else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				currentCells.add(new WaTorCell(Cell.NULL));
+			if(!isToroidal) {
+				if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+						(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+					currentCells.add(new WaTorCell(Cell.NULL));
+				}
 			}
 			else {
 				currentCells.add(paramCells.get(i));
@@ -100,7 +104,7 @@ public class WaTor extends CellManager {
 	@Override
 	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
-		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * fishRatio) {
 				paramCells.add(new WaTorCell(WaTorCell.FISH, 0));
