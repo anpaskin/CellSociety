@@ -8,20 +8,18 @@ import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 public abstract class SimulationWindow extends Window {
@@ -46,9 +44,9 @@ public abstract class SimulationWindow extends Window {
 	protected Button stepButton;
 
 	protected int numCells;
-	protected int cellSize = 50;
+	protected int cellSize = 20;
 
-	protected List<Button> buttons;
+	protected List<Node> buttons;
 	protected double offset = 50;
 	protected double padding = 100;
 
@@ -59,7 +57,6 @@ public abstract class SimulationWindow extends Window {
 	protected ArrayList<Color> cellColors = new ArrayList<>();
 
 	private CellManager simType;
-	private List<Integer> numSimTypes;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -68,7 +65,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	public void buttonClick() {
-		// TODO Auto-generated method stub
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				running = !running;
@@ -84,6 +80,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				stepping = true;
+				playButton.setGraphic(getImageView(PLAY_PNG));
 			}
 		});
 
@@ -136,10 +133,10 @@ public abstract class SimulationWindow extends Window {
 
 	public void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
-		WIDTH = dimensions.getMaxX();
-		HEIGHT = dimensions.getMaxY();
-		myStage.setX(dimensions.getMinX());
-		myStage.setY(dimensions.getMinY());
+		WIDTH = dimensions.getMaxX()*twothirds;
+		HEIGHT = dimensions.getMaxY()*twothirds;
+		//myStage.setX(dimensions.getMinX());
+		//myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 
@@ -148,7 +145,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addButtons() {
-		//TODO
 		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
 		setControlButtonLayout(playButton, offset, offset);
@@ -157,7 +153,7 @@ public abstract class SimulationWindow extends Window {
 		stepButton.setGraphic(getImageView(STEP_PNG));
 		setControlButtonLayout(stepButton, offset, offset + padding);
 
-		buttons = new ArrayList<Button>(Arrays.asList(playButton, stepButton));
+		buttons = new ArrayList<Node>(Arrays.asList(playButton, stepButton));
 		myRoot.getChildren().addAll(buttons);
 	}
 
@@ -266,42 +262,14 @@ public abstract class SimulationWindow extends Window {
 				GridPane.setRowIndex(polygon, row);
 				GridPane.setColumnIndex(polygon, col);
 				grid.getChildren().addAll(polygon);
-				/*
-				 * RECTANGLE
-				 */
-				//Rectangle rect = new Rectangle();
-				//rect.setWidth(cellSize);
-				//rect.setHeight(cellSize);
-				//rect.setFill(cellColors.get(cellNum));
-				//GridPane.setRowIndex(rect, row);
-				//GridPane.setColumnIndex(rect, col);
-				//grid.getChildren().addAll(rect);
 			}
 		}
 		grid.setLayoutX(WIDTH - numCells*cellSize - offset);
-		grid.setLayoutY(offset);
+		grid.setLayoutY(offset*half);
 		if (!myRoot.getChildren().contains(grid)) {
 			myRoot.getChildren().add(grid);
 		}
 	}
-
-	// updates grid with cellColors array list data
-	//	public GridPane updateGridPane(GridPane grid) {
-	//		for (int row = 0; row < numCells; row++) {
-	//			for (int col = 0; col < numCells; col++) {
-	//				Rectangle rect = new Rectangle();
-	//				rect.setWidth(cellSize);
-	//				rect.setHeight(cellSize);
-	//				int cellNum = row*numCells + col;
-	//				rect.setFill(cellColors.get(cellNum));
-	//				GridPane.setRowIndex(rect, row);
-	//				GridPane.setColumnIndex(rect, col);
-	//				grid.getChildren().addAll(rect);
-	//			}
-	//		}
-	//		return grid;
-	//		
-	//	}
 
 	// pass in currentCells array list and get array list of colors to fill grid
 	private void getCellColors(List<Cell> cellStatuses) {
