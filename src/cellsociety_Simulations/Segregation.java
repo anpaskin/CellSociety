@@ -53,7 +53,7 @@ public class Segregation extends CellManager{
 				for(Cell x : neighbors) {
 					neighborNums.add(currentCells.indexOf(x));
 				}
-				System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborNums);
+				//System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborNums);
 				if(checkNeighbors(c, neighbors)) {
 					nextCellStatuses.set(empties.get(0), c.getStatus());
 					empties.remove(0);

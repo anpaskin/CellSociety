@@ -40,7 +40,7 @@ public abstract class SimulationWindow extends Window {
 	protected Button stepButton;
 
 	protected int numCells;
-	protected int cellSize = 20;
+	protected int cellSize;
 
 	protected List<Node> buttons;
 	protected static double offset = 50;
@@ -61,6 +61,7 @@ public abstract class SimulationWindow extends Window {
 		grid = new GridPane();
 		setRowSize(simType);
 		System.out.println(numCells);
+		cellSize = (int) (HEIGHT - offset)/numCells;
 		gridDisplay = new GridDisplay(numCells, cellSize, shape);
 	}
 
