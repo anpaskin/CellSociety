@@ -6,13 +6,14 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.FireCell;
+import cellsociety_Cells.NullCell;
 
 public class Fire extends CellManager {
 
 	private double pCatch;	//the probability that a neighbor of a Cell with status "Fire" takes on status "Fire"
 	
-	public Fire(double probCatch, double n) {
-		super(n);
+	public Fire(double probCatch, double n, String shape) {
+		super(n, shape);
 		pCatch = probCatch;
 	}
 	
@@ -20,11 +21,15 @@ public class Fire extends CellManager {
 	 * Sets all current Cell statuses equal to "Tree" so that the simulation is ready to start.
 	 * Sets center Cell status to "Fire" by calling startFire.
 	 */
+	@Override
 	public void initializeCurrentCells() {
 		for(int n = 0; n < size; n++) {
 			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
 					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
-				currentCells.add(new FireCell(Cell.NULL));
+				currentCells.add(new NullCell());
+			}
+			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+				currentCells.add(new NullCell());
 			}
 			else {
 				currentCells.add(new FireCell(FireCell.TREE));

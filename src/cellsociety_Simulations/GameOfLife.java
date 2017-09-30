@@ -15,28 +15,13 @@ public class GameOfLife extends CellManager{
 
 	private double aliveRatio;
 	
-	public GameOfLife(double a, double n) {
-		super(n);
+	public GameOfLife(double a, double n, String shape) {
+		super(n, shape);
 		aliveRatio = a;
 	}
-	
-	public void initializeCurrentCells() {
-		List<Cell> paramCells = setParamCells();
-		for(int i = 0; i < size; i++) {
-			if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-					(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
-				currentCells.add(new LifeCell(Cell.NULL));
-			}
-			else {
-				int k = (int)(Math.random()*paramCells.size());
-				currentCells.add(paramCells.get(k));
-				paramCells.remove(k);
-			}
-			nextCellStatuses.add(currentCells.get(i).getStatus());
-		}
-	}
 
-	public List<Cell> setParamCells() {
+	@Override
+	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		for(int k = 0; k < pSize; k++) {

@@ -45,7 +45,7 @@ public class MenuWindow extends Window {
 		setupSceneDimensions();
 		setupScene();
 		simDriver = new Driver(s);
-	}	
+	}
 
 	@Override
 	public void setupScene() {
@@ -145,4 +145,16 @@ public class MenuWindow extends Window {
 		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
 		myRoot.getChildren().add(title);
 	}
+	
+	public CellManager getSimChoice() {
+		return simChoice;
+	}
+	
+/*	public boolean getNewSim() {
+		return newSim;
+	}
+	
+	public void setNewSim(boolean b) {
+		newSim = b;
+	}*/
 }
