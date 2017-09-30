@@ -17,4 +17,10 @@ public class FireWindow extends SimulationWindow {
 		super(s, sim);
 //		addSlider(probCatch);
 	}
+	
+	private void addExtras() {
+		
+		buttons.add(probCatch);
+		myRoot.getChildren().add(probCatch);
+	}
 }
