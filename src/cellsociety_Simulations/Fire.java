@@ -26,12 +26,14 @@ public class Fire extends CellManager {
 	public void initializeCurrentCells() {
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
-				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+				if(isEdge(n)) {
 					currentCells.add(new NullCell());
 				}
 				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new NullCell());
+				}
+				else {
+					currentCells.add(new FireCell(FireCell.TREE));
 				}
 			}
 			else {
@@ -47,8 +49,7 @@ public class Fire extends CellManager {
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
-				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+				if(isEdge(n)) {
 					currentCells.add(new NullCell());
 				}
 				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {

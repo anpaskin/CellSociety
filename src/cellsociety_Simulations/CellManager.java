@@ -102,10 +102,31 @@ public abstract class CellManager {
 	private List<Integer> getSquareNeighborLocationNums(Cell c) {
 		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
-		for(int i = -1; i < 2; i++) {
-			locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
-			locNums.add(cNum + i);
-			locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
+		if(!isToroidal) {
+			for(int i = -1; i < 2; i++) {
+				locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
+				locNums.add(cNum + i);
+				locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
+			}
+		}
+		else {
+			int rowSize = (int)Math.sqrt(size);
+			if(isLeftCol(cNum) && isTopRow(cNum)) {
+				locNums.add((int)size - 1);
+				locNums.add(rowSize*(rowSize - 1));
+				locNums.add(rowSize*(rowSize - 1) + 1);
+				locNums.add(rowSize - 1);
+				locNums.add(1);
+				locNums.add(rowSize - 1);
+				locNums.add(rowSize);
+				locNums.add(rowSize + 1);
+			}
+			else if(isLeftCol(cNum) && isBottomRow(cNum)) {
+				locNums.add(cNum - 1);
+				locNums.add(cNum - rowSize);
+				locNums.add(cNum - rowSize + 1);
+			}
+			
 		}
 		Collections.sort(locNums);
 		locNums.remove(locNums.indexOf(cNum));
@@ -136,12 +157,16 @@ public abstract class CellManager {
 		List<Cell> paramCells = setParamCells();
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
-				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+				if(isEdge(n)) {
 					currentCells.add(new NullCell());
 				}
 				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new NullCell());
+				}
+				else {
+					int k = (int)(Math.random()*paramCells.size());
+					currentCells.add(paramCells.get(k));
+					paramCells.remove(k);
 				}
 			}
 			else {
@@ -152,17 +177,42 @@ public abstract class CellManager {
 			nextCellStatuses.add(currentCells.get(n).getStatus());
 		}
 	}
+
+	protected boolean isEdge(int n) {
+		return (n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+				(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size));
+	}
+	
+	protected boolean isLeftCol(int n) {
+		return n % Math.sqrt(size) == 0;
+	}
+	
+	protected boolean isRightCol(int n) {
+		return n % Math.sqrt(size) == Math.sqrt(size) - 1;
+	}
+	
+	protected boolean isTopRow(int n) {
+		return n % Math.sqrt(size) == n;
+	}
+	
+	protected boolean isBottomRow(int n) {
+		return size - n < Math.sqrt(size);
+	}
 	
 	public void initializeCurrentCells(List<String> statuses) {
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
-				if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-						(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+				if(isEdge(n)) {
 					currentCells.add(new NullCell());
 				}
 				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new NullCell());
+				}
+				else {
+					int k = (int)(Math.random()*paramCells.size());
+					currentCells.add(paramCells.get(k));
+					paramCells.remove(k);
 				}
 			}
 			else {
@@ -173,7 +223,7 @@ public abstract class CellManager {
 	}
 	
 	protected List<Cell> setParamCells() {
-		return new ArrayList<Cell>();
+		return new ArrayList<Cell>((int)size);
 	}
 	
 	protected List<Cell> setParamCells(List<String> statuses) {

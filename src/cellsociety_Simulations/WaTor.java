@@ -63,6 +63,11 @@ public class WaTor extends CellManager {
 				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new WaTorCell(Cell.NULL));
 				}
+				else {
+					int k = (int)(Math.random()*paramCells.size());
+					currentCells.add(paramCells.get(k));
+					paramCells.remove(k);
+				}
 			}
 			else {
 				int k = (int)(Math.random()*paramCells.size());
@@ -80,12 +85,14 @@ public class WaTor extends CellManager {
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int i = 0; i < size; i++) {
 			if(!isToroidal) {
-				if((i % Math.sqrt(size) == 0) || (i % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-						(i % Math.sqrt(size) == i) || (size - i < Math.sqrt(size))) {
+				if(isEdge(i)) {
 					currentCells.add(new WaTorCell(Cell.NULL));
 				}
 				else if(cellShape.equals(TRI) && (i < 2*Math.sqrt(size) || i > size - 2*Math.sqrt(size) || i % Math.sqrt(size) == 1 || i % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new WaTorCell(Cell.NULL));
+				}
+				else {
+					currentCells.add(paramCells.get(i));
 				}
 			}
 			else {
