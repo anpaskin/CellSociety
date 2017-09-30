@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
+import cellsociety_Cells.FireCell;
 import cellsociety_Cells.LifeCell;
 
 /**
@@ -34,6 +35,16 @@ public class GameOfLife extends CellManager{
 		}
 		return paramCells;
 	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new LifeCell(s));
+		}
+		return ret;
+	}
+	
 	
 	protected void setNextCellStatuses() {
 		for(Cell c : currentCells) {

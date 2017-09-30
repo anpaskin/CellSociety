@@ -8,4 +8,5 @@
 	<sharkBreed>7</sharkBreed>
 	<sharkStarve>4</sharkStarve>
     <size>900.0</size>
+    <shape>triangle</shape>
 </data>

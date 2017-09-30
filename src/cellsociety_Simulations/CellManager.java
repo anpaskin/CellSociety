@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Cells.NullCell;
+import cellsociety_Cells.WaTorCell;
 
 /**
  * 
@@ -137,7 +138,6 @@ public abstract class CellManager {
 				currentCells.add(new NullCell());
 			}
 			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
-				System.out.println("Add inner null loop");
 				currentCells.add(new NullCell());
 			}
 			else {
@@ -149,7 +149,29 @@ public abstract class CellManager {
 		}
 	}
 	
+	public void initializeCurrentCells(List<String> statuses) {
+		List<Cell> paramCells = setParamCells(statuses);
+		for(int n = 0; n < size; n++) {
+			System.out.println("N = " + n);
+			if((n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
+					(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size))) {
+				currentCells.add(new NullCell());
+			}
+			else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
+				currentCells.add(new NullCell());
+			}
+			else {
+				currentCells.add(paramCells.get(n));
+			}
+			nextCellStatuses.add(currentCells.get(n).getStatus());
+		}
+	}
+	
 	protected List<Cell> setParamCells() {
+		return new ArrayList<Cell>();
+	}
+	
+	protected List<Cell> setParamCells(List<String> statuses) {
 		return new ArrayList<Cell>();
 	}
 

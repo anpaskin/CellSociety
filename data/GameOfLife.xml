@@ -4,4 +4,5 @@
     <author>John Horton Conway</author>
 	<aliveRatio>0.35</aliveRatio>
     <size>900.0</size>
+    <shape>triangle</shape>
 </data>

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
+import cellsociety_Cells.FireCell;
 import cellsociety_Cells.RPSCell;
 
 public class RPS extends CellManager {
@@ -41,6 +42,15 @@ public class RPS extends CellManager {
 			}
 		}
 		return paramCells;
+	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new RPSCell(s));
+		}
+		return ret;
 	}
 	
 	protected void setNextCellStatuses() {

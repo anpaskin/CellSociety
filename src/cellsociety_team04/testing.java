@@ -19,10 +19,10 @@ import cellsociety_Simulations.WaTor;
 public class testing {
 
 	public static void main(String[] args) {
-		segTesting(.5, .25, .5, 25);
+		//segTesting(.5, .25, .5, 25);
 		//fireTesting(.75, 66, 100);
 		//lifeTesting(.5, 100);
-		//waTorTesting(0.2, 0.35, 100);
+		waTorTesting(0.2, 0.7, 100);
 		//rpsTesting(.25, .25, .25, 100);
 	}
 	
@@ -60,7 +60,7 @@ public class testing {
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 5, 5, 5, 2, "triangle");
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 1, 5, 5, 1,  "triangle");
 		waSim.initializeCurrentCells();
 		List<Cell> s = waSim.getCurrentCells();
 		System.out.println(s);
