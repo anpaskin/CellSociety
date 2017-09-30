@@ -28,7 +28,7 @@ public class Segregation extends CellManager{
 	}
 
 	@Override
-	protected List<Cell> setParamCells() {
+	public List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
 		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {

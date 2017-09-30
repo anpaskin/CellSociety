@@ -19,11 +19,11 @@ import cellsociety_Simulations.WaTor;
 public class testing {
 
 	public static void main(String[] args) {
-		segTesting(.5, .25, .5, 25, "triangle", true);
-		//fireTesting(.75, 66, 100, "triangle", true);
-		//lifeTesting(.5, 100, "triangle", true);
-		//waTorTesting(0.2, 0.7, 100, "triangle", true);
-		//rpsTesting(.25, .25, .25, 100, "triangle", true);
+		//segTesting(.5, .25, .5, 25, "triangle", false);
+		//fireTesting(.75, 66, 100, "triangle", false);
+		//lifeTesting(.5, 100, "triangle", false);
+		//waTorTesting(0.2, 0.7, 100, "triangle", false);
+		rpsTesting(.25, .25, .25, 100, "triangle", false);
 	}
 	
 	private static void rpsTesting(double rocks, double papers, double scissors, double size, String shape, boolean toroidal) {
@@ -166,9 +166,11 @@ public class testing {
 	
 	private static void segTesting(double minSim, double emptyCount, double redCount, double size, String shape, boolean toroidal) {
 		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size, shape, toroidal);
+		List<Cell> p = segSim.setParamCells();
+		System.out.println(p);
 		segSim.initializeCurrentCells();
 		List<Cell> s = segSim.getCurrentCells();
-		//ArrayList<Cell> p = segSim.setParamCells();
+		System.out.println(s);
 		System.out.println("Current Cells Size: " + s.size());
 		int red = 0;
 		int blue = 0;
