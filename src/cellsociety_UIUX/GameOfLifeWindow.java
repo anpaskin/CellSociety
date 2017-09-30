@@ -9,19 +9,6 @@ public class GameOfLifeWindow extends SimulationWindow {
 	
 	public GameOfLifeWindow(Stage s, CellManager sim) {
 		super(s, sim);
+//		addSlider(aliveRatio);
 	}
-	
-	public void addSlider() {
-		aliveRatio.setMin(0);
-		aliveRatio.setMax(1);
-		aliveRatio.setValue(0.5);
-		aliveRatio.setShowTickLabels(true);
-		aliveRatio.setShowTickMarks(true);
-		aliveRatio.setMajorTickUnit(0.25);
-		aliveRatio.setBlockIncrement(0.05);
-		aliveRatio.setLayoutX(offset);
-		aliveRatio.setLayoutY(HEIGHT - offset*2);
-		myRoot.getChildren().add(aliveRatio);
-	}
-
 }

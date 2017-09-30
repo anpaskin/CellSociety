@@ -58,7 +58,10 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("size");
 		double size = extractNodeValue(nList);
 		
-		return new Segregation(threshold, redRatio, emptyRatio, size);
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		return new Segregation(threshold, redRatio, emptyRatio, size, shape);
 	}
 
 	private CellManager createPredatorPreySim()
@@ -80,9 +83,12 @@ public class XMLParser {
 
 		nList = doc.getElementsByTagName("size");
 		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
 
 		
-		return new WaTor(sharkPercent, fishPercent, size);
+		return new WaTor(sharkPercent, fishPercent, size, shape);
 	}
 
 	private CellManager createFireSim() {
@@ -92,7 +98,10 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("size");
 		double size = extractNodeValue(nList);
 		
-		return new Fire(probCatch, size);
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		return new Fire(probCatch, size, shape);
 	}
 
 	private CellManager createGameOfLifeSim() {	
@@ -102,7 +111,10 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("size");
 		double size = extractNodeValue(nList);
 		
-		return new GameOfLife(aliveRatio, size);
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		return new GameOfLife(aliveRatio, size, shape);
 
 	}
 	
