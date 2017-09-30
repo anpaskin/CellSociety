@@ -28,6 +28,7 @@ public abstract class SimulationWindow extends Window {
 	private static final int MIN_SLIDER_WIDTH = 180;
 	private static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
+	protected static final String RESET_PNG = "reset.png";
 	private static final String STEP_PNG = "step.png";
 	private String shape = "square";
 	
@@ -47,13 +48,13 @@ public abstract class SimulationWindow extends Window {
 	protected static double offset = 50;
 	protected double padding = 100;
 
-	protected Slider speed;
+	protected Slider speed = new Slider();;
 	private double simSpeed;
 
 	protected GridPane grid;
 	private GridDisplay gridDisplay;
 
-	private CellManager simType;
+	protected CellManager simType;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -97,6 +98,14 @@ public abstract class SimulationWindow extends Window {
 		resetGameLoop(simSpeed);
 	}
 
+	protected void sliderDrag() {
+		//do nothing
+	}
+	
+	protected void updateExtras(Slider mySlider) {
+		// do nothing
+	}
+	
 	/**
 	 * Updates the cells for each SimulationWindow
 	 * @param simType 
@@ -104,6 +113,7 @@ public abstract class SimulationWindow extends Window {
 	@Override
 	public void step() {
 		buttonClick();
+		sliderDrag();
 		if (running) {
 			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
@@ -171,7 +181,7 @@ public abstract class SimulationWindow extends Window {
 		myRoot.getChildren().addAll(controls);
 	}
 
-	private ImageView getImageView(String imageName) {
+	protected ImageView getImageView(String imageName) {
 		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
 		return new ImageView(buttonImage);
 	}
@@ -187,7 +197,6 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	private void addSpeedSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
-		speed = new Slider();
 		speed.setMin(1);
 		speed.setMax(3);
 		speed.setValue(1);
