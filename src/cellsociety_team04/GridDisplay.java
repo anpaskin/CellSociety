@@ -18,8 +18,10 @@ public class GridDisplay {
 	private static final double zero = 0.0;
 	private static final String NULL = "Null";
 	
+	private static final int gridXStart = 250;
+	
 	private int numCells;
-	private int cellSize = 50;
+	private int cellSize;
 	private int currRow;
 	private int currCol;
 	private String cellShape;
@@ -49,8 +51,8 @@ public class GridDisplay {
 				grid.getChildren().addAll(polygon);
 			}
 		}
-		grid.setLayoutX(width - numCells*cellSize - offset);
-		grid.setLayoutY(offset);
+		grid.setLayoutX(gridXStart);
+		grid.setLayoutY(offset/2);
 	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid

@@ -33,7 +33,7 @@ public abstract class Cell {
 			color = Color.WHITE;
 		}
 		else if(s.equals(NULL)) {
-			color = Color.WHITE;
+			color = Color.TRANSPARENT;
 		}
 	}
 	
