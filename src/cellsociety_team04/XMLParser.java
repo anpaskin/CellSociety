@@ -12,6 +12,9 @@ import cellsociety_Simulations.WaTor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -46,7 +49,10 @@ public class XMLParser {
 	}
 
 	private CellManager createSegregationSim() {
-		NodeList nList = doc.getElementsByTagName("minSimilar");
+		NodeList nList = doc.getElementsByTagName("title");
+		String simName = nList.item(0).getTextContent();
+		
+		nList = doc.getElementsByTagName("minSimilar");
 		double threshold = extractNodeValue(nList);
 		
 		nList = doc.getElementsByTagName("redRatio");
@@ -61,7 +67,25 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
+		nList = doc.getElementsByTagName("initalCellStatuses");
+		//ArrayList<String> initCells = extractCellStatuses(nList, simName);
+		
 		return new Segregation(threshold, redRatio, emptyRatio, size, shape);
+	}
+	
+	
+	private int[] extractCellStatuses(NodeList nList, String sim) {
+		String nums = (nList.item(0).getTextContent());
+		String[] items = nums.replaceAll("\\s", "").split(",");
+		int[] cellStats = new int[items.length];
+		for (int i = 0; i < items.length; i++) {
+			try {
+				cellStats[i] = Integer.parseInt(items[i]);
+		    } catch (NumberFormatException nfe) {
+		        //NOTE: write something here if you need to recover from formatting errors
+		    };
+		}
+		return null;
 	}
 
 	private CellManager createPredatorPreySim()
