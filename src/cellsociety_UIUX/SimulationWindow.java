@@ -28,7 +28,7 @@ public abstract class SimulationWindow extends Window {
 	private static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
 	private static final String STEP_PNG = "step.png";
-	private String shape = "triangle";
+	private String shape = "square";
 	
 	private static final double twothirds = 0.66;
 	protected static double WIDTH;

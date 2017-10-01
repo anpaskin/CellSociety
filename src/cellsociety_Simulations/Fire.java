@@ -9,13 +9,17 @@ import cellsociety_Cells.FireCell;
 import cellsociety_Cells.NullCell;
 import cellsociety_Cells.WaTorCell;
 
-public class Fire extends CellManager {
+public class Fire extends CardinalSim {
 
 	private double pCatch;	//the probability that a neighbor of a Cell with status "Fire" takes on status "Fire"
 	
 	public Fire(double probCatch, double n, String shape, boolean toroidal) {
 		super(n, shape, toroidal);
 		pCatch = probCatch;
+	}
+	
+	public Fire(double probCatch, double n, String shape) {
+		this(probCatch, n, shape, true);
 	}
 	
 	/**
@@ -104,20 +108,7 @@ public class Fire extends CellManager {
 		}
 	}
 	
-	/**
-	 * Redefines neighbors to be adjacent only (no diagonals).
-	 */
-	@Override
-	public List<Integer> getNeighborLocationNums(Cell c) {
-		List<Integer> locNums = new ArrayList<Integer>();
-		int cNum = currentCells.indexOf(c);
-		locNums.add(cNum - (int)Math.sqrt(currentCells.size()));
-		locNums.add(cNum + (int)Math.sqrt(currentCells.size()));
-		locNums.add(cNum - 1);
-		locNums.add(cNum + 1);
-		Collections.sort(locNums);
-		return locNums;
-	}
+	
 	
 	/**
 	 * Checks if any neighbors of a Cell have status "Fire".

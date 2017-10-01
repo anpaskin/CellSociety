@@ -26,6 +26,10 @@ public class Segregation extends CellManager{
 		blueRatio = 1 - r;
 		emptyRatio = empty;
 	}
+	
+	public Segregation(double t, double r, double empty, double n, String shape) {
+		this(t, r, empty, n, shape, true);
+	}
 
 	@Override
 	public List<Cell> setParamCells() {

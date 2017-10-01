@@ -71,6 +71,7 @@ public abstract class CellManager {
 	 */
 	protected final List<Cell> getNeighbors(Cell c) {
 		List<Integer> neighborLocNums = getNeighborLocationNums(c);
+		System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborLocNums);
 		List<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));
@@ -102,35 +103,138 @@ public abstract class CellManager {
 	private List<Integer> getSquareNeighborLocationNums(Cell c) {
 		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
-		if(!isToroidal) {
-			for(int i = -1; i < 2; i++) {
-				locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
-				locNums.add(cNum + i);
-				locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
-			}
+		if(!isToroidal || !isEdge(cNum)) {
+			addMiddleNeighborNums(locNums, cNum);
 		}
 		else {
-			int rowSize = (int)Math.sqrt(size);
-			if(isLeftCol(cNum) && isTopRow(cNum)) {
-				locNums.add((int)size - 1);
-				locNums.add(rowSize*(rowSize - 1));
-				locNums.add(rowSize*(rowSize - 1) + 1);
-				locNums.add(rowSize - 1);
-				locNums.add(1);
-				locNums.add(rowSize - 1);
-				locNums.add(rowSize);
-				locNums.add(rowSize + 1);
-			}
-			else if(isLeftCol(cNum) && isBottomRow(cNum)) {
-				locNums.add(cNum - 1);
-				locNums.add(cNum - rowSize);
-				locNums.add(cNum - rowSize + 1);
-			}
-			
+			getToroidalNeighborNums(locNums, cNum);
 		}
 		Collections.sort(locNums);
-		locNums.remove(locNums.indexOf(cNum));
+		if(locNums.contains(cNum)) locNums.remove(locNums.indexOf(cNum));
 		return locNums;
+	}
+
+	protected void getToroidalNeighborNums(List<Integer> locNums, int cNum) {
+		int rowSize = (int)Math.sqrt(size);
+		if(isLeftCol(cNum) && isTopRow(cNum)) {
+			addNWneighbors(locNums, rowSize);
+		}
+		else if(isLeftCol(cNum) && isBottomRow(cNum)) {
+			addSWneighbors(locNums, rowSize);
+		}
+		else if(isRightCol(cNum) && isTopRow(cNum)) {
+			addNEneighbors(locNums, rowSize);
+		}
+		else if(isRightCol(cNum) && isBottomRow(cNum)) {
+			addSEneighbors(locNums, rowSize);
+		}
+		else if(isLeftCol(cNum)) {
+			addWneighbors(locNums, cNum, rowSize);
+		}
+		else if(isRightCol(cNum)) {
+			addEneighbors(locNums, cNum, rowSize);
+		}
+		else if(isTopRow(cNum)) {
+			addNneighbors(locNums, cNum, rowSize);
+		}
+		else if(isBottomRow(cNum)) {
+			addSneighbors(locNums, cNum, rowSize);
+		}
+		else locNums.add(cNum);
+	}
+
+	protected void addMiddleNeighborNums(List<Integer> locNums, int cNum) {
+		for(int i = -1; i < 2; i++) {
+			locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
+			locNums.add(cNum + i);
+			locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
+		}
+	}
+
+	protected void addSneighbors(List<Integer> locNums, int cNum, int rowSize) {
+		for(int i = -1; i < 2; i++) {
+			locNums.add(cNum - rowSize + i);
+			locNums.add(cNum + i);
+			locNums.add(cNum - (rowSize * (rowSize - 1)) + i);
+		}
+	}
+
+	protected void addNneighbors(List<Integer> locNums, int cNum, int rowSize) {
+		for(int i = -1; i < 2; i++) {
+			locNums.add(cNum + (rowSize * (rowSize - 1)) + i);
+			locNums.add(cNum + i);
+			locNums.add(cNum + rowSize + i);
+		}
+	}
+
+	protected void addEneighbors(List<Integer> locNums, int cNum, int rowSize) {
+		locNums.add(cNum - rowSize - 1);
+		locNums.add(cNum - rowSize);
+		locNums.add(cNum - 2*rowSize + 1);
+		locNums.add(cNum - 1);
+		locNums.add(cNum - rowSize + 1);
+		locNums.add(cNum + rowSize - 1);
+		locNums.add(cNum + rowSize);
+		locNums.add(cNum + 1);
+	}
+
+	protected void addWneighbors(List<Integer> locNums, int cNum, int rowSize) {
+		locNums.add(cNum - 1);
+		locNums.add(cNum - rowSize);
+		locNums.add(cNum - rowSize + 1);
+		locNums.add(cNum + rowSize - 1);
+		locNums.add(cNum + 1);
+		locNums.add(cNum + 2*rowSize - 1);
+		locNums.add(cNum + rowSize);
+		locNums.add(cNum + rowSize + 1);
+	}
+	
+	protected void addSEneighbors(List<Integer> locNums, int rowSize) {
+		int cNum = (int)size - 1;
+		locNums.add(cNum - rowSize - 1);
+		locNums.add(cNum - rowSize);
+		locNums.add(cNum - 2*rowSize + 1);
+		locNums.add(cNum - 1);
+		locNums.add(cNum - rowSize + 1);
+		locNums.add(rowSize - 2);
+		locNums.add(rowSize - 1);
+		locNums.add(0);
+	}
+
+	protected void addNEneighbors(List<Integer> locNums, int rowSize) {
+		int cNum = rowSize - 1;
+		locNums.add((int)size - 2);
+		locNums.add((int)size - 1);
+		locNums.add(rowSize*(rowSize - 1));
+		locNums.add(cNum - 1);
+		locNums.add(0);
+		locNums.add(cNum * 2);
+		locNums.add(cNum + rowSize);
+		locNums.add(cNum + 1);
+	}
+
+	protected void addSWneighbors(List<Integer> locNums, int rowSize) {
+		int cNum = rowSize * (rowSize - 1);
+		locNums.add(cNum - 1);
+		locNums.add(cNum - rowSize);
+		locNums.add(cNum - rowSize + 1);
+		locNums.add((int)size - 1);
+		locNums.add(cNum + 1);
+		locNums.add(rowSize - 1);
+		locNums.add(0);
+		locNums.add(1);
+	}
+
+	protected void addNWneighbors(List<Integer> locNums, int rowSize) {
+		int cNum = 0;
+		locNums.add((int)size - 1);
+		locNums.add(rowSize*(rowSize - 1));
+		locNums.add(rowSize*(rowSize - 1) + 1);
+		locNums.add(rowSize - 1);
+		locNums.add(cNum + 1);
+		locNums.add(rowSize - 1);
+		locNums.add(rowSize);
+		locNums.add(rowSize + 1);
 	}
 	
 	private List<Integer> getTriNeighborLocationNums(Cell c) {
@@ -180,7 +284,7 @@ public abstract class CellManager {
 
 	protected boolean isEdge(int n) {
 		return (n % Math.sqrt(size) == 0) || (n % Math.sqrt(size) == Math.sqrt(size) - 1) || 
-				(n % Math.sqrt(size) == n) || (size - n < Math.sqrt(size));
+				(n % Math.sqrt(size) == n) || (size - n <= Math.sqrt(size));
 	}
 	
 	protected boolean isLeftCol(int n) {
@@ -196,7 +300,7 @@ public abstract class CellManager {
 	}
 	
 	protected boolean isBottomRow(int n) {
-		return size - n < Math.sqrt(size);
+		return size - n <= Math.sqrt(size);
 	}
 	
 	public void initializeCurrentCells(List<String> statuses) {
