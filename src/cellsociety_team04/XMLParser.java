@@ -64,6 +64,33 @@ public class XMLParser {
 		return new Segregation(threshold, redRatio, emptyRatio, size, shape, false);
 	}
 
+	private CellManager createPredatorPreySim()
+	{
+		NodeList nList = doc.getElementsByTagName("fishPercent");
+		double fishPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkPercent");
+		double sharkPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("fishBreed");
+		double fishBreed = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkBreed");
+		double sharkBreed = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("sharkStarve");
+		double sharkStarve = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+
+		
+		return new WaTor(sharkPercent, fishPercent, size, shape);
+	}
+
 //	private CellManager createPredatorPreySim()
 //	{
 //		NodeList nList = doc.getElementsByTagName("fishPercent");
@@ -101,7 +128,7 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
-		return new Fire(probCatch, size, shape, false);
+		return new Fire(probCatch, size, shape, true);
 	}
 
 	private CellManager createGameOfLifeSim() {	

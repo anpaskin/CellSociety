@@ -91,17 +91,6 @@ public abstract class CellManager {
 	 */
 	protected List<Integer> getNeighborLocationNums(Cell c) {
 		List<Integer> locNums = new ArrayList<Integer>();
-		if(cellShape.equals(SQUARE)) {
-			locNums = getSquareNeighborLocationNums(c);	
-		}
-		else if(cellShape.equals(TRI)) {
-			locNums = getTriNeighborLocationNums(c);
-		}
-		return locNums;
-	}
-
-	private List<Integer> getSquareNeighborLocationNums(Cell c) {
-		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
 		if(!isToroidal || !isEdge(cNum)) {
 			addMiddleNeighborNums(locNums, cNum);
@@ -140,14 +129,19 @@ public abstract class CellManager {
 		else if(isBottomRow(cNum)) {
 			addSneighbors(locNums, cNum, rowSize);
 		}
-		else locNums.add(cNum);
+		else addMiddleNeighborNums(locNums, cNum);
 	}
 
 	protected void addMiddleNeighborNums(List<Integer> locNums, int cNum) {
-		for(int i = -1; i < 2; i++) {
-			locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
-			locNums.add(cNum + i);
-			locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
+		if(cellShape.equals(TRI)) {
+			locNums = getTriNeighborLocationNums(currentCells.get(cNum));
+		}
+		else {
+			for(int i = -1; i < 2; i++) {
+				locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
+				locNums.add(cNum + i);
+				locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
+			}
 		}
 	}
 
@@ -157,6 +151,41 @@ public abstract class CellManager {
 			locNums.add(cNum + i);
 			locNums.add(cNum - (rowSize * (rowSize - 1)) + i);
 		}
+		if(cellShape.equals(TRI)) {
+			if(cNum == (rowSize*(rowSize - 1)) + 1) {
+				if((rowSize % 2) == 1) {
+					locNums.add(cNum - 2);
+					locNums.add(cNum - rowSize + 2);
+					
+				}
+				else if((rowSize % 2) == 0) {
+					locNums.add(rowSize - 1);
+					locNums.add(3);
+				}
+				locNums.add((int)size - 1);
+				locNums.add(cNum + 2);
+			}
+			else if(cNum == (int)size - 2) {
+				locNums.add(cNum - rowSize - 2);
+				locNums.add(cNum - 2*rowSize + 2);
+				locNums.add(cNum - 2);
+				locNums.add(rowSize*(rowSize - 1));
+			}
+			else {
+				if(((cNum / rowSize) % 2 == 1 && cNum % 2 == 1) ||
+						((cNum / rowSize) % 2 == 0 && cNum % 2 == 0)) {			//pointing down
+					locNums.add(cNum - rowSize - 2);
+					locNums.add(cNum - rowSize + 2);
+				}
+				else if(((cNum / rowSize) % 2 == 0 && cNum % 2 == 1) ||
+						((cNum / rowSize) % 2 == 1 && cNum % 2 == 0)) {			//pointing up
+					locNums.add(cNum - (rowSize*(rowSize - 1)) + 2);
+					locNums.add(cNum - (rowSize*(rowSize - 1)) - 2);
+				}
+				locNums.add(cNum - 2);
+				locNums.add(cNum + 2);
+			}
+		}
 	}
 
 	protected void addNneighbors(List<Integer> locNums, int cNum, int rowSize) {
@@ -165,8 +194,45 @@ public abstract class CellManager {
 			locNums.add(cNum + i);
 			locNums.add(cNum + rowSize + i);
 		}
+		if(cellShape.equals(TRI)) {
+			if(cNum == 1) {
+				locNums.add((int)size - 1);
+				locNums.add(cNum + (rowSize*(rowSize - 1)) + 2);
+				locNums.add(rowSize - 1);
+				locNums.add(cNum + 2);
+			}
+			else if(cNum == rowSize - 2) {
+				locNums.add(cNum + (rowSize*(rowSize - 1)) - 2);
+				locNums.add(rowSize*(rowSize - 1));
+				locNums.add(cNum - 2);
+				locNums.add(0);
+			}
+			else {
+				locNums.add(cNum + (rowSize*(rowSize - 1)) - 2);
+				locNums.add(cNum + (rowSize*(rowSize - 1)) + 2);
+				locNums.add(cNum - 2);
+				locNums.add(cNum + 2);
+			}
+		}
 	}
 
+	protected boolean pointingUp(int cNum, int rowSize) {
+		if(rowSize % 2 == 1) {
+			if(cNum % 2 == 1) return false;
+			else return true;
+		}
+		else {
+			if((cNum / rowSize) % 2 == 0) {
+				if(cNum % 2 == 0) return true;
+				else return false;
+			}
+			else {
+				if(cNum % 2 == 1) return true;
+				else return false;
+			}
+		}
+	}
+	
 	protected void addEneighbors(List<Integer> locNums, int cNum, int rowSize) {
 		locNums.add(cNum - rowSize - 1);
 		locNums.add(cNum - rowSize);
@@ -176,6 +242,18 @@ public abstract class CellManager {
 		locNums.add(cNum + rowSize - 1);
 		locNums.add(cNum + rowSize);
 		locNums.add(cNum + 1);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum - 2);
+			locNums.add(cNum - rowSize + 1);
+			if(!pointingUp(cNum, rowSize)) {			//pointing down
+				locNums.add(cNum - rowSize - 2);
+				locNums.add(cNum - 2*rowSize + 2);
+			}
+			else if(pointingUp(cNum, rowSize)) {			//pointing up
+				locNums.add(cNum + rowSize - 2);
+				locNums.add(cNum + 2);
+			}
+		}
 	}
 
 	protected void addWneighbors(List<Integer> locNums, int cNum, int rowSize) {
@@ -187,6 +265,18 @@ public abstract class CellManager {
 		locNums.add(cNum + 2*rowSize - 1);
 		locNums.add(cNum + rowSize);
 		locNums.add(cNum + rowSize + 1);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum + rowSize - 2);
+			locNums.add(cNum + 2);
+			if(!pointingUp(cNum, rowSize)) {		//pointing down
+				locNums.add(cNum - 2);
+				locNums.add(cNum - rowSize + 2);
+			}
+			else if(pointingUp(cNum, rowSize)) {	//pointing up
+				locNums.add(cNum + 2*rowSize - 2);
+				locNums.add(cNum + rowSize + 2);
+			}
+		}
 	}
 	
 	protected void addSEneighbors(List<Integer> locNums, int rowSize) {
@@ -199,6 +289,12 @@ public abstract class CellManager {
 		locNums.add(rowSize - 2);
 		locNums.add(rowSize - 1);
 		locNums.add(0);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum - 2);
+			locNums.add(cNum - rowSize + 2);
+			locNums.add(rowSize - 3);
+			locNums.add(1);
+		}
 	}
 
 	protected void addNEneighbors(List<Integer> locNums, int rowSize) {
@@ -211,6 +307,18 @@ public abstract class CellManager {
 		locNums.add(cNum * 2);
 		locNums.add(cNum + rowSize);
 		locNums.add(cNum + 1);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum - 2);
+			locNums.add(1);
+			if(pointingUp(cNum, rowSize)) {
+				locNums.add(cNum + rowSize - 2);
+				locNums.add(cNum + 2);
+			}
+			else if(!pointingUp(cNum, rowSize)) {
+				locNums.add((int)size - 3);
+				locNums.add(rowSize*(rowSize - 1) + 1);
+			}
+		}
 	}
 
 	protected void addSWneighbors(List<Integer> locNums, int rowSize) {
@@ -223,6 +331,18 @@ public abstract class CellManager {
 		locNums.add(rowSize - 1);
 		locNums.add(0);
 		locNums.add(1);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum + 2);
+			locNums.add(rowSize - 2);
+			if(pointingUp(cNum, rowSize)) {
+				locNums.add(cNum + rowSize - 2);
+				locNums.add(2);
+			}
+			else if(!pointingUp(cNum, rowSize)) {
+				locNums.add(cNum - 2);
+				locNums.add(cNum - rowSize + 2);
+			}
+		}
 	}
 
 	protected void addNWneighbors(List<Integer> locNums, int rowSize) {
@@ -235,13 +355,20 @@ public abstract class CellManager {
 		locNums.add(rowSize - 1);
 		locNums.add(rowSize);
 		locNums.add(rowSize + 1);
+		if(cellShape.equals(TRI)) {
+			locNums.add(cNum + rowSize - 2);
+			locNums.add(cNum + 2);
+			locNums.add(cNum + 2*rowSize - 2);
+			locNums.add(cNum + rowSize + 2);
+		}
 	}
 	
 	private List<Integer> getTriNeighborLocationNums(Cell c) {
 		List<Integer> locNums = new ArrayList<Integer>();
 		int cNum = currentCells.indexOf(c);
+		int rowSize = (int)Math.sqrt(size);
 		for(int i = -2; i < 3; i++) {
-			if(cNum % 2 == 0) {		//pointing up
+			if(pointingUp(cNum, rowSize)) {		//pointing up
 				if(i > -2 && i < 2) locNums.add(cNum - (int)Math.sqrt(currentCells.size()) + i);
 				locNums.add(cNum + i);
 				locNums.add(cNum + (int)Math.sqrt(currentCells.size()) + i);
@@ -304,6 +431,10 @@ public abstract class CellManager {
 	}
 	
 	public void initializeCurrentCells(List<String> statuses) {
+		if(statuses.size() == 0) {
+			initializeCurrentCells();
+			return;
+		}
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
