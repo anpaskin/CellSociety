@@ -1,11 +1,9 @@
 package cellsociety_UIUX;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cellsociety_Simulations.CellManager;
-import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.RPS;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
@@ -37,9 +35,13 @@ public class RPSWindow extends SimulationWindow {
 	protected void updateExtra(Slider mySlider) {
 		running = false;
 		playButton.setGraphic(getImageView(RESTART_PNG));
-		System.out.println("current aliveratio = " + mySlider.getValue());
+		System.out.println("current = " + mySlider.getClass() + mySlider.getValue());
 		System.out.println("need to restart");
-		simType = new GameOfLife(mySlider.getValue(), simType.getSize(), simType.getShape());
+		update();
+	}
+	
+	private void update() {
+		simType = new RPS(rockPercent.getValue(), paperPercent.getValue(), scissorsPercent.getValue(), simType.getSize(), simType.getShape());
 		simType.initializeCurrentCells();
 		displayGrid(simType.getCurrentCells());
 	}
