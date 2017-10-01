@@ -94,8 +94,4 @@ public class GameOfLife extends CellManager{
 		return aliveRatio;
 	}
 	
-	public double getSize() {
-		return size;
-	}
-	
 }

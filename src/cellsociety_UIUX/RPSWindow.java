@@ -28,7 +28,6 @@ public class RPSWindow extends SimulationWindow {
 		System.out.println("initial rockRatio = " + ((RPS) sim).getRockPercent());
 		System.out.println("initial paperRatio = " + ((RPS) sim).getPaperPercent());
 		System.out.println("initial scissorsRatio = " + ((RPS) sim).getScissorsPercent());
-		//updateExtras(probCatch);
 	}
 	
 	@Override

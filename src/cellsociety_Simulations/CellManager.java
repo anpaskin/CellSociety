@@ -476,5 +476,9 @@ public abstract class CellManager {
 	public String getShape() {
 		return cellShape;
 	}
+	
+	public boolean getToroidal() {
+		return isToroidal;
+	}
 
 }
