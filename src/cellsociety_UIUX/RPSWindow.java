@@ -25,7 +25,7 @@ public class RPSWindow extends SimulationWindow {
 			mySlider.setOnMouseReleased(e -> {
 				running = false;
 				playButton.setGraphic(getImageView(RESET_PNG));
-				updateExtras(mySlider);
+				updateExtra(mySlider);
 				System.out.println("press reset");
 			});
 		}
@@ -35,15 +35,15 @@ public class RPSWindow extends SimulationWindow {
 		for (int i = 0; i < extraSliders.size(); i++) {
 			controls.add(extraSliders.get(i));
 			addExtraSliders(extraSliders.get(i), 0.0, 1.0, 0.5, 0.25, 0.5);
-			updateExtras();
+			//updateExtras();
 		}
 	}
 
-	protected void updateExtras() {
-		//simType = new RPS(rockPercent.getValue(), paperPercent.getValue(), scissorsPercent.getValue());
-		for (int i = 0; i < extraSliders.size(); i++) {
-			System.out.println(extraSliders.get(i).getValue());
-		}
-	}
+//	protected void updateExtras() {
+//		//simType = new RPS(rockPercent.getValue(), paperPercent.getValue(), scissorsPercent.getValue());
+//		for (int i = 0; i < extraSliders.size(); i++) {
+//			System.out.println(extraSliders.get(i).getValue());
+//		}
+//	}
 }
 
