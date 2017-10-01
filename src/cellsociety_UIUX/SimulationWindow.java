@@ -26,9 +26,9 @@ import javafx.util.StringConverter;
 public abstract class SimulationWindow extends Window {
 
 	private static final int MIN_SLIDER_WIDTH = 180;
-	private static final String PLAY_PNG = "play.png";
+	protected static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
-	protected static final String RESET_PNG = "reset.png";
+	protected static final String RESTART_PNG = "restart.png";
 	private static final String STEP_PNG = "step.png";
 	private String shape = "triangle";
 	
@@ -49,7 +49,7 @@ public abstract class SimulationWindow extends Window {
 	protected double padding = 100;
 
 	protected Slider speed = new Slider();;
-	private double simSpeed;
+	protected double simSpeed;
 
 	protected GridPane grid;
 	private GridDisplay gridDisplay;
@@ -66,79 +66,9 @@ public abstract class SimulationWindow extends Window {
 		cellSize = (int) (HEIGHT - offset)/numCells;
 		gridDisplay = new GridDisplay(numCells, cellSize, shape);
 	}
-
-	public void buttonClick() {
-		playButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				running = !running;
-				if (running) {
-					playButton.setGraphic(getImageView(PAUSE_PNG));
-				}
-				else {
-					playButton.setGraphic(getImageView(PLAY_PNG));
-				}
-			}
-		});
-
-		stepButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				stepping = true;
-				playButton.setGraphic(getImageView(PLAY_PNG));
-			}
-		});
-
-		speed.setOnMouseReleased(e -> {
-			updateSimSpeed();
-		});
-
-	}
-
-	private void updateSimSpeed() {
-		simSpeed = (double) (1 / speed.getValue()) * 300;
-		resetGameLoop(simSpeed);
-	}
-
-	protected void sliderDrag() {
-		//do nothing
-	}
 	
-	protected void updateExtra(Slider mySlider) {
-		// do nothing
-		running = false;
-		playButton.setGraphic(getImageView(RESET_PNG));
-		//updateExtras(probCatch);
-		System.out.println("probCatch = " + mySlider.getValue());
-		System.out.println("press reset");
-	}
 	
-	/**
-	 * Updates the cells for each SimulationWindow
-	 * @param simType 
-	 */
-	@Override
-	public void step() {
-		buttonClick();
-		sliderDrag();
-		if (running) {
-			//simType.setNextCellStatuses();
-			simType.updateCurrentCells();
-			displayGrid(simType.getCurrentCells());
-		}
-		if (stepping) {
-			running = false;
-			//simType.setNextCellStatuses();
-			simType.updateCurrentCells();
-			displayGrid(simType.getCurrentCells());
-			stepping = false;
-		}
-	}
-
-	private void resetGameLoop(double newSpeed) {
-		animation.stop();
-		gameLoop(simType, newSpeed);
-	}
-
-
+	//FOR SETUP ****************************************
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
@@ -152,8 +82,6 @@ public abstract class SimulationWindow extends Window {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX()*twothirds;
 		HEIGHT = dimensions.getMaxY()*twothirds;
-		//myStage.setX(dimensions.getMinX());
-		//myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 	
@@ -172,7 +100,7 @@ public abstract class SimulationWindow extends Window {
 	public void setCellShape(String cellShape) {
 		shape = cellShape;
 	}
-
+	
 	private void addButtons() {
 		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
@@ -195,10 +123,10 @@ public abstract class SimulationWindow extends Window {
 		control.setLayoutX(x);
 		control.setLayoutY(y);
 	}
-
-
+	
 	private void addTitle() {
 		//do nothing
+//		TODO what does this even do rn???
 	}
 
 	private void addSpeedSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
@@ -240,8 +168,9 @@ public abstract class SimulationWindow extends Window {
             }
         });
 	}
-	
-	protected void addExtraSliders(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+
+	protected Slider addExtraSlider(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+		//TODO
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
@@ -254,6 +183,88 @@ public abstract class SimulationWindow extends Window {
 		mySlider.setLayoutX(offset);
 		mySlider.setLayoutY(offset + controls.size()*padding);
 		myRoot.getChildren().add(mySlider);
+		return mySlider;
+	}
+	
+	
+	// FOR INTERACTIONS ****************************************
+	public void buttonClick() {
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				running = !running;
+				if (running) {
+					playButton.setGraphic(getImageView(PAUSE_PNG));
+				}
+				else {
+					playButton.setGraphic(getImageView(PLAY_PNG));
+				}
+			}
+		});
+
+		stepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				stepping = true;
+				playButton.setGraphic(getImageView(PLAY_PNG));
+			}
+		});
+
+		speed.setOnMouseReleased(e -> {
+			updateSimSpeed();
+		});
+
+	}
+
+	private void updateSimSpeed() {
+		simSpeed = (double) (1 / speed.getValue()) * 300;
+		resetGameLoop(simSpeed);
+	}
+
+	private void sliderDrag() {
+		List<Slider> extraSliders = getExtraSliders();
+		for (int i = 0; i < extraSliders.size(); i++) {
+			Slider extraSlider = extraSliders.get(i);
+			extraSlider.setOnMouseReleased(e -> {
+				updateExtra(extraSlider);
+			});
+		}
+	}
+	
+	protected void updateExtra(Slider mySlider) {
+		//do nothing
+	}
+	
+	protected List<Slider> getExtraSliders() {
+		//do nothing;
+		return null;
+	}
+	
+	
+	// FOR UPDATING GAME LOOP (STEP) **********************
+	/**
+	 * Updates the cells for each SimulationWindow
+	 * @param simType 
+	 */
+	@Override
+	public void step() {
+		buttonClick();
+		sliderDrag();
+		if (running) {
+			//simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGrid(simType.getCurrentCells());
+		}
+		if (stepping) {
+			running = false;
+			//simType.setNextCellStatuses();
+			simType.updateCurrentCells();
+			displayGrid(simType.getCurrentCells());
+			stepping = false;
+		}
+	}
+
+	protected void resetGameLoop(double newSpeed) {
+		animation.stop();
+		gameLoop(simType, newSpeed);
 	}
  	
 	public void displayGrid(List<Cell> currentCellStatuses) {

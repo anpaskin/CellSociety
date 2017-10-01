@@ -1,11 +1,9 @@
 package cellsociety_Simulations;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
-import cellsociety_Cells.FireCell;
 import cellsociety_Cells.RPSCell;
 
 public class RPS extends CellManager {
@@ -112,4 +110,16 @@ public class RPS extends CellManager {
 		return ret;
 	}
 
+	public double getRockPercent() {
+		return rockRatio;
+	}
+	
+	public double getPaperPercent() {
+		return paperRatio;
+	}
+	
+	public double getScissorsPercent() {
+		return scissorsRatio;
+	}
+	
 }
