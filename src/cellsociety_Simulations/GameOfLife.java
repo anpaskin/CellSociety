@@ -20,6 +20,10 @@ public class GameOfLife extends CellManager{
 		super(n, shape, toroidal);
 		aliveRatio = a;
 	}
+	
+	public GameOfLife(double a, double n, String shape) {
+		this(a, n, shape, true);
+	}
 
 	@Override
 	protected List<Cell> setParamCells() {
