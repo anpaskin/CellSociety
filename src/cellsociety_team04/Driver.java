@@ -87,6 +87,7 @@ public class Driver {
 		simStages.get(simNum).setTitle(simCellManager.getClass().toString());
 		simStages.get(simNum).setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
+				simWindows.get(simNum).stopRunning();
 				System.out.println("Stage is closing");
 			}
 		});  

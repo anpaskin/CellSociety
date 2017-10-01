@@ -10,10 +10,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class GridDisplay {
+	private static final String SQUARE = "square";
+	private static final String HEXAGON = "hexagon";
+	private static final String TRIANGLE = "triangle";
 	private static final double half = 0.5;
 	private static final double third = 0.33;
 	private static final double twothirds = 0.66;
-	private static final double hexshift = 0.5/Math.pow(3,0.5);
+	private static final double sqrtthree = Math.pow(3, 0.5);
 	private static final double one = 1.0;
 	private static final double zero = 0.0;
 	private static final String NULL = "Null";
@@ -26,7 +29,6 @@ public class GridDisplay {
 	private int currCol;
 	private String cellShape;
 	private ArrayList<Color> cellColors = new ArrayList<Color>();
-	private double width;
 	private double offset;
 	
 	public GridDisplay(int nCells, int size, String shape) {
@@ -34,7 +36,6 @@ public class GridDisplay {
 		cellSize = size;
 		cellShape = shape;
 
-		width = SimulationWindow.getWidth();
 		offset = SimulationWindow.getOffset();
 	}
 	
@@ -48,6 +49,7 @@ public class GridDisplay {
 				Polygon polygon = new Polygon();
 				createCellShape(polygon);
 				setCellColorAndLocation(polygon, currentCells);
+				//setHVCellGaps(grid, row, col);
 				grid.getChildren().addAll(polygon);
 			}
 		}
@@ -57,14 +59,26 @@ public class GridDisplay {
 	}
 	
 	private void setHVGaps(GridPane grid) {
-		if (cellShape.equals("triangle")) {
-			grid.setHgap(-10);
-		} else if (cellShape.equals("hexagon")) {
-			
-		} else {
-			// do nothing
-		}
+		if (cellShape.equals(TRIANGLE)) {
+			grid.setHgap(-half*cellSize);
+			//grid.setVgap(-(one-half*sqrtthree)*cellSize*half);
+		} else if (cellShape.equals(HEXAGON)) {
+			grid.setHgap(-half*cellSize/sqrtthree);
+			grid.setVgap(-half*cellSize);
+		} // do nothing (rectangle)
 	}
+	
+//	private void setHVCellGaps(GridPane grid, int row, int col) {
+//		if (cellShape.equals(TRIANGLE)) {
+//			grid.setHgap(-half*cellSize);
+//			//grid.setVgap(Math.pow(-1, row+col)*(one-half*sqrtthree)*cellSize*half);
+//		} else if (cellShape.equals(HEXAGON)) {
+//			grid.setHgap(-half*cellSize/sqrtthree);
+//			grid.setVgap(-half*cellSize);
+//		} else {
+//			// do nothing (rectangle)
+//		}
+//	}
 	
 	// pass in currentCells array list and get array list of colors to fill grid
 	private void getCellColors(List<Cell> cellStatuses) {
@@ -75,9 +89,9 @@ public class GridDisplay {
 	}
 	
 	private void createCellShape(Polygon polygon) {
-		if (cellShape.equals("square")) {
+		if (cellShape.equals(SQUARE)) {
 			squareCell(polygon);
-		} else if (cellShape.equals("triangle")) {
+		} else if (cellShape.equals(TRIANGLE)) {
 			triangleCell(polygon);
 		} else {
 			hexagonCell(polygon);
@@ -96,7 +110,7 @@ public class GridDisplay {
 	private void triangleCell(Polygon polygon) {
 		if ((currRow + currCol) % 2 == 0) {
 			polygon.getPoints().addAll(new Double[]{
-					half*cellSize, zero,
+					half*cellSize, (one-half*sqrtthree)*cellSize,
 					zero, one*cellSize,
 					one*cellSize, one*cellSize
 			});
@@ -104,7 +118,7 @@ public class GridDisplay {
 		else {
 			polygon.getPoints().addAll(new Double[]{
 					zero, zero,
-					half*cellSize, one*cellSize,
+					half*cellSize, half*sqrtthree*cellSize,
 					one*cellSize, zero
 			});
 		}
@@ -113,11 +127,11 @@ public class GridDisplay {
 	private void hexagonCell(Polygon polygon) {
 		polygon.getPoints().addAll(new Double[] {
 				zero, half*cellSize,
-				hexshift*cellSize, zero,
-				(1-hexshift)*cellSize, zero,
+				half/sqrtthree*cellSize, zero,
+				(1-half/sqrtthree)*cellSize, zero,
 				one*cellSize, half*cellSize,
-				(1-hexshift)*cellSize, one*cellSize,
-				hexshift*cellSize, one*cellSize
+				(1-half/sqrtthree)*cellSize, one*cellSize,
+				half/sqrtthree*cellSize, one*cellSize
 		});
 	}
 	

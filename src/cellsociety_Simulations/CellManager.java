@@ -71,7 +71,7 @@ public abstract class CellManager {
 	 */
 	protected final List<Cell> getNeighbors(Cell c) {
 		List<Integer> neighborLocNums = getNeighborLocationNums(c);
-		System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborLocNums);
+		//System.out.println("Cell #" + currentCells.indexOf(c) + " neighbors: " + neighborLocNums);
 		List<Cell> neighbors = new ArrayList<Cell>();
 		for(int i = 0; i < neighborLocNums.size(); i++){
 			Cell curCell = currentCells.get(neighborLocNums.get(i));

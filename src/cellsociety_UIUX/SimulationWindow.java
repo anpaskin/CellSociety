@@ -30,7 +30,7 @@ public abstract class SimulationWindow extends Window {
 	private static final String PAUSE_PNG = "pause.png";
 	protected static final String RESET_PNG = "reset.png";
 	private static final String STEP_PNG = "step.png";
-	private String shape = "square";
+	private String shape = "triangle";
 	
 	private static final double twothirds = 0.66;
 	protected static double WIDTH;
@@ -62,7 +62,7 @@ public abstract class SimulationWindow extends Window {
 		simType = sim;
 		grid = new GridPane();
 		setRowSize(simType);
-		System.out.println(numCells);
+		System.out.println("size of grid: " + numCells);
 		cellSize = (int) (HEIGHT - offset)/numCells;
 		gridDisplay = new GridDisplay(numCells, cellSize, shape);
 	}
@@ -102,8 +102,13 @@ public abstract class SimulationWindow extends Window {
 		//do nothing
 	}
 	
-	protected void updateExtras(Slider mySlider) {
+	protected void updateExtra(Slider mySlider) {
 		// do nothing
+		running = false;
+		playButton.setGraphic(getImageView(RESET_PNG));
+		//updateExtras(probCatch);
+		System.out.println("probCatch = " + mySlider.getValue());
+		System.out.println("press reset");
 	}
 	
 	/**
@@ -256,6 +261,10 @@ public abstract class SimulationWindow extends Window {
 		if (!myRoot.getChildren().contains(grid)) {
 			myRoot.getChildren().add(grid);
 		}
+	}
+	
+	public void stopRunning() {
+		running = false;
 	}
 
 	/*public void throwErrors() {
