@@ -112,4 +112,16 @@ public class RPS extends CellManager {
 		return ret;
 	}
 
+	public double getRockPercent() {
+		return rockRatio;
+	}
+	
+	public double getPaperPercent() {
+		return paperRatio;
+	}
+	
+	public double getScissorsPercent() {
+		return scissorsRatio;
+	}
+	
 }
