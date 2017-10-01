@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data simulation="RockPaperScissors">
+    <title>Rock-Paper-Scissors</title>
+    <author>Pablo G´omez Esteban and Alfonso Rodr´ıguez-Pat´on</author>
+	<rockRatio></rockRatio>
+	<paperRatio></paperRatio>
+	<scissorsRatio></scissorsRatio>
+    <size>100.0</size>
+    <shape>square</shape>
+    <initalCellStatuses>[
+    0, 1, 0, 0, 0, 1, 0, 1, 0, 0,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1, 0, 0, 1, 0, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+    ]</initalCellStatuses>
+    <toroidalEdges>true</toroidalEdges>
+</data>
