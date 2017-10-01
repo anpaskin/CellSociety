@@ -25,8 +25,10 @@ import javafx.util.StringConverter;
 
 public abstract class SimulationWindow extends Window {
 
+	private static final int MIN_SLIDER_WIDTH = 180;
 	private static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
+	protected static final String RESET_PNG = "reset.png";
 	private static final String STEP_PNG = "step.png";
 	private String shape = "square";
 	
@@ -42,17 +44,17 @@ public abstract class SimulationWindow extends Window {
 	protected int numCells;
 	protected int cellSize;
 
-	protected List<Node> buttons;
+	protected List<Node> controls;
 	protected static double offset = 50;
 	protected double padding = 100;
 
-	Slider speed;
+	protected Slider speed = new Slider();;
 	private double simSpeed;
 
 	protected GridPane grid;
 	private GridDisplay gridDisplay;
 
-	private CellManager simType;
+	protected CellManager simType;
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -96,6 +98,14 @@ public abstract class SimulationWindow extends Window {
 		resetGameLoop(simSpeed);
 	}
 
+	protected void sliderDrag() {
+		//do nothing
+	}
+	
+	protected void updateExtras(Slider mySlider) {
+		// do nothing
+	}
+	
 	/**
 	 * Updates the cells for each SimulationWindow
 	 * @param simType 
@@ -103,6 +113,7 @@ public abstract class SimulationWindow extends Window {
 	@Override
 	public void step() {
 		buttonClick();
+		sliderDrag();
 		if (running) {
 			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
@@ -127,7 +138,7 @@ public abstract class SimulationWindow extends Window {
 	public void setupScene() {
 		setupSceneDimensions();
 		addButtons();
-		addSlider();
+		addSpeedSlider();
 		addTitle();
 		//throwErrors();
 	}
@@ -160,24 +171,24 @@ public abstract class SimulationWindow extends Window {
 	private void addButtons() {
 		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
-		setControlButtonLayout(playButton, offset, offset);
+		setControlLayout(playButton, offset, offset);
 
 		stepButton = new Button();
 		stepButton.setGraphic(getImageView(STEP_PNG));
-		setControlButtonLayout(stepButton, offset, offset + padding);
+		setControlLayout(stepButton, offset, offset + padding);
 
-		buttons = new ArrayList<Node>(Arrays.asList(playButton, stepButton));
-		myRoot.getChildren().addAll(buttons);
+		controls = new ArrayList<Node>(Arrays.asList(playButton, stepButton));
+		myRoot.getChildren().addAll(controls);
 	}
 
-	private ImageView getImageView(String imageName) {
+	protected ImageView getImageView(String imageName) {
 		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
 		return new ImageView(buttonImage);
 	}
 
-	private void setControlButtonLayout(Button button, Double x, Double y) {
-		button.setLayoutX(x);
-		button.setLayoutY(y);
+	private void setControlLayout(Node control, Double x, Double y) {
+		control.setLayoutX(x);
+		control.setLayoutY(y);
 	}
 
 
@@ -185,24 +196,23 @@ public abstract class SimulationWindow extends Window {
 		//do nothing
 	}
 
-	private void addSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
-		speed = new Slider();
+	private void addSpeedSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
 		speed.setMin(1);
 		speed.setMax(3);
 		speed.setValue(1);
 		labelSpeedSlider(speed);
-		speed.setMinWidth(180);
+		speed.setMinWidth(MIN_SLIDER_WIDTH);
 		speed.setShowTickLabels(true);
 		speed.setShowTickMarks(true);
 		speed.setMajorTickUnit(1);
 		speed.setBlockIncrement(1);
 		speed.setLayoutX(offset);
-		speed.setLayoutY(offset + buttons.size()*padding);
+		speed.setLayoutY(offset + controls.size()*padding);
 		myRoot.getChildren().add(speed);
 	}
 	
-	private void labelSpeedSlider(Slider speed) {
-		speed.setLabelFormatter(new StringConverter<Double>() {
+	protected void labelSpeedSlider(Slider mySlider) {
+		mySlider.setLabelFormatter(new StringConverter<Double>() {
             @Override
             public String toString(Double n) {
                 if (n <= 1.5) return "Slow";
@@ -224,6 +234,21 @@ public abstract class SimulationWindow extends Window {
                 }
             }
         });
+	}
+	
+	protected void addExtraSliders(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+		mySlider = new Slider();
+		mySlider.setMin(min);
+		mySlider.setMax(max);
+		mySlider.setValue(setValue);
+		mySlider.setMinWidth(MIN_SLIDER_WIDTH);
+		mySlider.setShowTickLabels(true);
+		mySlider.setShowTickMarks(true);
+		mySlider.setMajorTickUnit(ticks);
+		mySlider.setBlockIncrement(blocks);
+		mySlider.setLayoutX(offset);
+		mySlider.setLayoutY(offset + controls.size()*padding);
+		myRoot.getChildren().add(mySlider);
 	}
  	
 	public void displayGrid(List<Cell> currentCellStatuses) {

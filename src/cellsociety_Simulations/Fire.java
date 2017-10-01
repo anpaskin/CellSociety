@@ -125,6 +125,9 @@ public class Fire extends CardinalSim {
 		return false;
 	}
 	
+	private void setPCatch(double newPCatch) {
+		pCatch = newPCatch;
+	}
 	
 	
 }
