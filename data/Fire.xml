@@ -5,5 +5,5 @@
 	<probCatch>0.60</probCatch>
     <size>900.0</size>
     <size>100.0</size>
-    <shape>square</shape>
+    <shape>triangle</shape>
 </data>

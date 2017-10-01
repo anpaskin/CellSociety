@@ -35,48 +35,57 @@ public abstract class CardinalSim extends CellManager {
 	
 	@Override
 	protected void addMiddleNeighborNums(List<Integer> locNums, int cNum) {
-		locNums.add(cNum - (int)Math.sqrt(currentCells.size()));
+		int rowSize =(int)Math.sqrt(currentCells.size());
+		if(!pointingUp(cNum, rowSize)) locNums.add(cNum - rowSize);
 		locNums.add(cNum - 1);
 		locNums.add(cNum + 1);
-		locNums.add(cNum + (int)Math.sqrt(currentCells.size()));
+		if(pointingUp(cNum, rowSize)) locNums.add(cNum + rowSize);
 	}
 	
 	@Override
 	protected void addSneighbors(List<Integer> locNums, int cNum, int rowSize) {
-		locNums.add(cNum - rowSize);
+		if(cellShape.equals(SQUARE) || !pointingUp(cNum, rowSize)) {
+			locNums.add(cNum - rowSize);
+		}
 		locNums.add(cNum - 1);
 		locNums.add(cNum + 1);
-		locNums.add(cNum - (rowSize * (rowSize - 1)));
+		if((cellShape.equals(SQUARE) || pointingUp(cNum, rowSize))) {
+			locNums.add(cNum - (rowSize * (rowSize - 1)));
+		}
 	}
 	
 	@Override
 	protected void addNneighbors(List<Integer> locNums, int cNum, int rowSize) {
-		locNums.add(cNum + (rowSize * (rowSize - 1)));
+		if(cellShape.equals(SQUARE) || !pointingUp(cNum, rowSize)) locNums.add(cNum + (rowSize * (rowSize - 1)));
 		locNums.add(cNum - 1);
 		locNums.add(cNum + 1);
-		locNums.add(cNum + rowSize);
+		if(cellShape.equals(SQUARE) || pointingUp(cNum, rowSize)) locNums.add(cNum + rowSize);
 	}
 	
 	@Override
 	protected void addEneighbors(List<Integer> locNums, int cNum, int rowSize) {
-		locNums.add(cNum - rowSize);
+		if(cellShape.equals(SQUARE) || !pointingUp(cNum, rowSize)) {
+			locNums.add(cNum - rowSize);
+		}
 		locNums.add(cNum - 1);
 		locNums.add(cNum - rowSize + 1);
-		locNums.add(cNum + rowSize);
+		if(cellShape.equals(SQUARE) || pointingUp(cNum, rowSize)) {
+			locNums.add(cNum + rowSize);
+		}
 	}
 	
 	@Override
 	protected void addWneighbors(List<Integer> locNums, int cNum, int rowSize) {
-		locNums.add(cNum - rowSize);
+		if(cellShape.equals(SQUARE) || !pointingUp(cNum, rowSize)) locNums.add(cNum - rowSize);
 		locNums.add(cNum + rowSize - 1);
 		locNums.add(cNum + 1);
-		locNums.add(cNum + rowSize);
+		if(cellShape.equals(SQUARE) || pointingUp(cNum, rowSize)) locNums.add(cNum + rowSize);
 	}
 	
 	@Override
 	protected void addSEneighbors(List<Integer> locNums, int rowSize) {
 		int cNum = (int)size - 1;
-		locNums.add(cNum - rowSize);
+		if(cellShape.equals(SQUARE)) locNums.add(cNum - rowSize);
 		locNums.add(cNum - 1);
 		locNums.add(cNum - rowSize + 1);
 		locNums.add(rowSize - 1);
@@ -85,25 +94,25 @@ public abstract class CardinalSim extends CellManager {
 	@Override
 	protected void addNEneighbors(List<Integer> locNums, int rowSize) {
 		int cNum = rowSize - 1;
-		locNums.add((int)size - 1);
+		if(cellShape.equals(SQUARE) || rowSize % 2 == 0) locNums.add((int)size - 1);
 		locNums.add(cNum - 1);
 		locNums.add(0);
-		locNums.add(cNum + rowSize);
+		if(cellShape.equals(SQUARE) || rowSize % 2 == 1) locNums.add(cNum + rowSize);
 	}
 	
 	@Override
 	protected void addSWneighbors(List<Integer> locNums, int rowSize) {
 		int cNum = rowSize * (rowSize - 1);
-		locNums.add(cNum - rowSize);
+		if(cellShape.equals(SQUARE) || rowSize % 2 == 0) locNums.add(cNum - rowSize);
 		locNums.add((int)size - 1);
 		locNums.add(cNum + 1);
-		locNums.add(0);
+		if(cellShape.equals(SQUARE) || rowSize % 2 == 1) locNums.add(0);
 	}
 	
 	@Override
 	protected void addNWneighbors(List<Integer> locNums, int rowSize) {
 		int cNum = 0;
-		locNums.add(rowSize*(rowSize - 1));
+		if(cellShape.equals(SQUARE)) locNums.add(rowSize*(rowSize - 1));
 		locNums.add(rowSize - 1);
 		locNums.add(cNum + 1);
 		locNums.add(rowSize);
