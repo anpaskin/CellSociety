@@ -105,4 +105,16 @@ public class Segregation extends CellManager{
 		return simCount / occupiedNeighbors < minSimilar;
 	}
 	
+	
+	public double getRedToBlue() {
+		return redRatio;
+	}
+	
+	public double getEmptyRatio() {
+		return emptyRatio;
+	}
+	
+	public double getMinSimilar() {
+		return minSimilar;
+	}
 }

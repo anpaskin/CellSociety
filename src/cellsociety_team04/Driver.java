@@ -6,14 +6,9 @@ import java.util.List;
 
 import cellsociety_Simulations.*;
 import cellsociety_UIUX.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 /**
  * 
