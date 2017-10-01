@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import cellsociety_Simulations.CellManager;
 import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
+import cellsociety_Simulations.RPS;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
 
@@ -71,6 +72,11 @@ public class XMLParser {
 			isSegregation = true;
 			return createSegregationSim();
 		}
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("RockPaperScissors")) {
+			isRockPaperScissors = true;
+			return createRockPaperScissorsSim();
+		}
+		
 		
 		return null;
 	}
@@ -101,6 +107,96 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 
 		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal);
+	}
+
+	private CellManager createPredatorPreySim()
+	{
+		NodeList nList = doc.getElementsByTagName("fishPercent");
+		double fishPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkPercent");
+		double sharkPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("fishBreed");
+		int fishBreed = Integer.parseInt(nList.item(0).getTextContent());
+
+		nList = doc.getElementsByTagName("sharkBreed");
+		int sharkBreed = Integer.parseInt(nList.item(0).getTextContent());
+		
+		nList = doc.getElementsByTagName("fishEnergy");
+		int fishEnergy = Integer.parseInt(nList.item(0).getTextContent());
+		
+		nList = doc.getElementsByTagName("initialEnergy");
+		int initialEnergy = Integer.parseInt(nList.item(0).getTextContent());
+	
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
+	}
+
+	private CellManager createFireSim() {
+		NodeList nList = doc.getElementsByTagName("probCatch");
+		double probCatch = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new Fire(probCatch, size, shape, isToroidal);
+	}
+
+	private CellManager createGameOfLifeSim() {	
+		NodeList nList = doc.getElementsByTagName("aliveRatio");
+		double aliveRatio = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new GameOfLife(aliveRatio, size, shape, isToroidal);
+
+	}
+	
+	private CellManager createRockPaperScissorsSim() {
+		NodeList nList = doc.getElementsByTagName("rockRatio");
+		double rockRatio = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("paperRatio");
+		double paperRatio = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("ScissorsRatio");
+		double scissorsRatio = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+		
+		nList = doc.getElementsByTagName("initalCellStatuses");
+		extractCellStatuses(nList);
+		
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+
+		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal);
 	}
 	
 	private boolean stringToBoolean(NodeList nList) {
@@ -147,98 +243,6 @@ public class XMLParser {
 		} else if (isRockPaperScissors) {
 			simCells.addAll(RPSCells);
 		}
-	}
-
-	private CellManager createPredatorPreySim()
-	{
-		NodeList nList = doc.getElementsByTagName("fishPercent");
-		double fishPercent = extractNodeValue(nList);
-
-		nList = doc.getElementsByTagName("sharkPercent");
-		double sharkPercent = extractNodeValue(nList);
-
-		nList = doc.getElementsByTagName("fishBreed");
-		int fishBreed = Integer.parseInt(nList.item(0).getTextContent());
-
-		nList = doc.getElementsByTagName("sharkBreed");
-		int sharkBreed = Integer.parseInt(nList.item(0).getTextContent());
-		
-		nList = doc.getElementsByTagName("fishEnergy");
-		int fishEnergy = Integer.parseInt(nList.item(0).getTextContent());
-		
-		nList = doc.getElementsByTagName("initialEnergy");
-		int initialEnergy = Integer.parseInt(nList.item(0).getTextContent());
-	
-		nList = doc.getElementsByTagName("size");
-		double size = extractNodeValue(nList);
-		
-		nList = doc.getElementsByTagName("shape");
-		String shape = nList.item(0).getTextContent();
-
-		nList = doc.getElementsByTagName("toroidalEdges");
-		boolean isToroidal = stringToBoolean(nList);
-		
-		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
-	}
-
-//	private CellManager createPredatorPreySim()
-//	{
-//		NodeList nList = doc.getElementsByTagName("fishPercent");
-//		double fishPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkPercent");
-//		double sharkPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("fishBreed");
-//		double fishBreed = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkBreed");
-//		double sharkBreed = extractNodeValue(nList);
-//		
-//		nList = doc.getElementsByTagName("sharkStarve");
-//		double sharkStarve = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("size");
-//		double size = extractNodeValue(nList);
-//		
-//		nList = doc.getElementsByTagName("shape");
-//		String shape = nList.item(0).getTextContent();
-//
-//		
-//		return new WaTor(sharkPercent, fishPercent, size, sharkInitial, sharkBreed, fishBreed, fishEnergy, shape, false);
-//	}
-
-	private CellManager createFireSim() {
-		NodeList nList = doc.getElementsByTagName("probCatch");
-		double probCatch = extractNodeValue(nList);
-		
-		nList = doc.getElementsByTagName("size");
-		double size = extractNodeValue(nList);
-		
-		nList = doc.getElementsByTagName("shape");
-		String shape = nList.item(0).getTextContent();
-		
-		nList = doc.getElementsByTagName("toroidalEdges");
-		boolean isToroidal = stringToBoolean(nList);
-		
-		return new Fire(probCatch, size, shape, isToroidal);
-	}
-
-	private CellManager createGameOfLifeSim() {	
-		NodeList nList = doc.getElementsByTagName("aliveRatio");
-		double aliveRatio = extractNodeValue(nList);
-		
-		nList = doc.getElementsByTagName("size");
-		double size = extractNodeValue(nList);
-		
-		nList = doc.getElementsByTagName("shape");
-		String shape = nList.item(0).getTextContent();
-		
-		nList = doc.getElementsByTagName("toroidalEdges");
-		boolean isToroidal = stringToBoolean(nList);
-		
-		return new GameOfLife(aliveRatio, size, shape, isToroidal);
-
 	}
 	
 	private int extractIntValue(NodeList nList) {
