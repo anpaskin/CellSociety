@@ -168,7 +168,7 @@ public class XMLParser {
 		
 		nList = doc.getElementsByTagName("initialEnergy");
 		int initialEnergy = Integer.parseInt(nList.item(0).getTextContent());
-		
+	
 		nList = doc.getElementsByTagName("size");
 		double size = extractNodeValue(nList);
 		
@@ -180,6 +180,33 @@ public class XMLParser {
 		
 		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
 	}
+
+//	private CellManager createPredatorPreySim()
+//	{
+//		NodeList nList = doc.getElementsByTagName("fishPercent");
+//		double fishPercent = extractNodeValue(nList);
+//
+//		nList = doc.getElementsByTagName("sharkPercent");
+//		double sharkPercent = extractNodeValue(nList);
+//
+//		nList = doc.getElementsByTagName("fishBreed");
+//		double fishBreed = extractNodeValue(nList);
+//
+//		nList = doc.getElementsByTagName("sharkBreed");
+//		double sharkBreed = extractNodeValue(nList);
+//		
+//		nList = doc.getElementsByTagName("sharkStarve");
+//		double sharkStarve = extractNodeValue(nList);
+//
+//		nList = doc.getElementsByTagName("size");
+//		double size = extractNodeValue(nList);
+//		
+//		nList = doc.getElementsByTagName("shape");
+//		String shape = nList.item(0).getTextContent();
+//
+//		
+//		return new WaTor(sharkPercent, fishPercent, size, sharkInitial, sharkBreed, fishBreed, fishEnergy, shape, false);
+//	}
 
 	private CellManager createFireSim() {
 		NodeList nList = doc.getElementsByTagName("probCatch");
