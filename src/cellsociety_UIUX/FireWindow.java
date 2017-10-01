@@ -6,12 +6,7 @@ import java.util.List;
 
 import cellsociety_Simulations.CellManager;
 import cellsociety_Simulations.Fire;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class FireWindow extends SimulationWindow {

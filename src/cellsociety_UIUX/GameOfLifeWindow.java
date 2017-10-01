@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import cellsociety_Simulations.CellManager;
-import cellsociety_Simulations.Fire;
 import cellsociety_Simulations.GameOfLife;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
