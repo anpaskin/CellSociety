@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cellsociety_Simulations.CellManager;
+import cellsociety_Simulations.Fire;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -21,30 +22,25 @@ public class FireWindow extends SimulationWindow {
 	public FireWindow(Stage s, CellManager sim) {
 		super(s, sim);
 		controls.add(probCatch);
-		addExtraSliders(probCatch, 0.0, 1.0, 0.5, 0.25, 0.5);
+		probCatch = addExtraSliders(probCatch, 0.0, 1.0, ((Fire) sim).getPCatch(), 0.25, 0.5);
+		extraSliders.add(probCatch);
+		System.out.println("initial probCatch = " + ((Fire) sim).getPCatch());
 		//updateExtras(probCatch);
 	}
 
 	@Override
-	protected void sliderDrag() {
-		for (int i = 0; i < extraSliders.size(); i++) {
-			Slider extraSlider = extraSliders.get(i);
-			extraSlider.setOnMouseReleased(e -> {
-				updateExtra(extraSlider);
-			});
-		}
+	protected List<Slider> getExtraSliders() {
+		return extraSliders;
 	}
 
-	private void updateProbCatch() {
-		running = false;
-		playButton.setGraphic(getImageView(RESET_PNG));
-		updateExtra(probCatch);
+	@Override
+	protected void updateExtra(Slider mySlider) {
+		//running = false;
+		playButton.setGraphic(getImageView(PLAY_PNG));
+		((Fire)simType).setPCatch(probCatch.getValue());
+		System.out.println("new probCatch = " + mySlider.getValue());
 		System.out.println("press reset");
-	}
-
-/*	@Override
-	protected void updateExtras(Slider mySlider) {
 		//simType = new Fire(mySlider.getValue());
 		System.out.println("probCatch = " + mySlider.getValue());
-	}*/
+	}
 }

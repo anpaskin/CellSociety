@@ -26,9 +26,9 @@ import javafx.util.StringConverter;
 public abstract class SimulationWindow extends Window {
 
 	private static final int MIN_SLIDER_WIDTH = 180;
-	private static final String PLAY_PNG = "play.png";
+	protected static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
-	protected static final String RESET_PNG = "reset.png";
+	private static final String RESTART_PNG = "restart.png";
 	private static final String STEP_PNG = "step.png";
 	private String shape = "triangle";
 	
@@ -98,17 +98,28 @@ public abstract class SimulationWindow extends Window {
 		resetGameLoop(simSpeed);
 	}
 
-	protected void sliderDrag() {
-		//do nothing
+	private void sliderDrag() {
+		List<Slider> extraSliders = getExtraSliders();
+		for (int i = 0; i < extraSliders.size(); i++) {
+			Slider extraSlider = extraSliders.get(i);
+			extraSlider.setOnMouseReleased(e -> {
+				updateExtra(extraSlider);
+			});
+		}
 	}
 	
 	protected void updateExtra(Slider mySlider) {
-		// do nothing
-		running = false;
-		playButton.setGraphic(getImageView(RESET_PNG));
-		//updateExtras(probCatch);
-		System.out.println("probCatch = " + mySlider.getValue());
-		System.out.println("press reset");
+//		do nothing
+//		running = false;
+//		playButton.setGraphic(getImageView(RESET_PNG));
+//		updateValue(mySlider);
+//		System.out.println("probCatch = " + mySlider.getValue());
+//		System.out.println("press reset");
+	}
+	
+	protected List<Slider> getExtraSliders() {
+		//do nothing;
+		return null;
 	}
 	
 	/**
@@ -241,7 +252,7 @@ public abstract class SimulationWindow extends Window {
         });
 	}
 	
-	protected void addExtraSliders(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+	protected Slider addExtraSliders(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
@@ -254,6 +265,7 @@ public abstract class SimulationWindow extends Window {
 		mySlider.setLayoutX(offset);
 		mySlider.setLayoutY(offset + controls.size()*padding);
 		myRoot.getChildren().add(mySlider);
+		return mySlider;
 	}
  	
 	public void displayGrid(List<Cell> currentCellStatuses) {

@@ -21,7 +21,7 @@ public class GameOfLifeWindow extends SimulationWindow {
 	protected void sliderDrag() {
 		aliveRatio.setOnMouseReleased(e -> {
 			running = false;
-			playButton.setGraphic(getImageView(RESET_PNG));
+			playButton.setGraphic(getImageView(RESTART_PNG));
 			updateExtras(aliveRatio);
 			System.out.println("press reset");
 		});

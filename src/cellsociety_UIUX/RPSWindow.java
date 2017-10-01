@@ -24,7 +24,7 @@ public class RPSWindow extends SimulationWindow {
 			Slider mySlider = extraSliders.get(i);
 			mySlider.setOnMouseReleased(e -> {
 				running = false;
-				playButton.setGraphic(getImageView(RESET_PNG));
+				playButton.setGraphic(getImageView(RESTART_PNG));
 				updateExtra(mySlider);
 				System.out.println("press reset");
 			});
