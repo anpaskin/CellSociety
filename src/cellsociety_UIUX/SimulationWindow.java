@@ -170,6 +170,7 @@ public abstract class SimulationWindow extends Window {
 	}
 
 	protected Slider addExtraSlider(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+		//TODO
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
