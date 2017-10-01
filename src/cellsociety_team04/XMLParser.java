@@ -13,6 +13,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javafx.stage.FileChooser;
@@ -26,10 +28,23 @@ import javafx.stage.Stage;
  * 
  */
 
-
 public class XMLParser {
 	private FileChooser fileChooser;
 	private static Document doc;
+	
+	private boolean isGameOfLife = false;
+	private boolean isFire = false;
+	private boolean isWaTor = false;
+	private boolean isSegregation = false;
+	private boolean isRockPaperScissors = false;
+	
+	private static final List<String> GOLCells = Arrays.asList("Alive", "Dead");
+	private static final List<String> FireCells = Arrays.asList("Tree", "Fire", "Empty");
+	private static final List<String> WaTorCells = Arrays.asList("Fish", "Shark", "Empty");
+	private static final List<String> SegCells = Arrays.asList("Red", "Blue", "Empty");
+	private static final List<String> RPSCells = Arrays.asList("Rock", "Paper", "Scissors", "Empty");
+	
+	private ArrayList<String> simCells = new ArrayList<String>();
 
 	public XMLParser() {
 		fileChooser = new FileChooser();
@@ -40,19 +55,31 @@ public class XMLParser {
 	
 	
 	public CellManager getSimulation() {
-		if (doc.getDocumentElement().getAttribute("simulation").equals("GameOfLife")) return createGameOfLifeSim();
-		else if (doc.getDocumentElement().getAttribute("simulation").equals("Fire")) return createFireSim();
-//		else if (doc.getDocumentElement().getAttribute("simulation").equals("PredatorPrey")) return createPredatorPreySim();
-		else if (doc.getDocumentElement().getAttribute("simulation").equals("Segregation")) return createSegregationSim();
+		if (doc.getDocumentElement().getAttribute("simulation").equals("GameOfLife")) { 
+			isGameOfLife = true; 
+			return createGameOfLifeSim();
+		}
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("Fire")) {
+			isFire = true;
+			return createFireSim();
+		}
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("PredatorPrey")) {
+			isWaTor = true;
+			return createPredatorPreySim();
+		}
+		else if (doc.getDocumentElement().getAttribute("simulation").equals("Segregation")) {
+			isSegregation = true;
+			return createSegregationSim();
+		}
 		
 		return null;
 	}
 
 	private CellManager createSegregationSim() {
-		NodeList nList = doc.getElementsByTagName("title");
-		String simName = nList.item(0).getTextContent();
-		
-		nList = doc.getElementsByTagName("minSimilar");
+//		NodeList nList = doc.getElementsByTagName("title");
+//		String simName = nList.item(0).getTextContent();
+//		
+		NodeList nList = doc.getElementsByTagName("minSimilar");
 		double threshold = extractNodeValue(nList);
 		
 		nList = doc.getElementsByTagName("redRatio");
@@ -68,52 +95,91 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initalCellStatuses");
-		//ArrayList<String> initCells = extractCellStatuses(nList, simName);
+		extractCellStatuses(nList);
+		
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
 
-		return new Segregation(threshold, redRatio, emptyRatio, size, shape, false);
+		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal);
+	}
+	
+	private boolean stringToBoolean(NodeList nList) {
+		String boolVal = nList.item(0).getTextContent();
+		if (boolVal.equals("true")) {
+			return true;
+		}
+		return false;
 	}
 	
 	
-	private int[] extractCellStatuses(NodeList nList, String sim) {
+	private void extractCellStatuses(NodeList nList) {
 		String nums = (nList.item(0).getTextContent());
 		String[] items = nums.replaceAll("\\s", "").split(",");
-		int[] cellStats = new int[items.length];
+		int[] intCellStats = new int[items.length];
 		for (int i = 0; i < items.length; i++) {
 			try {
-				cellStats[i] = Integer.parseInt(items[i]);
+				intCellStats[i] = Integer.parseInt(items[i]);
 		    } catch (NumberFormatException nfe) {
 		        //NOTE: write something here if you need to recover from formatting errors
 		    };
 		}
-		return null;
+		getSimCells();
+		//System.out.println(simCells);
+		ArrayList<String> cellStats = new ArrayList<String>();
+		for (int k : intCellStats) {
+			cellStats.add(simCells.get(intCellStats[k]));
+			//System.out.println(simCells.get(intCellStats[k]));
+		}
+		System.out.println(cellStats);
+		Driver.setInitialCellStatuses(cellStats);
+	}
+	
+	private void getSimCells() {
+		simCells.clear();
+		if (isGameOfLife) {
+			simCells.addAll(GOLCells);
+		} else if (isFire) {
+			simCells.addAll(FireCells);
+		} else if (isWaTor) {
+			simCells.addAll(WaTorCells);
+		} else if (isSegregation) {
+			simCells.addAll(SegCells);
+		} else if (isRockPaperScissors) {
+			simCells.addAll(RPSCells);
+		}
 	}
 
-//	private CellManager createPredatorPreySim()
-//	{
-//		NodeList nList = doc.getElementsByTagName("fishPercent");
-//		double fishPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkPercent");
-//		double sharkPercent = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("fishBreed");
-//		double fishBreed = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("sharkBreed");
-//		double sharkBreed = extractNodeValue(nList);
-//		
-//		nList = doc.getElementsByTagName("sharkStarve");
-//		double sharkStarve = extractNodeValue(nList);
-//
-//		nList = doc.getElementsByTagName("size");
-//		double size = extractNodeValue(nList);
-//		
-//		nList = doc.getElementsByTagName("shape");
-//		String shape = nList.item(0).getTextContent();
-//
-//		
-//		return new WaTor(sharkPercent, fishPercent, size, sharkInitial, sharkBreed, fishBreed, fishEnergy, shape, false);
-//	}
+	private CellManager createPredatorPreySim()
+	{
+		NodeList nList = doc.getElementsByTagName("fishPercent");
+		double fishPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("sharkPercent");
+		double sharkPercent = extractNodeValue(nList);
+
+		nList = doc.getElementsByTagName("fishBreed");
+		int fishBreed = Integer.parseInt(nList.item(0).getTextContent());
+
+		nList = doc.getElementsByTagName("sharkBreed");
+		int sharkBreed = Integer.parseInt(nList.item(0).getTextContent());
+		
+		nList = doc.getElementsByTagName("fishEnergy");
+		int fishEnergy = Integer.parseInt(nList.item(0).getTextContent());
+		
+		nList = doc.getElementsByTagName("initialEnergy");
+		int initialEnergy = Integer.parseInt(nList.item(0).getTextContent());
+		
+		nList = doc.getElementsByTagName("size");
+		double size = extractNodeValue(nList);
+		
+		nList = doc.getElementsByTagName("shape");
+		String shape = nList.item(0).getTextContent();
+
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
+	}
 
 	private CellManager createFireSim() {
 		NodeList nList = doc.getElementsByTagName("probCatch");
@@ -125,7 +191,10 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
-		return new Fire(probCatch, size, shape, false);
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new Fire(probCatch, size, shape, isToroidal);
 	}
 
 	private CellManager createGameOfLifeSim() {	
@@ -138,8 +207,16 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
-		return new GameOfLife(aliveRatio, size, shape, false);
+		nList = doc.getElementsByTagName("toroidalEdges");
+		boolean isToroidal = stringToBoolean(nList);
+		
+		return new GameOfLife(aliveRatio, size, shape, isToroidal);
 
+	}
+	
+	private int extractIntValue(NodeList nList) {
+		String element = nList.item(0).getTextContent();
+		return Integer.parseInt(element);
 	}
 	
 	private Double extractNodeValue(NodeList nList) {
@@ -150,39 +227,11 @@ public class XMLParser {
 	private Double stringToDouble(String element) {
 		return Double.parseDouble(element);
 	}
-//	
-//	private int[][] createGrid()
-//	{
-//		Scanner scanner;
-//		NodeList nList = doc.getElementsByTagName("row");
-//
-//		int[][] testGrid = new int[getNumRows()][getNumCols()];
-//		for (int i = 0; i < getNumRows(); i++)
-//		{
-//			scanner = new Scanner(nList.item(i).getTextContent());
-//			for (int j = 0; j < getNumCols(); j++)
-//			{
-//				testGrid[i][j] = scanner.nextInt();
-//			}
-//		}
-//		return testGrid;
-//	}
-//	
-//	private int getNumRows()
-//	{
-//		NodeList nList = doc.getElementsByTagName("GridHeight");
-//		return Integer.parseInt(nList.item(0).getTextContent());
-//	}
-//	private int getNumCols()
-//	{
-//		NodeList nList = doc.getElementsByTagName("GridWidth");
-//		return Integer.parseInt(nList.item(0).getTextContent());
-//	}
 
-	public void chooseFile(Stage s) {
-		File selectedFile = fileChooser.showOpenDialog(s);
-		createDocForFile(selectedFile);
-	}
+//	public void chooseFile(Stage s) {
+//		File selectedFile = fileChooser.showOpenDialog(s);
+//		createDocForFile(selectedFile);
+//	}
 	
 	public void buttonChooseFile(File file) {
 		File buttonFile = file;
