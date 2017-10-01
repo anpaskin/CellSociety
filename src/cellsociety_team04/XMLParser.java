@@ -9,6 +9,7 @@ import cellsociety_Simulations.GameOfLife;
 import cellsociety_Simulations.RPS;
 import cellsociety_Simulations.Segregation;
 import cellsociety_Simulations.WaTor;
+import cellsociety_UIUX.SimulationWindow;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -100,12 +101,13 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
-		nList = doc.getElementsByTagName("initalCellStatuses");
+		nList = doc.getElementsByTagName("initialCellStatuses");
 		extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 
+		SimulationWindow.setCellShape(shape);
 		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal);
 	}
 
@@ -134,10 +136,14 @@ public class XMLParser {
 		
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
+		
+		nList = doc.getElementsByTagName("initialCellStatuses");
+		extractCellStatuses(nList);
 
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
+		SimulationWindow.setCellShape(shape);
 		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
 	}
 
@@ -151,9 +157,13 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
+		nList = doc.getElementsByTagName("initialCellStatuses");
+		extractCellStatuses(nList);
+		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
+		SimulationWindow.setCellShape(shape);
 		return new Fire(probCatch, size, shape, isToroidal);
 	}
 
@@ -167,9 +177,13 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
+		nList = doc.getElementsByTagName("initialCellStatuses");
+		extractCellStatuses(nList);
+		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
+		SimulationWindow.setCellShape(shape);
 		return new GameOfLife(aliveRatio, size, shape, isToroidal);
 
 	}
@@ -190,12 +204,13 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("shape");
 		String shape = nList.item(0).getTextContent();
 		
-		nList = doc.getElementsByTagName("initalCellStatuses");
+		nList = doc.getElementsByTagName("initialCellStatuses");
 		extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 
+		SimulationWindow.setCellShape(shape);
 		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal);
 	}
 	

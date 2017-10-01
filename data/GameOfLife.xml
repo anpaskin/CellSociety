@@ -5,7 +5,7 @@
 	<aliveRatio>0.35</aliveRatio>
     <size>100.0</size>
     <shape>triangle</shape>
-    <initalCellStatuses>[
+    <initialCellStatuses>[
     0, 1, 0, 0, 0, 1, 0, 1, 0, 0,
     0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -16,6 +16,6 @@
     0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
     0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-    ]</initalCellStatuses>
+    ]</initialCellStatuses>
     <toroidalEdges>true</toroidalEdges>
 </data>

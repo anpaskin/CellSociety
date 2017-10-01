@@ -7,10 +7,10 @@
 	<fishBreed>5</fishBreed>
 	<sharkBreed>7</sharkBreed>
 	<fishEnergy>4</fishEnergy>
-	<initalEnergy>2</initalEnergy>
+	<initialEnergy>2</initialEnergy>
     <size>100.0</size>
     <shape>triangle</shape>
-    <initalCellStatuses>[
+    <initialCellStatuses>[
     0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
     2, 0, 0, 0, 1, 0, 2, 0, 0, 0,
     0, 1, 0, 0, 0, 2, 0, 0, 2, 1,
@@ -21,6 +21,6 @@
     1, 0, 0, 2, 0, 0, 0, 1, 0, 2,
     0, 0, 1, 0, 0, 2, 0, 0, 2, 0,
     0, 0, 0, 1, 0, 0, 1, 0, 0, 1
-    ]</initalCellStatuses>
+    ]</initialCellStatuses>
     <toroidalEdges>false</toroidalEdges>
 </data>

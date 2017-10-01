@@ -6,8 +6,8 @@
     <redRatio>0.50</redRatio>
     <emptyRatio>0.10</emptyRatio>
     <size>100.0</size>
-    <shape>triangle</shape>
-    <initalCellStatuses>
+    <shape>square</shape>
+    <initialCellStatuses>
     0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
     2, 0, 0, 0, 1, 0, 2, 0, 0, 0,
     0, 1, 0, 0, 0, 2, 0, 0, 2, 1,
@@ -18,7 +18,7 @@
     1, 0, 0, 2, 0, 0, 0, 1, 0, 2,
     0, 0, 1, 0, 0, 2, 0, 0, 2, 0,
     0, 0, 0, 1, 0, 0, 1, 0, 0, 1
-    </initalCellStatuses>
+    </initialCellStatuses>
     <toroidalEdges>true</toroidalEdges>
 </data>
 
