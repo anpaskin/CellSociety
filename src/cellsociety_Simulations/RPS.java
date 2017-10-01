@@ -21,6 +21,10 @@ public class RPS extends CellManager {
 		scissorsRatio = scissorsPercent;
 	}
 	
+	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape) {
+		this(rockPercent, paperPercent, scissorsPercent, n, shape, true);
+	}
+	
 	@Override
 	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();

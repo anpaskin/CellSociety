@@ -13,7 +13,7 @@ import cellsociety_Cells.WaTorCell;
  * @author Aaron Paskin
  *
  */
-public class WaTor extends CellManager {
+public class WaTor extends CardinalSim {
 	
 	private int energyStart;						//energy with which every Cell with status "Shark" starts
 	private int sharkBreedCount;					//lifeCount at which Cell with status "Shark" can reproduce
@@ -36,8 +36,8 @@ public class WaTor extends CellManager {
 		nextEnergies = new ArrayList<Integer>();
 	}
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, String shape, boolean toroidal) {
-		super(n, shape, toroidal);
+	public WaTor(double sharksPercent, double fishPercent, double n, String shape) {
+		super(n, shape, true);
 		sharkRatio = sharksPercent;
 		energyStart = 3;
 		fishEnergyContent = 1;
@@ -144,18 +144,6 @@ public class WaTor extends CellManager {
 			((WaTorCell)currentCells.get(n)).setLifeCount(nextLifeCounts.get(n));
 			((WaTorCell)currentCells.get(n)).resetEaten();
 		}
-	}
-	
-	@Override
-	protected ArrayList<Integer> getNeighborLocationNums(Cell c) {
-		ArrayList<Integer> locNums = new ArrayList<Integer>();
-		int cNum = currentCells.indexOf(c);
-		locNums.add(cNum - (int)Math.sqrt(currentCells.size()));
-		locNums.add(cNum + (int)Math.sqrt(currentCells.size()));
-		locNums.add(cNum - 1);
-		locNums.add(cNum + 1);
-		Collections.sort(locNums);
-		return locNums;
 	}
 	
 	/**
