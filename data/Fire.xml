@@ -17,5 +17,5 @@
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ]</initalCellStatuses>
-    <neighbors>finite</neighbors>
+    <toroidalEdges>false</toroidalEdges>>
 </data>

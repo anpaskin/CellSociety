@@ -17,10 +17,9 @@ public class WaTorCell extends Cell {
 		lifeCount = 0;
 	}
 	
-	public WaTorCell(String s, int sEnergy, int lCount) {
+	public WaTorCell(String s, int sEnergy) {
 		super(s);
 		energy = sEnergy;
-		lifeCount = lCount;
 	}
 	
 	public void setStatus(String s) {

@@ -19,6 +19,7 @@ public class GridDisplay {
 	private static final double half = 0.5;
 	private static final double third = 0.33;
 	private static final double twothirds = 0.66;
+	private static final double sqrtthree = Math.pow(3, 0.5);
 	private static final double one = 1.0;
 	private static final double zero = 0.0;
 	private static final int gridXStart = 250;
@@ -39,7 +40,6 @@ public class GridDisplay {
 	private int everyOther;
 	private String cellShape;
 	private ArrayList<Color> cellColors = new ArrayList<Color>();
-	private double width;
 	private double offset;
 	
 	public GridDisplay(int nCells, int size, String shape) {
@@ -47,7 +47,6 @@ public class GridDisplay {
 		cellSize = size;
 		cellShape = shape;
 
-		width = SimulationWindow.getWidth();
 		offset = SimulationWindow.getOffset();
 	}
 	
@@ -73,12 +72,12 @@ public class GridDisplay {
 	
 	private void setHVGaps(GridPane grid) {
 		if (isTri) {
-			grid.setHgap(-0.5*cellSize);
+			grid.setHgap(-half*cellSize);
 		} else if (isHex) {
-			grid.setVgap(-0.5*cellSize);
-			grid.setHgap(-0.5/(Math.pow(3, 0.5))*cellSize);
+			grid.setHgap(-half*cellSize/sqrtthree);
+			grid.setVgap(-half*cellSize);
 		} else {
-			// do nothing
+			// do nothing (sqaure)
 		}
 	}
 	
@@ -123,7 +122,7 @@ public class GridDisplay {
 	private void triangleCell(Polygon polygon) {
 		if (everyOther % 2 == 0) {
 			polygon.getPoints().addAll(new Double[]{
-					half*cellSize, zero,
+					half*cellSize, (one-half*sqrtthree)*cellSize,
 					zero, one*cellSize,
 					one*cellSize, one*cellSize
 			});
@@ -131,7 +130,7 @@ public class GridDisplay {
 		else {
 			polygon.getPoints().addAll(new Double[]{
 					zero, zero,
-					half*cellSize, one*cellSize,
+					half*cellSize, half*sqrtthree*cellSize,
 					one*cellSize, zero
 			});
 		}
@@ -140,11 +139,11 @@ public class GridDisplay {
 	private void hexagonCell(Polygon polygon) {
 		polygon.getPoints().addAll(new Double[] {
 				zero, half*cellSize,
-				third*cellSize, zero,
-				twothirds*cellSize, zero,
+				half/sqrtthree*cellSize, zero,
+				(1-half/sqrtthree)*cellSize, zero,
 				one*cellSize, half*cellSize,
-				twothirds*cellSize, one*cellSize,
-				third*cellSize, one*cellSize
+				(1-half/sqrtthree)*cellSize, one*cellSize,
+				half/sqrtthree*cellSize, one*cellSize
 		});
 	}
 	

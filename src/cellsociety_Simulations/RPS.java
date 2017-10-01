@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
+import cellsociety_Cells.FireCell;
 import cellsociety_Cells.RPSCell;
 
 public class RPS extends CellManager {
@@ -13,19 +14,21 @@ public class RPS extends CellManager {
 	private double paperRatio;
 	private double scissorsRatio;
 	
-	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape) {
-		super(n, shape);
+	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		rockRatio = rockPercent;
 		paperRatio = paperPercent;
 		scissorsRatio = scissorsPercent;
 	}
 	
+	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape) {
+		this(rockPercent, paperPercent, scissorsPercent, n, shape, true);
+	}
+	
 	@Override
 	protected List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
-		int pSize;
-		if(cellShape.equals(TRI)) pSize = (int)(Math.pow((Math.sqrt(size) - 4), 2));
-		else pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * rockRatio) {
 				paramCells.add(new RPSCell(RPSCell.ROCK));
@@ -41,6 +44,15 @@ public class RPS extends CellManager {
 			}
 		}
 		return paramCells;
+	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new RPSCell(s));
+		}
+		return ret;
 	}
 	
 	protected void setNextCellStatuses() {

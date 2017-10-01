@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellsociety_Cells.Cell;
+import cellsociety_Cells.FireCell;
 import cellsociety_Cells.SegCell;
 
 /**
@@ -18,18 +19,22 @@ public class Segregation extends CellManager{
 	private double blueRatio;
 	private double emptyRatio;
 	
-	public Segregation(double t, double r, double empty, double n, String shape) {
-		super(n, shape);
+	public Segregation(double t, double r, double empty, double n, String shape, boolean toroidal) {
+		super(n, shape, toroidal);
 		minSimilar = t;
 		redRatio = r;
 		blueRatio = 1 - r;
 		emptyRatio = empty;
 	}
+	
+	public Segregation(double t, double r, double empty, double n, String shape) {
+		this(t, r, empty, n, shape, true);
+	}
 
 	@Override
-	protected List<Cell> setParamCells() {
+	public List<Cell> setParamCells() {
 		List<Cell> paramCells = new ArrayList<Cell>();
-		int pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
+		int pSize = getPSize();
 		for(int k = 0; k < pSize; k++) {
 			if(k < pSize * emptyRatio) {
 				paramCells.add(new SegCell(Cell.EMPTY));
@@ -42,6 +47,15 @@ public class Segregation extends CellManager{
 			}
 		}
 		return paramCells;
+	}
+	
+	@Override
+	protected List<Cell> setParamCells(List<String> statuses) {
+		List<Cell> ret = new ArrayList<Cell>();
+		for(String s : statuses) {
+			ret.add(new SegCell(s));
+		}
+		return ret;
 	}
 	
 	protected void setNextCellStatuses() {

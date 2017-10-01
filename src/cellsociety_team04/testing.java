@@ -19,15 +19,15 @@ import cellsociety_Simulations.WaTor;
 public class testing {
 
 	public static void main(String[] args) {
-		segTesting(.5, .25, .5, 25);
-		//fireTesting(.75, 66, 100);
-		//lifeTesting(.5, 100);
-		//waTorTesting(0.2, 0.35, 100);
-		//rpsTesting(.25, .25, .25, 100);
+		//segTesting(.5, .25, .5, 25, "triangle", false);
+		fireTesting(.75, 66, 100, "square", true);
+		//lifeTesting(.5, 100, "triangle", false);
+		//waTorTesting(0.2, 0.7, 100, "triangle", false);
+		//rpsTesting(.25, .25, .25, 100, "triangle", false);
 	}
 	
-	private static void rpsTesting(double rocks, double papers, double scissors, double size) {
-		CellManager rpsSim = new RPS(rocks, papers, scissors, size, "triangle");
+	private static void rpsTesting(double rocks, double papers, double scissors, double size, String shape, boolean toroidal) {
+		CellManager rpsSim = new RPS(rocks, papers, scissors, size, shape, toroidal);
 		rpsSim.initializeCurrentCells();
 		List<Cell> s = rpsSim.getCurrentCells();
 		double rc = Math.sqrt(s.size());
@@ -59,8 +59,8 @@ public class testing {
 		
 	}
 	
-	private static void waTorTesting(double sharkPercent, double fishPercent, double size) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 5, 5, 5, 2, "triangle");
+	private static void waTorTesting(double sharkPercent, double fishPercent, double size, String shape, boolean toroidal) {
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 1, 5, 5, 1, shape, toroidal);
 		waSim.initializeCurrentCells();
 		List<Cell> s = waSim.getCurrentCells();
 		System.out.println(s);
@@ -99,8 +99,8 @@ public class testing {
 		}
 	}
 	
-	private static void lifeTesting(double alive, double size) {
-		GameOfLife lifeSim = new GameOfLife(alive, size, "triangle");
+	private static void lifeTesting(double alive, double size, String shape, boolean toroidal) {
+		CellManager lifeSim = new GameOfLife(alive, size, shape, toroidal);
 		List<Cell> s = lifeSim.getCurrentCells();
 		lifeSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
@@ -131,8 +131,8 @@ public class testing {
 	}
 	
 	
-	private static void fireTesting(double probCatch, int fireStartLoc, double size) {
-		Fire fireSim = new Fire(probCatch, size, "triangle");
+	private static void fireTesting(double probCatch, int fireStartLoc, double size, String shape, boolean toroidal) {
+		Fire fireSim = new Fire(probCatch, size, shape, toroidal);
 		List<Cell> s = fireSim.getCurrentCells();
 		fireSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
@@ -164,11 +164,13 @@ public class testing {
 		
 	}
 	
-	private static void segTesting(double minSim, double emptyCount, double redCount, double size) {
-		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size, "triangle");
+	private static void segTesting(double minSim, double emptyCount, double redCount, double size, String shape, boolean toroidal) {
+		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size, shape, toroidal);
+		List<Cell> p = segSim.setParamCells();
+		System.out.println(p);
 		segSim.initializeCurrentCells();
 		List<Cell> s = segSim.getCurrentCells();
-		//ArrayList<Cell> p = segSim.setParamCells();
+		System.out.println(s);
 		System.out.println("Current Cells Size: " + s.size());
 		int red = 0;
 		int blue = 0;
