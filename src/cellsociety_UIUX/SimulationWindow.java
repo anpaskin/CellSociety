@@ -38,7 +38,7 @@ public abstract class SimulationWindow extends Window {
 	private static final String PAUSE_PNG = "pause.png";
 	protected static final String RESTART_PNG = "restart.png";
 	private static final String STEP_PNG = "step.png";
-	private String shape = "triangle";
+	private static String shape;
 	
 	private static final double twothirds = 0.66;
 	protected static double WIDTH;
@@ -106,7 +106,7 @@ public abstract class SimulationWindow extends Window {
 		numCells = (int) Math.sqrt(c.getSize());
 	}
 	
-	public void setCellShape(String cellShape) {
+	public static void setCellShape(String cellShape) {
 		shape = cellShape;
 	}
 	

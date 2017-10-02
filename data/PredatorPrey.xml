@@ -6,7 +6,21 @@
     <sharkPercent>0.30</sharkPercent>
 	<fishBreed>5</fishBreed>
 	<sharkBreed>7</sharkBreed>
-	<sharkStarve>4</sharkStarve>
-    <size>900.0</size>
+	<fishEnergy>4</fishEnergy>
+	<initialEnergy>2</initialEnergy>
+    <size>100.0</size>
     <shape>triangle</shape>
+    <initialCellStatuses>[
+    0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
+    2, 0, 0, 0, 1, 0, 2, 0, 0, 0,
+    0, 1, 0, 0, 0, 2, 0, 0, 2, 1,
+    2, 0, 0, 1, 0, 0, 2, 0, 0, 0,
+    0, 0, 1, 0, 2, 0, 0, 0, 2, 0,
+    2, 0, 0, 1, 0, 0, 2, 0, 0, 1,
+    0, 2, 1, 0, 0, 2, 0, 0, 0, 0,
+    1, 0, 0, 2, 0, 0, 0, 1, 0, 2,
+    0, 0, 1, 0, 0, 2, 0, 0, 2, 0,
+    0, 0, 0, 1, 0, 0, 1, 0, 0, 1
+    ]</initialCellStatuses>
+    <toroidalEdges>false</toroidalEdges>
 </data>

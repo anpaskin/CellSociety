@@ -5,6 +5,20 @@
     <minSimilar>0.30</minSimilar>
     <redRatio>0.50</redRatio>
     <emptyRatio>0.10</emptyRatio>
-    <size>900.0</size>
+    <size>100.0</size>
     <shape>square</shape>
-    </data>
+    <initialCellStatuses>
+    0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
+    2, 0, 0, 0, 1, 0, 2, 0, 0, 0,
+    0, 1, 0, 0, 0, 2, 0, 0, 2, 1,
+    2, 0, 0, 1, 0, 0, 2, 0, 0, 0,
+    0, 0, 1, 0, 2, 0, 0, 0, 2, 0,
+    2, 0, 0, 1, 0, 0, 2, 0, 0, 1,
+    0, 2, 1, 0, 0, 2, 0, 0, 0, 0,
+    1, 0, 0, 2, 0, 0, 0, 1, 0, 2,
+    0, 0, 1, 0, 0, 2, 0, 0, 2, 0,
+    0, 0, 0, 1, 0, 0, 1, 0, 0, 1
+    </initialCellStatuses>
+    <toroidalEdges>true</toroidalEdges>
+</data>
+
