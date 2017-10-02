@@ -32,7 +32,7 @@ public class Driver {
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
 	public CellManager simCellManager;
-	private static ArrayList<String> initialCellStatuses = new ArrayList<String>();
+	private ArrayList<String> initialCellStatuses = new ArrayList<String>();
 
 	public Driver(Stage stage) {
 		setup(stage);
@@ -46,7 +46,7 @@ public class Driver {
 		simStages = new ArrayList<>();
 	}
 	
-	public static void setInitialCellStatuses(ArrayList<String> cellStats) {
+	public void setInitialCellStatuses(ArrayList<String> cellStats) {
 		initialCellStatuses = cellStats;
 	}
 	

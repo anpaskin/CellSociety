@@ -31,6 +31,7 @@ import javafx.stage.Stage;
  */
 
 public class XMLParser {
+	private Driver driver;
 	private FileChooser fileChooser;
 	private static Document doc;
 	
@@ -242,7 +243,7 @@ public class XMLParser {
 			//System.out.println(simCells.get(intCellStats[k]));
 		}
 		System.out.println(cellStats);
-		Driver.setInitialCellStatuses(cellStats);
+		driver.setInitialCellStatuses(cellStats);
 	}
 	
 	private void getSimCells() {
