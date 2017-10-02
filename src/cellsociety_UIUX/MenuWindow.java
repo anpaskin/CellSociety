@@ -81,7 +81,10 @@ public class MenuWindow extends Window {
 		}
 	}
 
-	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+	/**
+	 * needs to figure this out
+	 */
+	private void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
@@ -95,7 +98,7 @@ public class MenuWindow extends Window {
 		}
 	}
 
-	public void resetMenu() {
+	private void resetMenu() {
 		simChoice = null;
 	}
 
@@ -157,10 +160,6 @@ public class MenuWindow extends Window {
 		title.setLayoutX(WIDTH/2-title.getBoundsInLocal().getWidth()/2);
 		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
 		myRoot.getChildren().add(title);
-	}
-	
-	public CellManager getSimChoice() {
-		return simChoice;
 	}
 	
 /*	public boolean getNewSim() {

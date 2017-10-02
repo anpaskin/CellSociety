@@ -27,6 +27,11 @@ public abstract class Window {
 		
 	}
 	
+	/**
+	 * needed to be called later
+	 * @param simType
+	 * @param simSpeed
+	 */
 	public void gameLoop(CellManager simType, double simSpeed) {
 		// attach "game loop" to timeline to play it
 		KeyFrame frame = new KeyFrame(Duration.millis(simSpeed),

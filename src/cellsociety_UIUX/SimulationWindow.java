@@ -84,7 +84,7 @@ public abstract class SimulationWindow extends Window {
 	
 	//FOR SETUP ****************************************
 	@Override
-	public void setupScene() {
+	protected void setupScene() {
 		setupSceneDimensions();
 		addButtons();
 		addSpeedSlider();
@@ -92,12 +92,14 @@ public abstract class SimulationWindow extends Window {
 	//	throwErrors();
 	}
 
-	public void setupSceneDimensions() {
+	protected void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX()*twothirds;
 		HEIGHT = dimensions.getMaxY()*twothirds;
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
+	
+	
 	
 	public static double getWidth() {
 		return WIDTH;
@@ -215,6 +217,9 @@ public abstract class SimulationWindow extends Window {
 	
 	
 	// FOR INTERACTIONS ****************************************
+	/**
+	 * for all interactions, needed to be called after all buttons are setup
+	 */
 	public void buttonClick() {
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
@@ -272,7 +277,7 @@ public abstract class SimulationWindow extends Window {
 	 * @param simType 
 	 */
 	@Override
-	public void step() {
+	protected void step() {
 		buttonClick();
 		sliderDrag();
 		if (running) {
@@ -288,11 +293,15 @@ public abstract class SimulationWindow extends Window {
 	//	throwErrors();
 	}
 
-	protected void resetGameLoop(double newSpeed) {
+	private void resetGameLoop(double newSpeed) {
 		animation.stop();
 		gameLoop(simType, newSpeed);
 	}
  	
+	/**
+	 * used to display in GridDisplay
+	 * @param currentCellStatuses
+	 */
 	public void displayGrid(List<Cell> currentCellStatuses) {
 		gridDisplay.updateGridDisplay(currentCellStatuses, grid);
 		if (!myRoot.getChildren().contains(grid)) {
@@ -300,6 +309,9 @@ public abstract class SimulationWindow extends Window {
 		}
 	}
 	
+	/**
+	 * called if the stage is closed which isnt determined here
+	 */
 	public void stopRunning() {
 		running = false;
 	}
