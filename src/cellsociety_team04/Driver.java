@@ -70,7 +70,10 @@ public class Driver {
 			simWindows.add(new WatorWindow(simStages.get(simNum), simCellManager));
 			System.out.println("wator");
 		}
-		else {
+		else if (simCellManager instanceof RPS) {
+			simWindows.add(new RPSWindow(simStages.get(simNum), simCellManager));
+			System.out.println("rockPaperScissors");
+		} else {
 			//TODO throw exception
 			return;
 		}
