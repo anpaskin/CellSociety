@@ -36,7 +36,6 @@ public class GameOfLifeWindow extends SimulationWindow {
 		System.out.println("current aliveratio = " + mySlider.getValue());
 		System.out.println("need to restart");
 		simType = new GameOfLife(mySlider.getValue(), simType.getSize(), simType.getShape());
-		simType.initializeCurrentCells();
 		displayGrid(simType.getCurrentCells());
 	}
 	

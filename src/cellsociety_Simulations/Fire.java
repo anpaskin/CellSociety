@@ -13,13 +13,14 @@ public class Fire extends CardinalSim {
 
 	private double pCatch;	//the probability that a neighbor of a Cell with status "Fire" takes on status "Fire"
 	
-	public Fire(double probCatch, double n, String shape, boolean toroidal) {
+	public Fire(double probCatch, double n, String shape, boolean toroidal, List<String> initialStatuses) {
 		super(n, shape, toroidal);
 		pCatch = probCatch;
+		initializeCurrentCells(initialStatuses);
 	}
 	
 	public Fire(double probCatch, double n, String shape) {
-		this(probCatch, n, shape, true);
+		this(probCatch, n, shape, true, new ArrayList<String>());
 	}
 	
 	/**
@@ -27,7 +28,7 @@ public class Fire extends CardinalSim {
 	 * Sets center Cell status to "Fire" by calling startFire.
 	 */
 	@Override
-	public void initializeCurrentCells() {
+	protected void initializeCurrentCells() {
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
 				if(isEdge(n)) {
@@ -49,7 +50,7 @@ public class Fire extends CardinalSim {
 	}
 	
 	@Override
-	public void initializeCurrentCells(List<String> statuses) {
+	protected void initializeCurrentCells(List<String> statuses) {
 		if(statuses.size() == 0) {
 			initializeCurrentCells();
 			return;

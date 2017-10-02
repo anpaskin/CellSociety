@@ -16,13 +16,14 @@ public class GameOfLife extends CellManager{
 
 	private double aliveRatio;
 	
-	public GameOfLife(double a, double n, String shape, boolean toroidal) {
+	public GameOfLife(double a, double n, String shape, boolean toroidal, List<String> initialStatuses) {
 		super(n, shape, toroidal);
 		aliveRatio = a;
+		initializeCurrentCells(initialStatuses);
 	}
 	
 	public GameOfLife(double a, double n, String shape) {
-		this(a, n, shape, true);
+		this(a, n, shape, true, new ArrayList<String>());
 	}
 
 	@Override

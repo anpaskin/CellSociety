@@ -24,7 +24,7 @@ public class WaTor extends CardinalSim {
 	private ArrayList<Integer> nextLifeCounts;
 	private ArrayList<Integer> nextEnergies;
 	
-	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape, boolean toroidal) {
+	public WaTor(double sharksPercent, double fishPercent, double n, int initialEnergy, int sharkBreed, int fishBreed, int fishEnergy, String shape, boolean toroidal, List<String> initialStatuses) {
 		super(n, shape, toroidal);
 		sharkRatio = sharksPercent;
 		energyStart = initialEnergy;
@@ -34,9 +34,9 @@ public class WaTor extends CardinalSim {
 		fishRatio = fishPercent;
 		nextLifeCounts = new ArrayList<Integer>();
 		nextEnergies = new ArrayList<Integer>();
+		initializeCurrentCells(initialStatuses);
 	}
 	
-
 	
 	/**
 	 * Randomly sets currentCells statuses from setParamCells list. Wraps Cells in a loop of "Null" Cells.
