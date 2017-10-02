@@ -19,16 +19,17 @@ public class Segregation extends CellManager{
 	private double blueRatio;
 	private double emptyRatio;
 	
-	public Segregation(double t, double r, double empty, double n, String shape, boolean toroidal) {
+	public Segregation(double t, double r, double empty, double n, String shape, boolean toroidal, List<String> initialStatuses) {
 		super(n, shape, toroidal);
 		minSimilar = t;
 		redRatio = r;
 		blueRatio = 1 - r;
 		emptyRatio = empty;
+		initializeCurrentCells(initialStatuses);
 	}
 	
 	public Segregation(double t, double r, double empty, double n, String shape) {
-		this(t, r, empty, n, shape, true);
+		this(t, r, empty, n, shape, true, new ArrayList<String>());
 	}
 
 	@Override
