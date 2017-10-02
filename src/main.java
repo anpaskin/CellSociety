@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 /**
  * 
- * Driver for running the code
+ * MAIN METHOD and sets up first menu window stage, then goes everywhere else to run
  * 
  * @author kelly
  *

@@ -19,6 +19,10 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for the Menu with the different buttons for each simulation, subclass of Window
+ * All user interactions are determined and executed in here and Driver
+ * All text is from source files (images!)
+ * 
  * @author Kelly Zhang
  * @author Dara Buggay
  *
@@ -40,7 +44,7 @@ public class MenuWindow extends Window {
 	private static final double HEIGHT = 500;
 
 	private static final int BUTTONOFFSET = 50;
-	private static final int BUTTONS_PER_LINE = 4;
+	private static final int BUTTONS_PER_LINE = 5;
 	private List<Button> buttons;
 
 	private CellManager simChoice;
@@ -78,7 +82,10 @@ public class MenuWindow extends Window {
 		}
 	}
 
-	public void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+	/**
+	 * needs to figure this out
+	 */
+	private void chooseSim() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
 		for (int i = 0; i < buttons.size(); i ++) {
 			Button button = buttons.get(i);
 			button.setOnAction(new EventHandler<ActionEvent>() {
@@ -92,7 +99,7 @@ public class MenuWindow extends Window {
 		}
 	}
 
-	public void resetMenu() {
+	private void resetMenu() {
 		simChoice = null;
 	}
 
@@ -139,6 +146,9 @@ public class MenuWindow extends Window {
 	private Button createMenuButton(String imageName, String buttonText) {
 		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
 		Button simButton = new Button();
+		simButton.setScaleX(0.75);
+		simButton.setScaleY(0.75);
+		
 		simButton.setGraphic(new ImageView(buttonImage));
 		simButton.setAccessibleText(buttonText);
 
@@ -151,10 +161,6 @@ public class MenuWindow extends Window {
 		title.setLayoutX(WIDTH/2-title.getBoundsInLocal().getWidth()/2);
 		title.setLayoutY(HEIGHT*1/3-title.getBoundsInLocal().getHeight()/2);
 		myRoot.getChildren().add(title);
-	}
-	
-	public CellManager getSimChoice() {
-		return simChoice;
 	}
 	
 /*	public boolean getNewSim() {
