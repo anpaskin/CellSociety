@@ -19,6 +19,10 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for the Menu with the different buttons for each simulation, subclass of Window
+ * All user interactions are determined and executed in here and Driver
+ * All text is from source files (images!)
+ * 
  * @author Kelly Zhang
  *
  */

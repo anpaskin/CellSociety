@@ -10,6 +10,8 @@ import javafx.util.Duration;
 
 /**
  * 
+ * This is the abstract Window superclass which sets up things that every window will need!
+ * 
  * @author Kelly Zhang
  *
  */

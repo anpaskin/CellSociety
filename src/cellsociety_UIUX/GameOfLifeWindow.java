@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for Game Of Life simulations, subclass of SimulationWindow
+ * Creates all the specific user input sliders (aliveRatio) and uses inputs to update how the simulation runs
+ * 		changing alive ratio needs the user to restart the simulation with a randomly generated grid with the new ratio
+ * 
  * @author Kelly Zhang
  *
  */

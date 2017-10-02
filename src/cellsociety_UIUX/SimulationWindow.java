@@ -31,7 +31,7 @@ import javafx.util.StringConverter;
  * This is the abstract class for the windows for simulations, subclass of Window
  * Creates all the general buttons and sliders (play, step, and speed) and uses inputs to update how the simulation runs (FOR SETUP)
  * Also contains all the user interaction ties (event handlers) and updates for these (FOR INTERACTIONS)
- * Finally, contains the game loop that will be made for each simulation with all the changes
+ * Finally, contains the step method that will be made for each simulation with all the changes
  * 
  * @author Kelly Zhang
  *
@@ -89,7 +89,7 @@ public abstract class SimulationWindow extends Window {
 		addButtons();
 		addSpeedSlider();
 		addText();
-		throwErrors();
+	//	throwErrors();
 	}
 
 	public void setupSceneDimensions() {
@@ -285,7 +285,7 @@ public abstract class SimulationWindow extends Window {
 			displayGrid(simType.getCurrentCells());
 			stepping = false;
 		}
-		throwErrors();
+	//	throwErrors();
 	}
 
 	protected void resetGameLoop(double newSpeed) {
@@ -304,14 +304,14 @@ public abstract class SimulationWindow extends Window {
 		running = false;
 	}
 
-	public void throwErrors() {
-		//TODO do more than just print error in console... need to handle
-		if (!errorText.getText().equals("no error")) {
-			running = false;
-			playButton.setGraphic(getImageView(PLAY_PNG));
-			System.out.println("there is an error");
-		}
-	}
+//	public void throwErrors() {
+//		//TODO do more than just print error in console... need to handle
+//		if (!errorText.getText().equals("no error")) {
+//			running = false;
+//			playButton.setGraphic(getImageView(PLAY_PNG));
+//			System.out.println("there is an error");
+//		}
+//	}
 	
 	public void setErrorText(String error) {
 		errorText.setText(error);

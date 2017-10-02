@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  * This is the specific window for WaTor simulations
  * Creates all the specific user input sliders (initialSharkEnergy, sharkBreedLifeCount, fishBreedLifeCount, fishEnergyContent) and uses inputs to update how the simulation runs
  * Can implement changing the fish and shark ratio sliders, but then you may encounter errors (sum being greater than 1) --> print error on screen with errorText in SimulationWindow
- * 
+ * 		this currently creates errors because when the randomly generated cells are created the empty cells aren't necessarily filled in creating holes...
  * @author Kelly Zhang
  *
  */

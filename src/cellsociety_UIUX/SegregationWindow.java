@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for Segregation simulations, subclass of SimulationWindow
+ * Creates all the specific user input sliders (emptyRatio and redToBlue) and uses inputs to update how the simulation runs
+ * 		changing empty ratio or red to blue makes the user need to restart the simulation with the new constraints (randomly made)
+ * 
  * @author Kelly Zhang
  *
  */

@@ -14,6 +14,7 @@ import javafx.stage.Stage;
  * 
  * This is the specific window for Fire simulations, subclass of SimulationWindow
  * Creates all the specific user input sliders (probCatch) and uses inputs to update how the simulation runs
+ * 		can be changed while the simulation is running
  * 
  * @author Kelly Zhang
  *

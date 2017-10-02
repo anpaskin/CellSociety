@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for Rock Paper Scissors simulations, subclass of SimulationWindow
+ * Creates all the specific user input sliders (rock, paper, and scissors percents) and uses inputs to update how the simulation runs
+ * 		this causes the simulation to need to be restarted and will only update according to the most recent change in sliders (so values on the individual sliders can sum to more than 1 at the same time)
+ * 			this issue could be handled with printing errors/notices on the screen (started in simulation window)
+ * 
  * @author Kelly Zhang
  *
  */
