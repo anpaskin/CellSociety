@@ -242,7 +242,7 @@ public class XMLParser {
 			//System.out.println(simCells.get(intCellStats[k]));
 		}
 		System.out.println(cellStats);
-		Driver.setInitialCellStatuses(cellStats);
+		//Driver.setInitialCellStatuses(cellStats);
 	}
 	
 	private void getSimCells() {
