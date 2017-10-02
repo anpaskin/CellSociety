@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Simulations.CellManager;
 import cellsociety_Simulations.Segregation;
+import cellsociety_Simulations.WaTor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,6 +15,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class SegregationWindow extends SimulationWindow {
 	
 	private Slider redToBlue = new Slider();
@@ -22,13 +29,13 @@ public class SegregationWindow extends SimulationWindow {
 	
 	public SegregationWindow(Stage s, CellManager sim) {
 		super(s, sim);
-		
+
 		controls.add(redToBlue);
 		redToBlue = addExtraSlider(redToBlue, 0.0, 1.0, ((Segregation) sim).getRedToBlue(), 0.25, 0.5);
-		
+
 		controls.add(emptyRatio);
 		emptyRatio = addExtraSlider(emptyRatio, 0.0, 1.0, ((Segregation) sim).getEmptyRatio(), 0.25, 0.5);
-		
+
 		extraSliders.add(redToBlue);
 		extraSliders.add(emptyRatio);
 		

@@ -9,7 +9,7 @@
 	<fishEnergy>4</fishEnergy>
 	<initialEnergy>2</initialEnergy>
     <size>100.0</size>
-    <shape>triangle</shape>
+    <shape>square</shape>
     <initialCellStatuses>[
     0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
     2, 0, 0, 0, 1, 0, 2, 0, 0, 0,

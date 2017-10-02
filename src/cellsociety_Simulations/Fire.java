@@ -50,6 +50,10 @@ public class Fire extends CardinalSim {
 	
 	@Override
 	public void initializeCurrentCells(List<String> statuses) {
+		if(statuses.size() == 0) {
+			initializeCurrentCells();
+			return;
+		}
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
