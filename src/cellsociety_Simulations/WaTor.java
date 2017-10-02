@@ -72,6 +72,10 @@ public class WaTor extends CardinalSim {
 	
 	@Override
 	public void initializeCurrentCells(List<String> statuses) {
+		if(statuses.size() == 0) {
+			initializeCurrentCells();
+			return;
+		}
 		List<Cell> paramCells = setParamCells(statuses);
 		for(int i = 0; i < size; i++) {
 			if(!isToroidal) {
