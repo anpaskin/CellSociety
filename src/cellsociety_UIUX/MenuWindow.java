@@ -16,6 +16,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class MenuWindow extends Window {
 
 	private static final String GAMEOFLIFE_TAG = "GameOfLife";

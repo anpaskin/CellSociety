@@ -8,6 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public abstract class Window {
 	protected Stage myStage;
 	protected Group myRoot;

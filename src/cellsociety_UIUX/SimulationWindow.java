@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import cellsociety_Simulations.Segregation;
 import cellsociety_team04.GridDisplay;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,10 +20,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public abstract class SimulationWindow extends Window {
 
 	private static final int MIN_SLIDER_WIDTH = 180;
@@ -46,7 +54,7 @@ public abstract class SimulationWindow extends Window {
 
 	protected List<Node> controls;
 	protected static double offset = 50;
-	protected double padding = 100;
+	protected double padding = 75;
 
 	protected Slider speed = new Slider();;
 	protected double simSpeed;
@@ -55,6 +63,7 @@ public abstract class SimulationWindow extends Window {
 	private GridDisplay gridDisplay;
 
 	protected CellManager simType;
+	private Text errorText = new Text();
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -74,8 +83,8 @@ public abstract class SimulationWindow extends Window {
 		setupSceneDimensions();
 		addButtons();
 		addSpeedSlider();
-		addTitle();
-		//throwErrors();
+		addText();
+		throwErrors();
 	}
 
 	public void setupSceneDimensions() {
@@ -124,9 +133,13 @@ public abstract class SimulationWindow extends Window {
 		control.setLayoutY(y);
 	}
 	
-	private void addTitle() {
+	private void addText() {
 		//do nothing
 //		TODO what does this even do rn???
+		errorText.setText("no error");
+		errorText.setLayoutX(WIDTH - offset - errorText.getBoundsInLocal().getWidth());
+		errorText.setLayoutY(HEIGHT - offset);
+		myRoot.getChildren().add(errorText);
 	}
 
 	private void addSpeedSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
@@ -168,9 +181,8 @@ public abstract class SimulationWindow extends Window {
             }
         });
 	}
-
+	
 	protected Slider addExtraSlider(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
-		//TODO
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
@@ -249,17 +261,16 @@ public abstract class SimulationWindow extends Window {
 		buttonClick();
 		sliderDrag();
 		if (running) {
-			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGrid(simType.getCurrentCells());
 		}
 		if (stepping) {
 			running = false;
-			//simType.setNextCellStatuses();
 			simType.updateCurrentCells();
 			displayGrid(simType.getCurrentCells());
 			stepping = false;
 		}
+		throwErrors();
 	}
 
 	protected void resetGameLoop(double newSpeed) {
@@ -278,12 +289,16 @@ public abstract class SimulationWindow extends Window {
 		running = false;
 	}
 
-	/*public void throwErrors() {
+	public void throwErrors() {
 		//TODO do more than just print error in console... need to handle
-		double gridSize = numCells*cellSize;
-		//if (gridSize > WIDTH || gridSize > HEIGHT) {
-		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
-			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
+		if (!errorText.getText().equals("no error")) {
+			running = false;
+			playButton.setGraphic(getImageView(PLAY_PNG));
+			System.out.println("there is an error");
 		}
-	}*/
+	}
+	
+	public void setErrorText(String error) {
+		errorText.setText(error);
+	}
 }
