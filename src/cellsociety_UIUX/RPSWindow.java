@@ -17,6 +17,9 @@ import javafx.stage.Stage;
  *
  */
 public class RPSWindow extends SimulationWindow {
+	private static final String SCISSORS_PERCENT = "scissorsPercent";
+	private static final String PAPER_PERCENT = "paperPercent";
+	private static final String ROCK_PERCENT = "rockPercent";
 	private Slider rockPercent = new Slider();
 	private Slider paperPercent = new Slider();
 	private Slider scissorsPercent = new Slider();
@@ -27,13 +30,16 @@ public class RPSWindow extends SimulationWindow {
 
 		controls.add(rockPercent);
 		rockPercent = addExtraSlider(rockPercent, 0.0, 1.0, ((RPS) sim).getRockPercent(), 0.25, 0.5);
+		addExtraSliderLabel(rockPercent, ROCK_PERCENT);
 		
 		controls.add(paperPercent);
 		paperPercent = addExtraSlider(paperPercent, 0.0, 1.0, ((RPS) sim).getPaperPercent(), 0.25, 0.5);
+		addExtraSliderLabel(paperPercent, PAPER_PERCENT);
 		
 		controls.add(scissorsPercent);
 		scissorsPercent = addExtraSlider(scissorsPercent, 0.0, 1.0, ((RPS) sim).getScissorsPercent(), 0.25, 0.5);
-
+		addExtraSliderLabel(scissorsPercent, SCISSORS_PERCENT);
+		
 		extraSliders.add(rockPercent);
 		extraSliders.add(paperPercent);
 		extraSliders.add(scissorsPercent);

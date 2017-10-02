@@ -28,6 +28,11 @@ import javafx.util.StringConverter;
 
 /**
  * 
+ * This is the abstract class for the windows for simulations, subclass of Window
+ * Creates all the general buttons and sliders (play, step, and speed) and uses inputs to update how the simulation runs (FOR SETUP)
+ * Also contains all the user interaction ties (event handlers) and updates for these (FOR INTERACTIONS)
+ * Finally, contains the game loop that will be made for each simulation with all the changes
+ * 
  * @author Kelly Zhang
  *
  */
@@ -196,6 +201,16 @@ public abstract class SimulationWindow extends Window {
 		mySlider.setLayoutY(offset + controls.size()*padding);
 		myRoot.getChildren().add(mySlider);
 		return mySlider;
+	}
+	
+	protected void addExtraSliderLabel(Slider mySlider, String label) {
+		Text myText = new Text();
+		myText.setText(label);
+		System.out.println("ACCESSIBLE TEXT " + mySlider.getAccessibleText());
+		myText.setLayoutX(offset);
+		myText.setLayoutY(offset + controls.size()*padding + mySlider.getBoundsInLocal().getHeight());
+		myRoot.getChildren().add(myText);
+		
 	}
 	
 	

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
  *
  */
 public class GameOfLifeWindow extends SimulationWindow {
+	private static final String ALIVE_RATIO = "aliveRatio";
 	private Slider aliveRatio = new Slider();
 	private List<Slider> extraSliders = new ArrayList<>(Arrays.asList(aliveRatio));
 	
@@ -24,6 +25,7 @@ public class GameOfLifeWindow extends SimulationWindow {
 
 		controls.add(aliveRatio);
 		aliveRatio = addExtraSlider(aliveRatio, 0.0, 1.0, ((GameOfLife) sim).getAliveRatio(), 0.25, 0.5);
+		addExtraSliderLabel(aliveRatio, ALIVE_RATIO);
 		
 		extraSliders.add(aliveRatio);
 		System.out.println("initial aliveRatio = " + ((GameOfLife) sim).getAliveRatio());

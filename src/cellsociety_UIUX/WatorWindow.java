@@ -12,11 +12,19 @@ import javafx.stage.Stage;
 
 /**
  * 
+ * This is the specific window for WaTor simulations
+ * Creates all the specific user input sliders (initialSharkEnergy, sharkBreedLifeCount, fishBreedLifeCount, fishEnergyContent) and uses inputs to update how the simulation runs
+ * Can implement changing the fish and shark ratio sliders, but then you may encounter errors (sum being greater than 1) --> print error on screen with errorText in SimulationWindow
+ * 
  * @author Kelly Zhang
  *
  */
 public class WatorWindow extends SimulationWindow {
 
+	private static final String FISH_ENERGY_CONTENT = "fishEnergyContent";
+	private static final String FISH_BREED_LIFE_COUNT = "fishBreedLifeCount";
+	private static final String SHARK_BREED_LIFE_COUNT = "sharkBreedLifeCount";
+	private static final String INITIAL_SHARK_ENERGY = "initialSharkEnergy";
 	private Slider sharkRatio = new Slider();
 	private Slider fishRatio = new Slider();
 	private Slider initialSharkEnergy = new Slider();
@@ -28,27 +36,31 @@ public class WatorWindow extends SimulationWindow {
 	public WatorWindow(Stage s, CellManager sim) {
 		super(s, sim);
 
-		controls.add(sharkRatio);
-		sharkRatio = addExtraSlider(sharkRatio, 0.0, 1.0, ((WaTor) sim).getSharkRatio(), 0.25, 0.5);
-
-		controls.add(fishRatio);
-		fishRatio = addExtraSlider(fishRatio, 0.0, 1.0, ((WaTor) sim).getFishRatio(), 0.25, 0.5);
+//		controls.add(sharkRatio);
+//		sharkRatio = addExtraSlider(sharkRatio, 0.0, 1.0, ((WaTor) sim).getSharkRatio(), 0.25, 0.5);
+//
+//		controls.add(fishRatio);
+//		fishRatio = addExtraSlider(fishRatio, 0.0, 1.0, ((WaTor) sim).getFishRatio(), 0.25, 0.5);
 
 		controls.add(initialSharkEnergy);
-		initialSharkEnergy = addExtraSlider(initialSharkEnergy, 0.0, 5.0, ((WaTor) sim).getInitialSharkEnergy(), 0.25, 0.5);
+		initialSharkEnergy = addExtraSlider(initialSharkEnergy, 0.0, 5.0, ((WaTor) sim).getInitialSharkEnergy(), 1.0, 1.0);
 		initialSharkEnergy.setValue((int) Math.round(initialSharkEnergy.getValue()));
+		addExtraSliderLabel(initialSharkEnergy, INITIAL_SHARK_ENERGY);
 
 		controls.add(sharkBreedLifeCount);
-		sharkBreedLifeCount = addExtraSlider(sharkBreedLifeCount, 0.0, 1.0, ((WaTor) sim).getSharkBreedCount(), 0.25, 0.5);
+		sharkBreedLifeCount = addExtraSlider(sharkBreedLifeCount, 0.0, 5.0, ((WaTor) sim).getSharkBreedCount(), 1.0, 1.0);
 		sharkBreedLifeCount.setValue((int) Math.round(sharkBreedLifeCount.getValue()));
+		addExtraSliderLabel(sharkBreedLifeCount, SHARK_BREED_LIFE_COUNT);
 
 		controls.add(fishBreedLifeCount);
-		fishBreedLifeCount = addExtraSlider(fishBreedLifeCount, 0.0, 1.0, ((WaTor) sim).getFishBreedCount(), 0.25, 0.5);
+		fishBreedLifeCount = addExtraSlider(fishBreedLifeCount, 0.0, 5.0, ((WaTor) sim).getFishBreedCount(), 1.0, 1.0);
 		fishBreedLifeCount.setValue((int) Math.round(fishBreedLifeCount.getValue()));
+		addExtraSliderLabel(fishBreedLifeCount, FISH_BREED_LIFE_COUNT);
 
 		controls.add(fishEnergyContent);
-		fishEnergyContent = addExtraSlider(fishEnergyContent, 0.0, 5.0, ((WaTor) sim).getFishEnergyContent(), 0.25, 0.5);
+		fishEnergyContent = addExtraSlider(fishEnergyContent, 0.0, 5.0, ((WaTor) sim).getFishEnergyContent(), 1.0, 1.0);
 		fishEnergyContent.setValue((int) Math.round(fishEnergyContent.getValue()));
+		addExtraSliderLabel(fishEnergyContent, FISH_ENERGY_CONTENT);
 
 		extraSliders.add(sharkRatio);
 		extraSliders.add(fishRatio);
@@ -57,8 +69,8 @@ public class WatorWindow extends SimulationWindow {
 		extraSliders.add(fishBreedLifeCount);
 		extraSliders.add(fishEnergyContent);
 
-		System.out.println("initial sharkRatio = " + ((WaTor) sim).getSharkRatio());
-		System.out.println("initial fishRatio = " + ((WaTor) sim).getFishRatio());
+//		System.out.println("initial sharkRatio = " + ((WaTor) sim).getSharkRatio());
+//		System.out.println("initial fishRatio = " + ((WaTor) sim).getFishRatio());
 		System.out.println("initial initialSharkEnergy = " + ((WaTor) sim).getInitialSharkEnergy());
 		System.out.println("initial sharkBreedLifeCount = " + ((WaTor) sim).getSharkBreedCount());
 		System.out.println("initial fishBreedLifeCount = " + ((WaTor) sim).getFishBreedCount());
@@ -70,7 +82,7 @@ public class WatorWindow extends SimulationWindow {
 		if (mySlider.equals(sharkRatio) || mySlider.equals(fishRatio)) {
 			running = false;
 			playButton.setGraphic(getImageView(RESTART_PNG));
-			System.out.println("current = " + mySlider.getClass() + mySlider.getValue());
+			System.out.println("current = " + mySlider.getValue());
 			System.out.println("need to restart");
 			update();
 		}
