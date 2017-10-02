@@ -39,7 +39,7 @@ public class MenuWindow extends Window {
 	private static final double HEIGHT = 500;
 
 	private static final int BUTTONOFFSET = 50;
-	private static final int BUTTONS_PER_LINE = 4;
+	private static final int BUTTONS_PER_LINE = 5;
 	private List<Button> buttons;
 
 	private CellManager simChoice;
@@ -138,6 +138,9 @@ public class MenuWindow extends Window {
 	private Button createMenuButton(String imageName, String buttonText) {
 		Image buttonImage = new Image(getClass().getClassLoader().getResourceAsStream(imageName));
 		Button simButton = new Button();
+		simButton.setScaleX(0.75);
+		simButton.setScaleY(0.75);
+		
 		simButton.setGraphic(new ImageView(buttonImage));
 		simButton.setAccessibleText(buttonText);
 
