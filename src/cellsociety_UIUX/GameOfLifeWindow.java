@@ -9,6 +9,11 @@ import cellsociety_Simulations.GameOfLife;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class GameOfLifeWindow extends SimulationWindow {
 	private Slider aliveRatio = new Slider();
 	private List<Slider> extraSliders = new ArrayList<>(Arrays.asList(aliveRatio));

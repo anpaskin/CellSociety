@@ -10,6 +10,12 @@ import cellsociety_Simulations.WaTor;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class RPSWindow extends SimulationWindow {
 	private Slider rockPercent = new Slider();
 	private Slider paperPercent = new Slider();

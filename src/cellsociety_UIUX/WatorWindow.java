@@ -10,6 +10,11 @@ import cellsociety_Simulations.WaTor;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class WatorWindow extends SimulationWindow {
 
 	private Slider sharkRatio = new Slider();

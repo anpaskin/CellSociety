@@ -10,6 +10,11 @@ import cellsociety_Simulations.WaTor;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public class FireWindow extends SimulationWindow {
 	private Slider probCatch = new Slider();
 	private List<Slider> extraSliders = new ArrayList<>(Arrays.asList(probCatch));
