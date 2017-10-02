@@ -65,7 +65,6 @@ public class RPSWindow extends SimulationWindow {
 	
 	private void update() {
 		simType = new RPS(rockPercent.getValue(), paperPercent.getValue(), scissorsPercent.getValue(), simType.getSize(), simType.getShape());
-		simType.initializeCurrentCells();
 		displayGrid(simType.getCurrentCells());
 	}
 	

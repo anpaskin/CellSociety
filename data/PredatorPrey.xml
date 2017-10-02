@@ -10,7 +10,7 @@
 	<initialEnergy>2</initialEnergy>
     <size>100.0</size>
     <shape>square</shape>
-    <initialCellStatuses>[
+    <initialCellStatuses>
     0, 0, 1, 0, 0, 0, 0, 0, 2, 0,
     2, 0, 0, 0, 1, 0, 2, 0, 0, 0,
     0, 1, 0, 0, 0, 2, 0, 0, 2, 1,
@@ -21,6 +21,6 @@
     1, 0, 0, 2, 0, 0, 0, 1, 0, 2,
     0, 0, 1, 0, 0, 2, 0, 0, 2, 0,
     0, 0, 0, 1, 0, 0, 1, 0, 0, 1
-    ]</initialCellStatuses>
+    </initialCellStatuses>
     <toroidalEdges>false</toroidalEdges>
 </data>

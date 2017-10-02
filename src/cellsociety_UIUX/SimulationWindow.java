@@ -34,6 +34,7 @@ import javafx.util.StringConverter;
  * Finally, contains the step method that will be made for each simulation with all the changes
  * 
  * @author Kelly Zhang
+ * @author Dara Buggay
  *
  */
 public abstract class SimulationWindow extends Window {

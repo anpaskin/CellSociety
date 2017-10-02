@@ -61,8 +61,7 @@ public class SegregationWindow extends SimulationWindow {
 	}
 	
 	private void update() {
-		simType = new Segregation(((Segregation)simType).getMinSimilar(), redToBlue.getValue(), emptyRatio.getValue(), simType.getSize(), simType.getShape(), simType.getToroidal());
-		simType.initializeCurrentCells();
+		simType = new Segregation(((Segregation)simType).getMinSimilar(), redToBlue.getValue(), emptyRatio.getValue(), simType.getSize(), simType.getShape(), simType.getToroidal(), new ArrayList<String>());
 		displayGrid(simType.getCurrentCells());
 	}
 	

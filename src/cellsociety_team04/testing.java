@@ -27,8 +27,7 @@ public class testing {
 	}
 	
 	private static void rpsTesting(double rocks, double papers, double scissors, double size, String shape, boolean toroidal) {
-		CellManager rpsSim = new RPS(rocks, papers, scissors, size, shape, toroidal);
-		rpsSim.initializeCurrentCells();
+		CellManager rpsSim = new RPS(rocks, papers, scissors, size, shape, toroidal, new ArrayList<String>());
 		List<Cell> s = rpsSim.getCurrentCells();
 		double rc = Math.sqrt(s.size());
 		String[][] grid = new String[(int)rc][(int)rc];
@@ -60,7 +59,7 @@ public class testing {
 	}
 	
 	private static void waTorTesting(double sharkPercent, double fishPercent, double size, String shape, boolean toroidal) {
-		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 1, 5, 5, 1, shape, toroidal);
+		WaTor waSim = new WaTor(sharkPercent, fishPercent, size, 1, 5, 5, 1, shape, toroidal, new ArrayList<String>());
 		waSim.initializeCurrentCells();
 		List<Cell> s = waSim.getCurrentCells();
 		System.out.println(s);
@@ -100,9 +99,8 @@ public class testing {
 	}
 	
 	private static void lifeTesting(double alive, double size, String shape, boolean toroidal) {
-		CellManager lifeSim = new GameOfLife(alive, size, shape, toroidal);
+		CellManager lifeSim = new GameOfLife(alive, size, shape, toroidal, new ArrayList<String>());
 		List<Cell> s = lifeSim.getCurrentCells();
-		lifeSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
 		int i = 0;
@@ -132,9 +130,8 @@ public class testing {
 	
 	
 	private static void fireTesting(double probCatch, int fireStartLoc, double size, String shape, boolean toroidal) {
-		Fire fireSim = new Fire(probCatch, size, shape, toroidal);
+		Fire fireSim = new Fire(probCatch, size, shape, toroidal, new ArrayList<String>());
 		List<Cell> s = fireSim.getCurrentCells();
-		fireSim.initializeCurrentCells();
 		double rc = Math.sqrt(s.size());
 		char[][] grid = new char[(int)rc][(int)rc];
 		int i = 0;
@@ -165,10 +162,9 @@ public class testing {
 	}
 	
 	private static void segTesting(double minSim, double emptyCount, double redCount, double size, String shape, boolean toroidal) {
-		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size, shape, toroidal);
+		Segregation segSim = new Segregation(minSim, emptyCount, redCount, size, shape, toroidal, new ArrayList<String>());
 		List<Cell> p = segSim.setParamCells();
 		System.out.println(p);
-		segSim.initializeCurrentCells();
 		List<Cell> s = segSim.getCurrentCells();
 		System.out.println(s);
 		System.out.println("Current Cells Size: " + s.size());

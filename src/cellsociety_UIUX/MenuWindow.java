@@ -24,6 +24,7 @@ import javafx.stage.Stage;
  * All text is from source files (images!)
  * 
  * @author Kelly Zhang
+ * @author Dara Buggay
  *
  */
 public class MenuWindow extends Window {

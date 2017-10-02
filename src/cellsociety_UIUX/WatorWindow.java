@@ -107,8 +107,7 @@ public class WatorWindow extends SimulationWindow {
 	}
 
 	private void update() {
-		simType = new WaTor(((WaTor) simType).getSharkRatio(), ((WaTor) simType).getFishRatio(), simType.getSize(), (int) Math.round(initialSharkEnergy.getValue()), (int) Math.round(sharkBreedLifeCount.getValue()),(int) Math.round(fishBreedLifeCount.getValue()), (int) Math.round(fishEnergyContent.getValue()), simType.getShape(), simType.getToroidal());
-		simType.initializeCurrentCells();
+		simType = new WaTor(((WaTor) simType).getSharkRatio(), ((WaTor) simType).getFishRatio(), simType.getSize(), (int) Math.round(initialSharkEnergy.getValue()), (int) Math.round(sharkBreedLifeCount.getValue()),(int) Math.round(fishBreedLifeCount.getValue()), (int) Math.round(fishEnergyContent.getValue()), simType.getShape(), simType.getToroidal(), new ArrayList<String>());
 		displayGrid(simType.getCurrentCells());
 	}
 

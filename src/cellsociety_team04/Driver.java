@@ -32,7 +32,7 @@ public class Driver {
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
 	public CellManager simCellManager;
-	private static ArrayList<String> initialCellStatuses = new ArrayList<String>();
+	private ArrayList<String> initialCellStatuses = new ArrayList<String>();
 
 	public Driver(Stage stage) {
 		setup(stage);
@@ -44,14 +44,6 @@ public class Driver {
 	public void setup(Stage stage) {
 		simWindows = new ArrayList<>();
 		simStages = new ArrayList<>();
-	}
-	
-	/**
-	 * gets the initial cells from backend
-	 * @param cellStats
-	 */
-	public static void setInitialCellStatuses(ArrayList<String> cellStats) {
-		initialCellStatuses = cellStats;
 	}
 	
 	/**
@@ -78,7 +70,10 @@ public class Driver {
 			simWindows.add(new WatorWindow(simStages.get(simNum), simCellManager));
 			System.out.println("wator");
 		}
-		else {
+		else if (simCellManager instanceof RPS) {
+			simWindows.add(new RPSWindow(simStages.get(simNum), simCellManager));
+			System.out.println("rockPaperScissors");
+		} else {
 			//TODO throw exception
 			return;
 		}
@@ -89,7 +84,6 @@ public class Driver {
 	private void setupSim(int simNum) {
 		simWindows.get(simNum).buttonClick();
 		simWindows.get(simNum).setRowSize(simCellManager);
-		simCellManager.initializeCurrentCells(initialCellStatuses);
 		simWindows.get(simNum).displayGrid(simCellManager.getCurrentCells());
 		simStages.get(simNum).setScene(simWindows.get(simNum).getScene());
 		simStages.get(simNum).setTitle(simCellManager.getClass().toString());

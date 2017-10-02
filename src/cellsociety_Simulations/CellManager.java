@@ -25,17 +25,17 @@ public abstract class CellManager {
 	public static final String TRI = "triangle";
 	public static final String HEX = "hexagon";
 	
-	public CellManager(double n, String shape) {
+	public CellManager(double n, String shape, boolean toroidal, List<String> initialStatuses) {
+		this(n, shape, toroidal);
+		initializeCurrentCells(initialStatuses);
+	}
+	
+	public CellManager(double n, String shape, boolean toroidal) {
 		currentCells = new ArrayList<Cell>();
 		nextCellStatuses = new ArrayList<String>();
 		cellShape = shape;
 		if(cellShape.equals(SQUARE)) size = Math.pow(Math.sqrt(n) + 2, 2);
 		else if(cellShape.equals(TRI)) size = Math.pow(Math.sqrt(n) + 4, 2);
-		isToroidal = false;
-	}
-	
-	public CellManager(double n, String shape, boolean toroidal) {
-		this(n, shape);
 		isToroidal = toroidal;
 		if(toroidal) size = n;
 	}
@@ -384,7 +384,7 @@ public abstract class CellManager {
 		return locNums;
 	}
 
-	public void initializeCurrentCells() {
+	protected void initializeCurrentCells() {
 		List<Cell> paramCells = setParamCells();
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
@@ -430,7 +430,7 @@ public abstract class CellManager {
 		return size - n <= Math.sqrt(size);
 	}
 	
-	public void initializeCurrentCells(List<String> statuses) {
+	protected void initializeCurrentCells(List<String> statuses) {
 		if(statuses.size() == 0) {
 			initializeCurrentCells();
 			return;
