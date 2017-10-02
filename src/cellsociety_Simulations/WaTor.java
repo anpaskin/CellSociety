@@ -77,6 +77,7 @@ public class WaTor extends CardinalSim {
 			return;
 		}
 		List<Cell> paramCells = setParamCells(statuses);
+		int paramCount = 0;
 		for(int i = 0; i < size; i++) {
 			if(!isToroidal) {
 				if(isEdge(i)) {
@@ -86,7 +87,8 @@ public class WaTor extends CardinalSim {
 					currentCells.add(new WaTorCell(Cell.NULL));
 				}
 				else {
-					currentCells.add(paramCells.get(i));
+					currentCells.add(paramCells.get(paramCount));
+					paramCount++;
 				}
 			}
 			else {
