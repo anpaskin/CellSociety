@@ -16,11 +16,12 @@ public class GameOfLifeWindow extends SimulationWindow {
 	
 	public GameOfLifeWindow(Stage s, CellManager sim) {
 		super(s, sim);
+
 		controls.add(aliveRatio);
 		aliveRatio = addExtraSlider(aliveRatio, 0.0, 1.0, ((GameOfLife) sim).getAliveRatio(), 0.25, 0.5);
+		
 		extraSliders.add(aliveRatio);
 		System.out.println("initial aliveRatio = " + ((GameOfLife) sim).getAliveRatio());
-		//updateExtras(probCatch);
 	}
 	
 	@Override

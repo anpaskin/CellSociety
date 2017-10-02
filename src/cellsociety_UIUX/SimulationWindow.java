@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import cellsociety_Simulations.Segregation;
 import cellsociety_team04.GridDisplay;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,7 +47,7 @@ public abstract class SimulationWindow extends Window {
 
 	protected List<Node> controls;
 	protected static double offset = 50;
-	protected double padding = 100;
+	protected double padding = 75;
 
 	protected Slider speed = new Slider();;
 	protected double simSpeed;
@@ -168,9 +169,8 @@ public abstract class SimulationWindow extends Window {
             }
         });
 	}
-
+	
 	protected Slider addExtraSlider(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
-		//TODO
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
