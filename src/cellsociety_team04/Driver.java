@@ -12,7 +12,7 @@ import javafx.stage.WindowEvent;
 
 /**
  * 
- * Driver for running the code
+ * Driver for running the code, helps keep track of all the simulations running
  * 
  * @author kelly
  * @author Dara
@@ -46,10 +46,10 @@ public class Driver {
 		simStages = new ArrayList<>();
 	}
 	
-	public void setInitialCellStatuses(ArrayList<String> cellStats) {
-		initialCellStatuses = cellStats;
-	}
-	
+	/**
+	 * used in SimulationWindow to figure out what type of simulation
+	 * @param simChoice
+	 */
 	public void determineSim(CellManager simChoice) {
 		simStages.add(new Stage());
 		int simNum = simStages.size()-1;
@@ -95,6 +95,10 @@ public class Driver {
 		});  
 		simStages.get(simNum).show();
 	}
+	
+	/**
+	 * is called to actually run each specific simulation
+	 */
 	public void runSimulation() {
 		int simNum = simStages.size()-1;
 		simWindows.get(simNum).gameLoop(simCellManager, MILLISECOND_DELAY);

@@ -28,6 +28,11 @@ import javafx.util.StringConverter;
 
 /**
  * 
+ * This is the abstract class for the windows for simulations, subclass of Window
+ * Creates all the general buttons and sliders (play, step, and speed) and uses inputs to update how the simulation runs (FOR SETUP)
+ * Also contains all the user interaction ties (event handlers) and updates for these (FOR INTERACTIONS)
+ * Finally, contains the step method that will be made for each simulation with all the changes
+ * 
  * @author Kelly Zhang
  * @author Dara Buggay
  *
@@ -80,20 +85,22 @@ public abstract class SimulationWindow extends Window {
 	
 	//FOR SETUP ****************************************
 	@Override
-	public void setupScene() {
+	protected void setupScene() {
 		setupSceneDimensions();
 		addButtons();
 		addSpeedSlider();
 		addText();
-		throwErrors();
+	//	throwErrors();
 	}
 
-	public void setupSceneDimensions() {
+	protected void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX()*twothirds;
 		HEIGHT = dimensions.getMaxY()*twothirds;
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
+	
+	
 	
 	public static double getWidth() {
 		return WIDTH;
@@ -199,8 +206,21 @@ public abstract class SimulationWindow extends Window {
 		return mySlider;
 	}
 	
+	protected void addExtraSliderLabel(Slider mySlider, String label) {
+		Text myText = new Text();
+		myText.setText(label);
+		System.out.println("ACCESSIBLE TEXT " + mySlider.getAccessibleText());
+		myText.setLayoutX(offset);
+		myText.setLayoutY(offset + controls.size()*padding + mySlider.getBoundsInLocal().getHeight());
+		myRoot.getChildren().add(myText);
+		
+	}
+	
 	
 	// FOR INTERACTIONS ****************************************
+	/**
+	 * for all interactions, needed to be called after all buttons are setup
+	 */
 	public void buttonClick() {
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
@@ -258,7 +278,7 @@ public abstract class SimulationWindow extends Window {
 	 * @param simType 
 	 */
 	@Override
-	public void step() {
+	protected void step() {
 		buttonClick();
 		sliderDrag();
 		if (running) {
@@ -271,14 +291,18 @@ public abstract class SimulationWindow extends Window {
 			displayGrid(simType.getCurrentCells());
 			stepping = false;
 		}
-		throwErrors();
+	//	throwErrors();
 	}
 
-	protected void resetGameLoop(double newSpeed) {
+	private void resetGameLoop(double newSpeed) {
 		animation.stop();
 		gameLoop(simType, newSpeed);
 	}
  	
+	/**
+	 * used to display in GridDisplay
+	 * @param currentCellStatuses
+	 */
 	public void displayGrid(List<Cell> currentCellStatuses) {
 		gridDisplay.updateGridDisplay(currentCellStatuses, grid);
 		if (!myRoot.getChildren().contains(grid)) {
@@ -286,18 +310,21 @@ public abstract class SimulationWindow extends Window {
 		}
 	}
 	
+	/**
+	 * called if the stage is closed which isnt determined here
+	 */
 	public void stopRunning() {
 		running = false;
 	}
 
-	public void throwErrors() {
-		//TODO do more than just print error in console... need to handle
-		if (!errorText.getText().equals("no error")) {
-			running = false;
-			playButton.setGraphic(getImageView(PLAY_PNG));
-			System.out.println("there is an error");
-		}
-	}
+//	public void throwErrors() {
+//		//TODO do more than just print error in console... need to handle
+//		if (!errorText.getText().equals("no error")) {
+//			running = false;
+//			playButton.setGraphic(getImageView(PLAY_PNG));
+//			System.out.println("there is an error");
+//		}
+//	}
 	
 	public void setErrorText(String error) {
 		errorText.setText(error);
