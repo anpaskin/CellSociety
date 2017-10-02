@@ -5,9 +5,9 @@
 	<rockRatio>0.20</rockRatio>
 	<paperRatio>0.50</paperRatio>
 	<scissorsRatio>0.30</scissorsRatio>
-    <size>400.0</size>
+    <size>100.0</size>
     <shape>square</shape>
-    <initialCellStatuses>[
+    <initialCellStatuses>
     0, 1, 0, 0, 0, 1, 0, 1, 2, 0,
     0, 3, 2, 0, 1, 0, 2, 0, 0, 0,
     1, 1, 0, 3, 0, 2, 0, 3, 0, 1,
@@ -18,6 +18,6 @@
     0, 2, 3, 2, 0, 1, 0, 1, 2, 0,
     3, 0, 1, 0, 3, 0, 2, 0, 0, 0,
     0, 3, 0, 0, 0, 1, 0, 3, 0, 1
-    ]</initialCellStatuses>
+    </initialCellStatuses>
     <toroidalEdges>true</toroidalEdges>
 </data>
