@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 /**
  * 
  * @author Kelly Zhang
+ * @author Dara Buggay
  *
  */
 public class MenuWindow extends Window {
