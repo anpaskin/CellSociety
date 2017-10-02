@@ -472,5 +472,13 @@ public abstract class CellManager {
 		else pSize = (int)(Math.pow((Math.sqrt(size) - 2), 2));
 		return pSize;
 	}
+	
+	public String getShape() {
+		return cellShape;
+	}
+	
+	public boolean getToroidal() {
+		return isToroidal;
+	}
 
 }

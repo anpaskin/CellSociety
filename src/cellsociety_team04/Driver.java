@@ -6,14 +6,9 @@ import java.util.List;
 
 import cellsociety_Simulations.*;
 import cellsociety_UIUX.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 /**
  * 
@@ -37,6 +32,7 @@ public class Driver {
 	protected double MILLISECOND_DELAY = 10000.0 / FRAMES_PER_SECOND;
 
 	public CellManager simCellManager;
+	private static ArrayList<String> initialCellStatuses = new ArrayList<String>();
 
 	public Driver(Stage stage) {
 		setup(stage);
@@ -48,6 +44,10 @@ public class Driver {
 	public void setup(Stage stage) {
 		simWindows = new ArrayList<>();
 		simStages = new ArrayList<>();
+	}
+	
+	public static void setInitialCellStatuses(ArrayList<String> cellStats) {
+		initialCellStatuses = cellStats;
 	}
 	
 	public void determineSim(CellManager simChoice) {
@@ -81,7 +81,7 @@ public class Driver {
 	private void setupSim(int simNum) {
 		simWindows.get(simNum).buttonClick();
 		simWindows.get(simNum).setRowSize(simCellManager);
-		simCellManager.initializeCurrentCells();
+		simCellManager.initializeCurrentCells(initialCellStatuses);
 		simWindows.get(simNum).displayGrid(simCellManager.getCurrentCells());
 		simStages.get(simNum).setScene(simWindows.get(simNum).getScene());
 		simStages.get(simNum).setTitle(simCellManager.getClass().toString());

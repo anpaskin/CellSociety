@@ -90,4 +90,8 @@ public class GameOfLife extends CellManager{
 		return false;
 	}
 	
+	public double getAliveRatio() {
+		return aliveRatio;
+	}
+	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import cellsociety_Cells.Cell;
 import cellsociety_Simulations.CellManager;
+import cellsociety_Simulations.Segregation;
 import cellsociety_team04.GridDisplay;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,18 +20,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+
+/**
+ * 
+ * @author Kelly Zhang
+ *
+ */
 public abstract class SimulationWindow extends Window {
 
 	private static final int MIN_SLIDER_WIDTH = 180;
-	private static final String PLAY_PNG = "play.png";
+	protected static final String PLAY_PNG = "play.png";
 	private static final String PAUSE_PNG = "pause.png";
-	protected static final String RESET_PNG = "reset.png";
+	protected static final String RESTART_PNG = "restart.png";
 	private static final String STEP_PNG = "step.png";
-	private String shape = "triangle";
+	private static String shape;
 	
 	private static final double twothirds = 0.66;
 	protected static double WIDTH;
@@ -46,15 +54,16 @@ public abstract class SimulationWindow extends Window {
 
 	protected List<Node> controls;
 	protected static double offset = 50;
-	protected double padding = 100;
+	protected double padding = 75;
 
 	protected Slider speed = new Slider();;
-	private double simSpeed;
+	protected double simSpeed;
 
 	protected GridPane grid;
 	private GridDisplay gridDisplay;
 
 	protected CellManager simType;
+	private Text errorText = new Text();
 
 	public SimulationWindow(Stage s, CellManager sim) {
 		super(s);
@@ -66,94 +75,22 @@ public abstract class SimulationWindow extends Window {
 		cellSize = (int) (HEIGHT - offset)/numCells;
 		gridDisplay = new GridDisplay(numCells, cellSize, shape);
 	}
-
-	public void buttonClick() {
-		playButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				running = !running;
-				if (running) {
-					playButton.setGraphic(getImageView(PAUSE_PNG));
-				}
-				else {
-					playButton.setGraphic(getImageView(PLAY_PNG));
-				}
-			}
-		});
-
-		stepButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-				stepping = true;
-				playButton.setGraphic(getImageView(PLAY_PNG));
-			}
-		});
-
-		speed.setOnMouseReleased(e -> {
-			updateSimSpeed();
-		});
-
-	}
-
-	private void updateSimSpeed() {
-		simSpeed = (double) (1 / speed.getValue()) * 300;
-		resetGameLoop(simSpeed);
-	}
-
-	protected void sliderDrag() {
-		//do nothing
-	}
 	
-	protected void updateExtra(Slider mySlider) {
-		// do nothing
-		running = false;
-		playButton.setGraphic(getImageView(RESET_PNG));
-		//updateExtras(probCatch);
-		System.out.println("probCatch = " + mySlider.getValue());
-		System.out.println("press reset");
-	}
 	
-	/**
-	 * Updates the cells for each SimulationWindow
-	 * @param simType 
-	 */
-	@Override
-	public void step() {
-		buttonClick();
-		sliderDrag();
-		if (running) {
-			//simType.setNextCellStatuses();
-			simType.updateCurrentCells();
-			displayGrid(simType.getCurrentCells());
-		}
-		if (stepping) {
-			running = false;
-			//simType.setNextCellStatuses();
-			simType.updateCurrentCells();
-			displayGrid(simType.getCurrentCells());
-			stepping = false;
-		}
-	}
-
-	private void resetGameLoop(double newSpeed) {
-		animation.stop();
-		gameLoop(simType, newSpeed);
-	}
-
-
+	//FOR SETUP ****************************************
 	@Override
 	public void setupScene() {
 		setupSceneDimensions();
 		addButtons();
 		addSpeedSlider();
-		addTitle();
-		//throwErrors();
+		addText();
+		throwErrors();
 	}
 
 	public void setupSceneDimensions() {
 		Rectangle2D dimensions = Screen.getPrimary().getVisualBounds();
 		WIDTH = dimensions.getMaxX()*twothirds;
 		HEIGHT = dimensions.getMaxY()*twothirds;
-		//myStage.setX(dimensions.getMinX());
-		//myStage.setY(dimensions.getMinY());
 		myScene = new Scene(myRoot, WIDTH, HEIGHT);
 	}
 	
@@ -169,10 +106,10 @@ public abstract class SimulationWindow extends Window {
 		numCells = (int) Math.sqrt(c.getSize());
 	}
 	
-	public void setCellShape(String cellShape) {
+	public static void setCellShape(String cellShape) {
 		shape = cellShape;
 	}
-
+	
 	private void addButtons() {
 		playButton = new Button();
 		playButton.setGraphic(getImageView(PLAY_PNG));
@@ -195,10 +132,14 @@ public abstract class SimulationWindow extends Window {
 		control.setLayoutX(x);
 		control.setLayoutY(y);
 	}
-
-
-	private void addTitle() {
+	
+	private void addText() {
 		//do nothing
+//		TODO what does this even do rn???
+		errorText.setText("no error");
+		errorText.setLayoutX(WIDTH - offset - errorText.getBoundsInLocal().getWidth());
+		errorText.setLayoutY(HEIGHT - offset);
+		myRoot.getChildren().add(errorText);
 	}
 
 	private void addSpeedSlider() {//http://docs.oracle.com/javafx/2/ui_controls/slider.htm
@@ -241,7 +182,7 @@ public abstract class SimulationWindow extends Window {
         });
 	}
 	
-	protected void addExtraSliders(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
+	protected Slider addExtraSlider(Slider mySlider, double min, double max, double setValue, double ticks, double blocks) {
 		mySlider = new Slider();
 		mySlider.setMin(min);
 		mySlider.setMax(max);
@@ -254,6 +195,87 @@ public abstract class SimulationWindow extends Window {
 		mySlider.setLayoutX(offset);
 		mySlider.setLayoutY(offset + controls.size()*padding);
 		myRoot.getChildren().add(mySlider);
+		return mySlider;
+	}
+	
+	
+	// FOR INTERACTIONS ****************************************
+	public void buttonClick() {
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				running = !running;
+				if (running) {
+					playButton.setGraphic(getImageView(PAUSE_PNG));
+				}
+				else {
+					playButton.setGraphic(getImageView(PLAY_PNG));
+				}
+			}
+		});
+
+		stepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				stepping = true;
+				playButton.setGraphic(getImageView(PLAY_PNG));
+			}
+		});
+
+		speed.setOnMouseReleased(e -> {
+			updateSimSpeed();
+		});
+
+	}
+
+	private void updateSimSpeed() {
+		simSpeed = (double) (1 / speed.getValue()) * 300;
+		resetGameLoop(simSpeed);
+	}
+
+	private void sliderDrag() {
+		List<Slider> extraSliders = getExtraSliders();
+		for (int i = 0; i < extraSliders.size(); i++) {
+			Slider extraSlider = extraSliders.get(i);
+			extraSlider.setOnMouseReleased(e -> {
+				updateExtra(extraSlider);
+			});
+		}
+	}
+	
+	protected void updateExtra(Slider mySlider) {
+		//do nothing
+	}
+	
+	protected List<Slider> getExtraSliders() {
+		//do nothing;
+		return null;
+	}
+	
+	
+	// FOR UPDATING GAME LOOP (STEP) **********************
+	/**
+	 * Updates the cells for each SimulationWindow
+	 * @param simType 
+	 */
+	@Override
+	public void step() {
+		buttonClick();
+		sliderDrag();
+		if (running) {
+			simType.updateCurrentCells();
+			displayGrid(simType.getCurrentCells());
+		}
+		if (stepping) {
+			running = false;
+			simType.updateCurrentCells();
+			displayGrid(simType.getCurrentCells());
+			stepping = false;
+		}
+		throwErrors();
+	}
+
+	protected void resetGameLoop(double newSpeed) {
+		animation.stop();
+		gameLoop(simType, newSpeed);
 	}
  	
 	public void displayGrid(List<Cell> currentCellStatuses) {
@@ -267,12 +289,16 @@ public abstract class SimulationWindow extends Window {
 		running = false;
 	}
 
-	/*public void throwErrors() {
+	public void throwErrors() {
 		//TODO do more than just print error in console... need to handle
-		double gridSize = numCells*cellSize;
-		//if (gridSize > WIDTH || gridSize > HEIGHT) {
-		if (grid.getBoundsInParent().getMinX() < offset + buttons.get(0).getBoundsInLocal().getWidth() || grid.getBoundsInParent().getMinY() + gridSize > HEIGHT) {
-			System.out.println("ERROR: grid created is too big, make number of cells in grid smaller or decrease the cell size");			
+		if (!errorText.getText().equals("no error")) {
+			running = false;
+			playButton.setGraphic(getImageView(PLAY_PNG));
+			System.out.println("there is an error");
 		}
-	}*/
+	}
+	
+	public void setErrorText(String error) {
+		errorText.setText(error);
+	}
 }

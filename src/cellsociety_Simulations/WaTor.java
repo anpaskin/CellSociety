@@ -267,4 +267,43 @@ public class WaTor extends CardinalSim {
 		return emptyNeighborLocs;
 	}
 	
+	public double getSharkRatio() {
+		return sharkRatio;
+	}
+	
+	public double getFishRatio() {
+		return fishRatio;
+	}
+	
+	public int getInitialSharkEnergy() {
+		return energyStart;
+	}
+	
+	public void setInitialSharkEnergy(int newEnergy) {
+		energyStart = newEnergy;
+	}
+	
+	public int getSharkBreedCount() {
+		return sharkBreedCount;
+	}
+	
+	public void setSharkBreedCount(int newSharkBreed) {
+		sharkBreedCount = newSharkBreed;
+	}
+	
+	public int getFishBreedCount() {
+		return fishBreedCount;
+	}
+	
+	public void setFishBreedCount(int newFishBreed) {
+		fishBreedCount = newFishBreed;
+	}
+	
+	public int getFishEnergyContent() {
+		return fishEnergyContent;
+	}
+	
+	public void setFishEnergyContent(int newFishEnergy) {
+		fishEnergyContent = newFishEnergy;
+	}
 }
