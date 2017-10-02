@@ -77,7 +77,7 @@ public class GridDisplay {
 			grid.setHgap(-half*cellSize/sqrtthree);
 			grid.setVgap(-half*cellSize);
 		} else {
-			// do nothing (sqaure)
+			// do nothing (square)
 		}
 	}
 	
@@ -98,6 +98,7 @@ public class GridDisplay {
 			isHex = true;
 		}
 	}
+	
 	private void createCell(Polygon polygon) {
 		if (isSquare) {
 			squareCell(polygon);

@@ -29,6 +29,7 @@ import javafx.util.StringConverter;
 /**
  * 
  * @author Kelly Zhang
+ * @author Dara Buggay
  *
  */
 public abstract class SimulationWindow extends Window {

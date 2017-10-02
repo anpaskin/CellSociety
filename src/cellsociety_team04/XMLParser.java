@@ -31,6 +31,7 @@ import javafx.stage.Stage;
  */
 
 public class XMLParser {
+	private Driver driver;
 	private FileChooser fileChooser;
 	private static Document doc;
 	
@@ -102,13 +103,13 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initialCellStatuses");
-		extractCellStatuses(nList);
+		ArrayList<String> initCellStats = extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 
 		SimulationWindow.setCellShape(shape);
-		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal, new ArrayList<String>());
+		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal, initCellStats);
 	}
 
 	private CellManager createPredatorPreySim()
@@ -138,13 +139,13 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initialCellStatuses");
-		extractCellStatuses(nList);
+		ArrayList<String> initCellStats = extractCellStatuses(nList);
 
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal, new ArrayList<String>());
+		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal, initCellStats);
 	}
 
 	private CellManager createFireSim() {
@@ -158,13 +159,13 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initialCellStatuses");
-		extractCellStatuses(nList);
+		ArrayList<String> initCellStats = extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new Fire(probCatch, size, shape, isToroidal, new ArrayList<String>());
+		return new Fire(probCatch, size, shape, isToroidal, initCellStats);
 	}
 
 	private CellManager createGameOfLifeSim() {	
@@ -178,13 +179,13 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initialCellStatuses");
-		extractCellStatuses(nList);
+		ArrayList<String> initCellStats = extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new GameOfLife(aliveRatio, size, shape, isToroidal, new ArrayList<String>());
+		return new GameOfLife(aliveRatio, size, shape, isToroidal, initCellStats);
 
 	}
 	
@@ -195,7 +196,7 @@ public class XMLParser {
 		nList = doc.getElementsByTagName("paperRatio");
 		double paperRatio = extractNodeValue(nList);
 		
-		nList = doc.getElementsByTagName("ScissorsRatio");
+		nList = doc.getElementsByTagName("scissorsRatio");
 		double scissorsRatio = extractNodeValue(nList);
 		
 		nList = doc.getElementsByTagName("size");
@@ -205,13 +206,13 @@ public class XMLParser {
 		String shape = nList.item(0).getTextContent();
 		
 		nList = doc.getElementsByTagName("initialCellStatuses");
-		extractCellStatuses(nList);
+		ArrayList<String> initCellStats = extractCellStatuses(nList);
 		
 		nList = doc.getElementsByTagName("toroidalEdges");
 		boolean isToroidal = stringToBoolean(nList);
 
 		SimulationWindow.setCellShape(shape);
-		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal, new ArrayList<String>());
+		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal, initCellStats);
 	}
 	
 	private boolean stringToBoolean(NodeList nList) {
@@ -223,7 +224,7 @@ public class XMLParser {
 	}
 	
 	
-	private void extractCellStatuses(NodeList nList) {
+	private ArrayList<String> extractCellStatuses(NodeList nList) {
 		String nums = (nList.item(0).getTextContent());
 		String[] items = nums.replaceAll("\\s", "").split(",");
 		int[] intCellStats = new int[items.length];
@@ -238,10 +239,11 @@ public class XMLParser {
 		//System.out.println(simCells);
 		ArrayList<String> cellStats = new ArrayList<String>();
 		for (int k : intCellStats) {
-			cellStats.add(simCells.get(intCellStats[k]));
+			cellStats.add(simCells.get(k));
 			//System.out.println(simCells.get(intCellStats[k]));
 		}
 		System.out.println(cellStats);
+		return cellStats;
 		//Driver.setInitialCellStatuses(cellStats);
 	}
 	
