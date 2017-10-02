@@ -109,7 +109,7 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 
 		SimulationWindow.setCellShape(shape);
-		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal);
+		return new Segregation(threshold, redRatio, emptyRatio, size, shape, isToroidal, new ArrayList<String>());
 	}
 
 	private CellManager createPredatorPreySim()
@@ -145,7 +145,7 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal);
+		return new WaTor(sharkPercent, fishPercent, size, initialEnergy, sharkBreed, fishBreed, fishEnergy, shape, isToroidal, new ArrayList<String>());
 	}
 
 	private CellManager createFireSim() {
@@ -165,7 +165,7 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new Fire(probCatch, size, shape, isToroidal);
+		return new Fire(probCatch, size, shape, isToroidal, new ArrayList<String>());
 	}
 
 	private CellManager createGameOfLifeSim() {	
@@ -185,7 +185,7 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 		
 		SimulationWindow.setCellShape(shape);
-		return new GameOfLife(aliveRatio, size, shape, isToroidal);
+		return new GameOfLife(aliveRatio, size, shape, isToroidal, new ArrayList<String>());
 
 	}
 	
@@ -212,7 +212,7 @@ public class XMLParser {
 		boolean isToroidal = stringToBoolean(nList);
 
 		SimulationWindow.setCellShape(shape);
-		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal);
+		return new RPS(rockRatio, paperRatio, scissorsRatio, size, shape, isToroidal, new ArrayList<String>());
 	}
 	
 	private boolean stringToBoolean(NodeList nList) {

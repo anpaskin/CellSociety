@@ -12,15 +12,16 @@ public class RPS extends CellManager {
 	private double paperRatio;
 	private double scissorsRatio;
 	
-	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape, boolean toroidal) {
+	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape, boolean toroidal, List<String> initialStatuses) {
 		super(n, shape, toroidal);
 		rockRatio = rockPercent;
 		paperRatio = paperPercent;
 		scissorsRatio = scissorsPercent;
+		initializeCurrentCells(initialStatuses);
 	}
 	
 	public RPS(double rockPercent, double paperPercent, double scissorsPercent, double n, String shape) {
-		this(rockPercent, paperPercent, scissorsPercent, n, shape, true);
+		this(rockPercent, paperPercent, scissorsPercent, n, shape, true, new ArrayList<String>());
 	}
 	
 	@Override

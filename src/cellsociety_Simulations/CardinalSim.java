@@ -8,6 +8,10 @@ import cellsociety_Cells.Cell;
 
 public abstract class CardinalSim extends CellManager {
 
+	public CardinalSim(double n, String shape, boolean toroidal, List<String> initialStatuses) {
+		super(n, shape, toroidal, initialStatuses);
+	}
+	
 	public CardinalSim(double n, String shape, boolean toroidal) {
 		super(n, shape, toroidal);
 	}
