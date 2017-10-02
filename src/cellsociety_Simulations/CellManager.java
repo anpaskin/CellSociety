@@ -436,6 +436,7 @@ public abstract class CellManager {
 			return;
 		}
 		List<Cell> paramCells = setParamCells(statuses);
+		int paramCount = 0;
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
 				if(isEdge(n)) {
@@ -445,9 +446,8 @@ public abstract class CellManager {
 					currentCells.add(new NullCell());
 				}
 				else {
-					int k = (int)(Math.random()*paramCells.size());
-					currentCells.add(paramCells.get(k));
-					paramCells.remove(k);
+					currentCells.add(paramCells.get(paramCount));
+					paramCount++;
 				}
 			}
 			else {

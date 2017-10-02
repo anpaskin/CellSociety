@@ -56,6 +56,7 @@ public class Fire extends CardinalSim {
 			return;
 		}
 		List<Cell> paramCells = setParamCells(statuses);
+		int paramCount = 0;
 		for(int n = 0; n < size; n++) {
 			if(!isToroidal) {
 				if(isEdge(n)) {
@@ -63,6 +64,10 @@ public class Fire extends CardinalSim {
 				}
 				else if(cellShape.equals(TRI) && (n < 2*Math.sqrt(size) || n > size - 2*Math.sqrt(size) || n % Math.sqrt(size) == 1 || n % Math.sqrt(size) == Math.sqrt(size) - 2)) {
 					currentCells.add(new NullCell());
+				}
+				else {
+					currentCells.add(paramCells.get(paramCount));
+					paramCount++;
 				}
 			}
 			else {
