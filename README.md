@@ -8,7 +8,7 @@ Cellular automata program that can run a variety of built-in simulations with ad
 
 Simulations include Segregation, Wa-Tor (Predator-Prey), Forest Fire, Game of Life, and Rock Paper Scissors.
 
-XML adjustable grid properties include cell shapes and toroidal boundaries. XML file for each simulation can be found in data folder.
+XML adjustable grid properties include cell shapes, grid size, and toroidal boundaries. XML file for each simulation can be found in data folder.
 
 Run Main.java in src to run program.
 
