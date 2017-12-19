@@ -35,14 +35,11 @@ public class main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) {
-		//TODO move this stuff into MenuWindow?
 		menuStage = stage;
 		menuStage.setTitle(MENUTITLE);
 		menuWindow = new MenuWindow(menuStage);
 		menuStage.setScene(menuWindow.getScene());
 		menuStage.show();
-
-		//menuLoop(simCellManager);
 		menuWindow.gameLoop(simCellManager, MILLISECOND_DELAY);
 	}
 
